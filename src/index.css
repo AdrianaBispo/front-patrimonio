@@ -1,0 +1,191 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+
+  /* Brand */
+  --color-primary: #201f24;
+  --color-secondary: #277c78;
+  --color-tertiary: #82c9d7;
+
+  /* Backgrounds */
+  --color-bg-primary: #f8f4f0;
+  --color-bg-secondary: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f3f0ec;
+
+  /* Text */
+  --color-text-primary: #201f24;
+  --color-text-secondary: #ffffff;
+
+  /* Border */
+  --color-border: #e5e1dd;
+
+  /* Feedback */
+  --color-success: #16a34a;
+  --color-warning: #f59e0b;
+  --color-danger: #dc2626;
+
+  --shadow-card: 0 4px 12px rgb(0 0 0 / 3%);
+  --shadow-dropdown: 0 12px 32px rgb(0 0 0 / 8%);
+}
+
+@layer base {
+  body {
+    @apply bg-bg-primary
+            text-text-primary
+            font-sans;
+  }
+  h1 {
+    @apply text-4xl
+            font-bold;
+  }
+
+  h2 {
+    @apply text-3xl
+            font-bold;
+  }
+
+  h3 {
+    @apply text-2xl
+            font-bold;
+  }
+
+  h4 {
+    @apply text-xl
+        font-bold;
+  }
+
+  p {
+    @apply text-sm
+          block 
+          mb-2 
+        text-text-primary/70
+          font-light;
+  }
+
+  label {
+    @apply text-sm
+          block 
+          mb-2 
+        text-text-primary
+          font-medium;
+  }
+}
+
+@layer components {
+  .input-utilities {
+    @apply w-full 
+      bg-bg-secondary
+      placeholder:text-slate-400
+      text-primary
+      text-sm
+      border
+      border-border
+      rounded-lg
+      px-3
+      py-3
+      transition
+      duration-300
+      focus:outline-none
+      focus:border-tertiary
+      hover:border-tertiary;
+    &:focus {
+      box-shadow: 0 0 0 3px
+        color-mix(in oklab, var(--color-tertiary) 25%, transparent);
+    }
+  }
+
+  .sidebar-item-utilities {
+    @apply flex items-center
+      px-3
+      py-3
+      mr-5
+      text-sm
+      font-medium
+      bg-transparent
+      text-text-secondary
+      rounded-r-xl
+      mt-0.5
+      transition
+      duration-200
+      gap-3
+      border-l-4
+      border-transparent
+      hover:bg-bg-secondary/80  
+      hover:border-l-4
+      hover:border-secondary
+      hover:text-text-primary
+      focus:border-l-4
+      focus:border-secondary
+      focus:bg-bg-secondary 
+      focus:text-primary
+      active:bg-bg-secondary
+      active:border-secondary 
+      active:text-primary;
+  }
+
+  .btn-primary {
+    @apply flex justify-center
+    font-medium
+    gap-2
+    rounded-md
+    bg-secondary
+    px-4 py-2
+    text-white
+    hover:bg-secondary
+    focus-visible:outline-2
+    focus-visible:outline-offset-2
+    focus-visible:outline-secondary
+    active:bg-secondary/65;
+  }
+
+  .btn-secondary {
+    @apply flex justify-center
+    rounded-md
+    border
+    border-primary
+    bg-white
+    px-4 py-2
+    text-sm/6
+    font-medium
+    text-text-primary
+    hover:bg-border/90
+    focus-visible:outline-2
+    focus-visible:outline-offset-2
+    focus-visible:outline-primary
+    active:bg-border;
+  }
+
+  .table {
+    @apply w-full
+
+
+          bg-surface;
+
+    box-shadow: var(--shadow-card);
+  }
+  .table thead {
+    @apply bg-surface-muted
+
+          text-xs
+
+          uppercase
+
+          tracking-wide;
+  }
+
+  .table tbody tr {
+    @apply 
+    border-b
+        border-border;
+  }
+
+  .card {
+    @apply rounded-xl
+        bg-surface
+        p-6;
+
+    box-shadow: var(--shadow-card);
+  }
+}
