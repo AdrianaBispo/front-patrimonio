@@ -1,6 +1,4 @@
-import NavBar from "./shared/components/Navbar";
 import SideMenu from "./shared/components/SideMenu";
-import User from "./pages/user/usersList/views/User";
 import { Outlet } from "react-router-dom";
 
 export default function App() {
