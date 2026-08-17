@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import ColaboradorView from "./views/ColaboradorView";
+import ColaboradorView from "./views/colaboradorView";
 import ColaboradorCadastroView from "./views/colaboradorCadastroView";
 
 export default function ColaboradorRoute() {
