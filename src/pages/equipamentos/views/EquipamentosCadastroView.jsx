@@ -133,7 +133,7 @@ export default function EquipamentoCadastroView() {
           </div>
           <div className="flex flex-col mb-5 md:flex-row gap-5">
             <div className="flex-1">
-              <label htmlFor="cargo"></label>
+              <label htmlFor="cargo">Fornedor</label>
               <select id="cargo" name="cargo" className="input-utilities">
                 <option value="">Selecione</option>
                 <option value="volvo">Volvo</option>
