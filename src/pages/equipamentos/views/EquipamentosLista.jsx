@@ -1,14 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import EditButton from "../../../../shared/components/EditButton";
-import DeleteButton from "../../../../shared/components/DeleteButton";
-import Cards from "../components/Cards";
+import Cards from "../../user/usersList/components/Cards";
 
-export default function UserListView() {
+export default function EquipamentosLista() {
   const navigate = useNavigate();
   return (
     <div className="max-w-7xl mx-auto">
       <div className="gap-2 mb-9 flex justify-between">
-        <h3 className=" text-primary/80 mb-2">Users</h3>
+        <h3 className=" text-primary/80 mb-2">Equipamentos</h3>
         <button
           class="flex justify-center gap-2 items-center rounded-md bg-primary px-8 py-1.5 text-sm/6 font-semibold text-white hover:bg-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary active:bg-primary/65"
           onClick={() => navigate("cadastrar")}
@@ -33,7 +31,7 @@ export default function UserListView() {
 
       <div className="flex justify-between gap-7 mb-9">
         <Cards
-          title="Total de Usuários"
+          title="Total de Clientes"
           value={50}
           icon={
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-200">
@@ -124,7 +122,7 @@ export default function UserListView() {
 
             <input
               type="text"
-              placeholder="Pesquisar usuário..."
+              placeholder="Pesquisar item..."
               class="px-1.5"
               className="input-utilities w-full pl-10 pr-2 py-2 bg-bg-primary"
             />
@@ -132,23 +130,21 @@ export default function UserListView() {
         </div>
 
         <table className="min-w-full divide-y divide-border">
-<thead className=" text-center text-xs font-medium tracking-wider text-text-primary">            <tr>
+          <thead className=" text-center text-xs font-medium tracking-wider text-text-primary">
+            <tr>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
-                Nome
+              ID
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
-                Cargo
+                Item
               </th>
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
+                Categoria
+              </th>
+             
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
                 Status
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
-              Perfil de Acesso
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
-                E-mail
-              </th>
-              <th className="px-6 py-3"></th>
             </tr>
           </thead>
 
@@ -161,10 +157,7 @@ export default function UserListView() {
 
                     <div className="ml-4">
                       <div className="text-sm font-medium text-text-primary">
-                        Jane Cooper
-                      </div>
-                      <div className="text-sm text-text-primary/60">
-                        jane.cooper@example.com
+                        DJI Matrice 300 RTK
                       </div>
                     </div>
                   </div>
@@ -172,33 +165,18 @@ export default function UserListView() {
 
                 <td className="whitespace-nowrap px-6 py-4">
                   <div className="text-sm text-text-primary">
-                    Regional Paradigm Technician
-                  </div>
-
-                  <div className="text-sm text-text-primary/60">
-                    Optimization
+                    DJI Matrice 300 RTK
                   </div>
                 </td>
 
                 <td className="whitespace-nowrap px-6 py-4">
-                  <span className="inline-flex rounded-full bg-active px-3 py-0.5 text-xs font-semibold leading-5 text-white">
-                    Active
+                  <span className="inline-flex rounded-full bg-active px-3 py-0.5 text-xs font-semibold leading-5">
+                    EQ-7724-A
                   </span>
                 </td>
 
                 <td className="whitespace-nowrap px-6 py-4 text-sm text-text-primary/60">
-                  Admin
-                </td>
-
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-text-primary/60">
-                  jane.cooper@example.com
-                </td>
-
-                <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
-                  <div className="flex items-center gap-3">
-                    <EditButton />
-                    <DeleteButton />
-                  </div>
+                  Active
                 </td>
               </tr>
             ))}

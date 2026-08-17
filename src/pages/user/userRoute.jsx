@@ -8,7 +8,6 @@ export default function UserRoute() {
       {/* Rota padrão (Ex: /users) -> Lista de Usuários */}
       <Route index element={<UserListView />} />
 
-      {/* Rota relativa (Ex: /users/cadastrar) -> Formulário de Cadastro */}
       <Route path="/cadastrar" element={<CadastrarUser />} />
     </Routes>
   );

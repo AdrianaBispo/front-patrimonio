@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import Cards from "../../user/usersList/components/Cards";
-export default function InventoryList() {
+
+export default function FornecedorLista() {
   const navigate = useNavigate();
   return (
     <div className="max-w-7xl mx-auto">
       <div className="gap-2 mb-9 flex justify-between">
-        <h3 className=" text-primary/80 mb-2">Equipamentos</h3>
+        <h3 className=" text-primary/80 mb-2">Fornecedores</h3>
         <button
           class="flex justify-center gap-2 items-center rounded-md bg-primary px-8 py-1.5 text-sm/6 font-semibold text-white hover:bg-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary active:bg-primary/65"
           onClick={() => navigate("cadastrar")}
@@ -30,7 +31,7 @@ export default function InventoryList() {
 
       <div className="flex justify-between gap-7 mb-9">
         <Cards
-          title="Total de Clientes"
+          title="Total de Fornecedores"
           value={50}
           icon={
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-200">
@@ -45,7 +46,7 @@ export default function InventoryList() {
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"
+                  d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z"
                 />
               </svg>
             </div>
@@ -121,7 +122,7 @@ export default function InventoryList() {
 
             <input
               type="text"
-              placeholder="Pesquisar item..."
+              placeholder="Pesquisar fornecedor..."
               class="px-1.5"
               className="input-utilities w-full pl-10 pr-2 py-2 bg-bg-primary"
             />
@@ -130,19 +131,18 @@ export default function InventoryList() {
 
         <table className="min-w-full divide-y divide-border">
           <thead className=" text-center text-xs font-medium tracking-wider text-text-primary">
-            
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
-                Item
+                Razão Social
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
-                Categoria
+                Contato
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
-                Id
+                Telefone
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
-                Status
+                CNPJ
               </th>
             </tr>
           </thead>
@@ -152,14 +152,9 @@ export default function InventoryList() {
               <tr key={item}>
                 <td className="whitespace-nowrap px-6 py-4">
                   <div className="flex items-center">
-                    <div className="flex h-10 w-10 rounded-full bg-gray-200"></div>
-
-                    <div className="ml-4">
+                    <div className="">
                       <div className="text-sm font-medium text-text-primary">
-                        Jane Cooper
-                      </div>
-                      <div className="text-sm text-text-primary/60">
-                        jane.cooper@example.com
+                        NOme da Empresa{" "}
                       </div>
                     </div>
                   </div>
@@ -167,22 +162,18 @@ export default function InventoryList() {
 
                 <td className="whitespace-nowrap px-6 py-4">
                   <div className="text-sm text-text-primary">
-                    Regional Paradigm Technician
-                  </div>
-
-                  <div className="text-sm text-text-primary/60">
-                    Optimization
+                    DJI Matrice 300 RTK
                   </div>
                 </td>
 
                 <td className="whitespace-nowrap px-6 py-4">
-                  <span className="inline-flex rounded-full bg-active px-3 py-0.5 text-xs font-semibold leading-5 text-white">
-                    Active
+                  <span className="inline-flex rounded-full bg-active px-3 py-0.5 text-xs font-semibold leading-5">
+                    EQ-7724-A
                   </span>
                 </td>
 
                 <td className="whitespace-nowrap px-6 py-4 text-sm text-text-primary/60">
-                  Admin
+                  Active
                 </td>
               </tr>
             ))}

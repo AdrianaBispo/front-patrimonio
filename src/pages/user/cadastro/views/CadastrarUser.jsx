@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 export default function CadastrarUserView() {
+  const navigate = useNavigate();
+
   return (
     <div className="max-w-7xl mx-auto">
       <div className="gap-2 mb-9">
@@ -84,19 +88,18 @@ export default function CadastrarUserView() {
 
           <div className="flex flex-col mb-5 md:flex-row gap-5">
             <div className="flex-1">
-              <label htmlFor="cargo">Role Selection</label>
+              <label htmlFor="cargo">Perfil de Acesso</label>
 
               <select id="cargo" name="cargo" className="input-utilities">
                 <option value="">Selecione</option>
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-                <option value="mercedes">Mercedes</option>
-                <option value="audi">Audi</option>
+                <option value="volvo">Administrador</option>
+                <option value="saab">Técnico</option>
+                <option value="mercedes">Usuário Comum</option>
               </select>
             </div>
 
             <div className="flex-1">
-              <label htmlFor="cargo">Departament</label>
+              <label htmlFor="cargo">Departamento</label>
               <select id="cargo" name="cargo" className="input-utilities">
                 <option value="">Selecione</option>
                 <option value="volvo">Volvo</option>
