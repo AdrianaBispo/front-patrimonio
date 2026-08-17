@@ -126,6 +126,22 @@ export default function EquipamentosLista() {
               class="px-1.5"
               className="input-utilities w-full pl-10 pr-2 py-2 bg-bg-primary"
             />
+
+            <button
+              type="button"
+              className="absolute right-3 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center text-on-surface-variant transition-colors hover:text-secondary"
+              title="Escanear código de barras"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24px"
+                viewBox="0 -960 960 960"
+                width="24px"
+                fill="#1f1f1f"
+              >
+                <path d="M40-120v-200h80v120h120v80H40Zm680 0v-80h120v-120h80v200H720ZM160-240v-480h80v480h-80Zm120 0v-480h40v480h-40Zm120 0v-480h80v480h-80Zm120 0v-480h120v480H520Zm160 0v-480h40v480h-40Zm80 0v-480h40v480h-40ZM40-640v-200h200v80H120v120H40Zm800 0v-120H720v-80h200v200h-80Z" />
+              </svg>
+            </button>
           </div>
         </div>
 
@@ -133,7 +149,7 @@ export default function EquipamentosLista() {
           <thead className=" text-center text-xs font-medium tracking-wider text-text-primary">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
-              ID
+                ID
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
                 Item
@@ -141,7 +157,7 @@ export default function EquipamentosLista() {
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
                 Categoria
               </th>
-             
+
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
                 Status
               </th>
