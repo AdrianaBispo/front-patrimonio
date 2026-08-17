@@ -4,6 +4,7 @@ import App from "./App";
 import AuthRoute from "./pages/auth/authRoutes";
 import UserRoute from "./pages/user/userRoute";
 import EquipamentoRoute from "./pages/equipamentos/equipamentoRoute";
+import FornecedorRoute from "./pages/fornecedor/FornecedorRoute";
 
 export default function Router() {
   return (
@@ -16,9 +17,13 @@ export default function Router() {
         <Route path="/" element={<App />}>
           {/* Ao acessar "/", redireciona para "/users" */}
           <Route index element={<Navigate to="/users" replace />} />
-          
+
           <Route path="users/*" element={<UserRoute />} />
-          <Route path="equipamentos/*" element={<EquipamentoRoute/>}/>
+
+          <Route path="equipamentos/*" element={<EquipamentoRoute />} />
+
+          <Route path="fornecedores/*" element={<FornecedorRoute/>}/>
+          
         </Route>
       </Routes>
     </BrowserRouter>
