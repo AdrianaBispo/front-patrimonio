@@ -120,7 +120,7 @@ export default function SideMenu() {
         </li>
         <li>
           <NavLink
-            to="/equipamentos"
+            to="/colaboradores"
             href="#"
             class="group rounded-base hover:bg-neutral-tertiary hover:text-fg-brand"
             className="sidebar-item-utilities"
