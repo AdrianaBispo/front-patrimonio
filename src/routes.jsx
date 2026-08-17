@@ -5,6 +5,7 @@ import AuthRoute from "./pages/auth/authRoutes";
 import UserRoute from "./pages/user/userRoute";
 import EquipamentoRoute from "./pages/equipamentos/equipamentoRoute";
 import FornecedorRoute from "./pages/fornecedor/FornecedorRoute";
+import ColaboradorRoute from "./pages/colaborador/colaboradorRoute";
 
 export default function Router() {
   return (
@@ -23,6 +24,8 @@ export default function Router() {
           <Route path="equipamentos/*" element={<EquipamentoRoute />} />
 
           <Route path="fornecedores/*" element={<FornecedorRoute/>}/>
+
+          <Route path="colaboradores/*" element={<ColaboradorRoute/>}/>
           
         </Route>
       </Routes>
