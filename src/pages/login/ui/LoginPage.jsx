@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import LoadingUI from "../../../shared/ui/LoadingUi";
 
-function Login() {
+function LoginPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
