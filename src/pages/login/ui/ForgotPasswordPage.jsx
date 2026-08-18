@@ -1,4 +1,4 @@
-function ForgotPassword() {
+function ForgotPasswordPage() {
   return (
     <div class="grid grid-cols-2 min-h-screen bg-bg-primary">
       <div class="flex min-h-full flex-col justify-center px-6 py-12">
@@ -80,4 +80,4 @@ function ForgotPassword() {
   );
 }
 
-export default ForgotPassword;
+export default ForgotPasswordPage;
