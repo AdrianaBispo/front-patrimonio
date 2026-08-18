@@ -1,4 +1,29 @@
+import { useEffect, useState } from "react";
+import LoadingUI from "../../../shared/ui/LoadingUi";
+
 function Login() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const image = new Image();
+
+    image.src =
+      "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/content-gallery-3.png";
+
+    image.onload = () => {
+      setLoading(false);
+    };
+
+    image.onerror = () => {
+      setLoading(false);
+    };
+  }, []);
+
+  if (loading) {
+    return <LoadingUI/>
+     
+  }
+
   return (
     <div class="grid grid-cols-2 min-h-screen bg-bg-primary">
       <div class="flex min-h-full flex-col justify-center px-6 py-12">
@@ -52,10 +77,7 @@ function Login() {
             </div>
 
             <div class="text-sm text-right">
-              <a
-                href="/forgot-password"
-                class="text-secondary hover:underline"
-              >
+              <a href="/forgot-password" class="text-secondary hover:underline">
                 Esqueci minha senha
               </a>
             </div>
