@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import LoadingUI from "../../../shared/ui/LoadingUi";
+import LoadingUI from "../../../../shared/components/LoadingUi";
 
 function LoginPage() {
   const [loading, setLoading] = useState(true);
