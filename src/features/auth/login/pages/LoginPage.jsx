@@ -77,7 +77,7 @@ function LoginPage() {
             </div>
 
             <div class="text-sm text-right">
-              <a href="/forgot-password" class="text-secondary hover:underline">
+              <a href="auth/forgot-password" class="text-secondary hover:underline">
                 Esqueci minha senha
               </a>
             </div>
