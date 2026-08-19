@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import LoadingUI from "../../../../shared/components/LoadingUi";
+import { Link } from "react-router-dom";
 
 function LoginPage() {
   const [loading, setLoading] = useState(true);
@@ -77,9 +78,9 @@ function LoginPage() {
             </div>
 
             <div class="text-sm text-right">
-              <a href="auth/forgot-password" class="text-secondary hover:underline">
+              <Link to="/auth/forgot-password" class="text-secondary hover:underline">
                 Esqueci minha senha
-              </a>
+              </Link>
             </div>
 
             <div>
