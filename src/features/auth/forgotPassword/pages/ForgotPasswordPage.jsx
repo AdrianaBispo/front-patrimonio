@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function ForgotPasswordPage() {
   return (
     <div class="grid grid-cols-2 min-h-screen bg-bg-primary">
@@ -26,11 +28,7 @@ function ForgotPasswordPage() {
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form action="#" class="space-y-6">
             <div>
-              <label
-                for="user"
-              >
-                E-mail
-              </label>
+              <label for="user">E-mail</label>
               <div class="mt-2">
                 <input
                   id="user"
@@ -44,16 +42,16 @@ function ForgotPasswordPage() {
             </div>
 
             <div>
-              <button
-                type="submit"
-               className="btn-primary w-full"
-              >
+              <button type="submit" className="btn-primary w-full">
                 Recuperar Acesso
               </button>
             </div>
 
             <div class="text-center">
-              <a href="/login" class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+              <Link
+                to="/auth/login"
+                class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -69,7 +67,7 @@ function ForgotPasswordPage() {
                   />
                 </svg>
                 Voltar ao Login
-              </a>
+              </Link>
             </div>
           </form>
         </div>
