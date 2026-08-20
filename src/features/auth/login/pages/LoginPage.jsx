@@ -21,12 +21,11 @@ function LoginPage() {
   }, []);
 
   if (loading) {
-    return <LoadingUI/>
-     
+    return <LoadingUI />;
   }
 
   return (
-    <div class="grid grid-cols-2 min-h-screen bg-bg-primary">
+    <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2 bg-bg-primary">
       <div class="flex min-h-full flex-col justify-center px-6 py-12">
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
           <div class="rounded-md bg-secondary p-2 ring-1 ring-white/10 text-white max-w-10">
@@ -78,7 +77,10 @@ function LoginPage() {
             </div>
 
             <div class="text-sm text-right">
-              <Link to="/auth/forgot-password" class="text-secondary hover:underline">
+              <Link
+                to="/auth/forgot-password"
+                class="text-secondary hover:underline"
+              >
                 Esqueci minha senha
               </Link>
             </div>
@@ -91,8 +93,7 @@ function LoginPage() {
           </form>
         </div>
       </div>
-
-      <div class="bg-[url(https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/content-gallery-3.png)]"></div>
+      <div class="bg-[url(https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/content-gallery-3.png)] hidden lg:block"></div>
     </div>
   );
 }
