@@ -2,9 +2,13 @@ import { useNavigate } from "react-router-dom";
 import EditButton from "../../../../shared/components/EditButton";
 import DeleteButton from "../../../../shared/components/DeleteButton";
 import Cards from "../components/Cards";
+import ErroDialogo from "../../../../shared/components/ErroDialogo";
 
 export default function UserListView() {
   const navigate = useNavigate();
+  const [showPopUp, setShowPopUp] = useState(false)
+
+
   return (
     <div className="max-w-7xl mx-auto">
       <div className="gap-2 mb-9 flex justify-between">
@@ -197,13 +201,14 @@ export default function UserListView() {
                 <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
                   <div className="flex items-center gap-3">
                     <EditButton />
-                    <DeleteButton />
+                    <DeleteButton onClick={()=>setShowPopUp(true)}/>
                   </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        {/* <ErroDialogo showPopUp={showPopUp} closePopUp={()=>setShowPopUp(false)}/> */}
       </div>
     </div>
   );
