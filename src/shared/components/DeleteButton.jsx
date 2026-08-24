@@ -1,6 +1,6 @@
-export default function DeleteButton() {
+export default function DeleteButton({onClick}) {
   return (
-    <button href="#" class="ml-2 text-red-600 hover:text-red-900">
+    <button onClick={onClick} class="ml-2 text-red-600 hover:text-red-900">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
