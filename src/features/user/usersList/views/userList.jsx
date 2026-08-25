@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useState, useRef } from "react";
 import EditButton from "../../../../shared/components/EditButton";
 import DeleteButton from "../../../../shared/components/DeleteButton";
 import Cards from "../components/Cards";
@@ -6,8 +7,7 @@ import ErroDialogo from "../../../../shared/components/ErroDialogo";
 
 export default function UserListView() {
   const navigate = useNavigate();
-  const [showPopUp, setShowPopUp] = useState(false)
-
+  const [showPopUp, setShowPopUp] = useState(false);
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -136,7 +136,9 @@ export default function UserListView() {
         </div>
 
         <table className="min-w-full divide-y divide-border">
-<thead className=" text-center text-xs font-medium tracking-wider text-text-primary">            <tr>
+          <thead className=" text-center text-xs font-medium tracking-wider text-text-primary">
+            {" "}
+            <tr>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
                 Nome
               </th>
@@ -147,7 +149,7 @@ export default function UserListView() {
                 Status
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
-              Perfil de Acesso
+                Perfil de Acesso
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
                 E-mail
@@ -201,14 +203,29 @@ export default function UserListView() {
                 <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
                   <div className="flex items-center gap-3">
                     <EditButton />
-                    <DeleteButton onClick={()=>setShowPopUp(true)}/>
+                    <DeleteButton onClick={() => setShowPopUp(true)} />{" "}
+                    <ErroDialogo
+                      showPopUp={showPopUp}
+                      titulo="Excluir Usuário"
+                      mensagem={
+                        <>
+                          Tem certeza que deseja excluir este usuário?
+                          <br />
+                          Essa ação não poderá ser desfeita.
+                        </>
+                      }
+                      confirmarDialogo={() => {
+                        console.log("Deletado com sucesso!");
+                        setShowPopUp(false); 
+                      }}
+                      fecharDialogo={() => setShowPopUp(false)} 
+                    />
                   </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        {/* <ErroDialogo showPopUp={showPopUp} closePopUp={()=>setShowPopUp(false)}/> */}
       </div>
     </div>
   );
