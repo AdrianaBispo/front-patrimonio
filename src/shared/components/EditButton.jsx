@@ -1,6 +1,6 @@
-export default function EditButton() {
+export default function EditButton({onClick}) {
   return (
-    <button href="#" class="text-text-primary hover:text-text-primary">
+    <button onClick={onClick} class="text-text-primary hover:text-text-primary">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
