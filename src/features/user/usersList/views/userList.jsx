@@ -202,7 +202,7 @@ export default function UserListView() {
 
                 <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
                   <div className="flex items-center gap-3">
-                    <EditButton />
+                    <EditButton onClick={()=> navigate("editar")}/>
                     <DeleteButton onClick={() => setShowPopUp(true)} />{" "}
                     <ErroDialogo
                       showPopUp={showPopUp}
