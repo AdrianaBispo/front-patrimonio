@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import CadastrarUser from "./cadastro/views/CadastrarUser";
 import UserListView from "./usersList/views/userList";
+import EditarUsuarioView from "./usersList/views/EditarUsuario";
 
 export default function UserRoute() {
   return (
@@ -9,6 +10,7 @@ export default function UserRoute() {
       <Route index element={<UserListView />} />
 
       <Route path="/cadastrar" element={<CadastrarUser />} />
+      <Route path="/editar" element={<EditarUsuarioView />}></Route>
     </Routes>
   );
 }
