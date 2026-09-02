@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-export default function CadastrarUserView() {
+export default function CadastrarUserPage() {
   const navigate = useNavigate();
 
   return (

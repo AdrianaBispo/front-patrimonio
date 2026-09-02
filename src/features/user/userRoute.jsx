@@ -1,7 +1,9 @@
 import { Routes, Route } from "react-router-dom";
-import CadastrarUser from "./cadastro/views/CadastrarUser";
-import UserListView from "./usersList/views/userList";
-import EditarUsuarioView from "./usersList/views/EditarUsuario";
+import CadastrarUser from "./usersList/pages/CadastrarUsuarioPage";
+import UserListView from "./usersList/pages/userListPage";
+import EditarUsuarioView from "./usersList/pages/EditarUsuarioPage";
+import CadastrarUserPage from "./usersList/pages/CadastrarUsuarioPage";
+import EditarUsuarioPage from "./usersList/pages/EditarUsuarioPage";
 
 export default function UserRoute() {
   return (
@@ -9,8 +11,8 @@ export default function UserRoute() {
       {/* Rota padrão (Ex: /users) -> Lista de Usuários */}
       <Route index element={<UserListView />} />
 
-      <Route path="/cadastrar" element={<CadastrarUser />} />
-      <Route path="/editar" element={<EditarUsuarioView />}></Route>
+      <Route path="/cadastrar" element={<CadastrarUserPage />} />
+      <Route path="/editar" element={<EditarUsuarioPage />}></Route>
     </Routes>
   );
 }

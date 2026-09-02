@@ -5,7 +5,7 @@ import DeleteButton from "../../../../shared/components/DeleteButton";
 import Cards from "../components/Cards";
 import ErroDialogo from "../../../../shared/components/ErroDialogo";
 
-export default function UserListView() {
+export default function UserListPage() {
   const navigate = useNavigate();
   const [showPopUp, setShowPopUp] = useState(false);
 
