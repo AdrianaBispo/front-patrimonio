@@ -1,9 +1,7 @@
 import { Routes, Route } from "react-router-dom";
-import CadastrarUser from "./usersList/pages/CadastrarUsuarioPage";
-import UserListView from "./usersList/pages/userListPage";
-import EditarUsuarioView from "./usersList/pages/EditarUsuarioPage";
-import CadastrarUserPage from "./usersList/pages/CadastrarUsuarioPage";
-import EditarUsuarioPage from "./usersList/pages/EditarUsuarioPage";
+import UserListView from "./pages/userListPage";
+import CadastrarUserPage from "./pages/CadastrarUsuarioPage";
+import EditarUsuarioPage from "./pages/EditarUsuarioPage";
 
 export default function UserRoute() {
   return (
