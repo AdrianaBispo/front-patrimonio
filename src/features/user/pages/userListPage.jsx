@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useRef } from "react";
 import EditButton from "../../../shared/components/EditButton";
 import DeleteButton from "../../../shared/components/DeleteButton";
-import Cards from "../components/Cards";
+import Cards from "../../../shared/components/Cards";
 import ErroDialogo from "../../../shared/components/ErroDialogo";
 
 export default function UserListPage() {
