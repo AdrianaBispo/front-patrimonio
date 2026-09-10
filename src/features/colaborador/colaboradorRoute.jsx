@@ -1,12 +1,12 @@
 import { Routes, Route } from "react-router-dom";
-import ColaboradorCadastroView from "./views/colaboradorCadastroView";
 import ColaboradorPage from "./views/colaboradorPage";
+import ColaboradorCadastroPage from "./views/colaboradorCadastroPage";
 
 export default function ColaboradorRoute() {
   return (
     <Routes>
       <Route index element={<ColaboradorPage />} />
-      <Route path="/cadastrar" element={<ColaboradorCadastroView />} />
+      <Route path="/cadastrar" element={<ColaboradorCadastroPage />} />
     </Routes>
   );
 }
