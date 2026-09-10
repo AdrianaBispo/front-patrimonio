@@ -1,8 +1,14 @@
 import { useNavigate } from "react-router-dom";
+import { useState, useRef } from "react";
 import Cards from "../../../shared/components/Cards";
+import EditButton from "../../../shared/components/EditButton";
+import DeleteButton from "../../../shared/components/DeleteButton";
+import ErroDialogo from "../../../shared/components/ErroDialogo";
 
 export default function ColaboradorPage() {
   const navigate = useNavigate();
+  const [showPopUp, setShowPopUp] = useState(false);
+
   return (
     <div className="max-w-7xl mx-auto">
       <div className="gap-2 mb-9 flex justify-between">
@@ -133,7 +139,7 @@ export default function ColaboradorPage() {
           <thead className=" text-center text-xs font-medium tracking-wider text-text-primary">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
-              Nome
+                Nome
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
                 Cargo
@@ -141,10 +147,11 @@ export default function ColaboradorPage() {
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
                 CPF
               </th>
-             
+
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
                 Status
               </th>
+              <th className="px-6 py-3"></th>
             </tr>
           </thead>
 
@@ -153,20 +160,14 @@ export default function ColaboradorPage() {
               <tr key={item}>
                 <td className="whitespace-nowrap px-6 py-4">
                   <div className="flex items-center">
-                    <div className="flex h-10 w-10 rounded-full bg-gray-200"></div>
-
-                    <div className="ml-4">
-                      <div className="text-sm font-medium text-text-primary">
-                        DJI Matrice 300 RTK
-                      </div>
+                    <div className="text-sm font-medium text-text-primary">
+                      Nome do Colaborador
                     </div>
                   </div>
                 </td>
 
                 <td className="whitespace-nowrap px-6 py-4">
-                  <div className="text-sm text-text-primary">
-                    DJI Matrice 300 RTK
-                  </div>
+                  <div className="text-sm text-text-primary">Nome do Cargo</div>
                 </td>
 
                 <td className="whitespace-nowrap px-6 py-4">
@@ -177,6 +178,29 @@ export default function ColaboradorPage() {
 
                 <td className="whitespace-nowrap px-6 py-4 text-sm text-text-primary/60">
                   Active
+                </td>
+
+                <td className="whitespace-nowrap px-6 py-4 text-sm text-text-primary/60">
+                  <div className="flex items-center gap-3">
+                    <EditButton onClick={() => {}} />
+                    <DeleteButton onClick={() => setShowPopUp(true)} />{" "}
+                    <ErroDialogo
+                      showPopUp={showPopUp}
+                      titulo="Excluir Colaborador"
+                      mensagem={
+                        <>
+                          Tem certeza que deseja excluir este colaborador?
+                          <br />
+                          Essa ação não poderá ser desfeita.
+                        </>
+                      }
+                      confirmarDialogo={() => {
+                        console.log("Deletado com sucesso!");
+                        setShowPopUp(false);
+                      }}
+                      fecharDialogo={() => setShowPopUp(false)}
+                    />
+                  </div>
                 </td>
               </tr>
             ))}
