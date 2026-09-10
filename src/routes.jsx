@@ -5,7 +5,7 @@ import AuthRoute from "./app/routes/authRoutes";
 import UserRoute from "./features/user/userRoute";
 // import EquipamentoRoute from "./pages/equipamentos/equipamentoRoute";
 // import FornecedorRoute from "./pages/fornecedor/FornecedorRoute";
-import ColaboradorRoute from "./features/colaborador/colaboradorRoute";
+import ColaboradorRoute from "./app/routes/colaboradorRoute";
 
 export default function Router() {
   return (
