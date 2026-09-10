@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
-import ColaboradorPage from "./views/colaboradorPage";
-import ColaboradorCadastroPage from "./views/colaboradorCadastroPage";
+import ColaboradorPage from "../../features/colaborador/pages/colaboradorPage";
+import ColaboradorCadastroPage from "../../features/colaborador/pages/colaboradorCadastroPage";
 
 export default function ColaboradorRoute() {
   return (
