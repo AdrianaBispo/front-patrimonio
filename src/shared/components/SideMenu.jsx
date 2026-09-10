@@ -11,7 +11,7 @@ export default function SideMenu() {
       </div>
       <ul>
         <li class="px-1 py-1"></li>
-        <li>
+        {/* <li>
           <a
             href="#"
             class="group rounded-base hover:bg-neutral-tertiary hover:text-fg-brand"
@@ -117,7 +117,7 @@ export default function SideMenu() {
 
             <span class="ms-3">Histórico Manutenção</span>
           </NavLink>
-        </li>
+        </li> */}
         <li>
           <NavLink
             to="/colaboradores"
