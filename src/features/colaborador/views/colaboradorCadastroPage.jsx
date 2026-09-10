@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-export default function ColaboradorCadastroView() {
+export default function ColaboradorCadastroPage() {
   const navigate = useNavigate();
 
   return (
@@ -102,10 +102,15 @@ export default function ColaboradorCadastroView() {
               <label htmlFor="cargo">Departamento</label>
               <select id="cargo" name="cargo" className="input-utilities">
                 <option value="">Selecione</option>
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-                <option value="mercedes">Mercedes</option>
-                <option value="audi">Audi</option>
+                <option value=""></option>
+              </select>
+            </div>
+
+            <div className="flex-1">
+              <label htmlFor="cargo">Usuário</label>
+              <select id="cargo" name="cargo" className="input-utilities">
+                <option value="">Selecione</option>
+                <option value=""></option>
               </select>
             </div>
           </div>
@@ -121,7 +126,7 @@ export default function ColaboradorCadastroView() {
           Cancelar
         </button>
         <button type="button" className="btn-primary bg-primary px-8">
-          Criar Usuário
+          Salvar
         </button>
       </div>
     </div>
