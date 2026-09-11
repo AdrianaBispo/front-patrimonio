@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import App from "./App";
 import AuthRoute from "./app/routes/authRoutes";
-import UserRoute from "./features/user/userRoute";
+import UserRoute from "./app/routes/userRoute";
 // import EquipamentoRoute from "./pages/equipamentos/equipamentoRoute";
 // import FornecedorRoute from "./pages/fornecedor/FornecedorRoute";
 import ColaboradorRoute from "./app/routes/colaboradorRoute";
