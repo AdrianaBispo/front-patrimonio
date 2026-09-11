@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import Cards from "../../user/usersList/components/Cards";
+import Cards from "../../../shared/components/Cards";
 
-export default function EquipamentosLista() {
+export default function EquipamentosListaPage() {
   const navigate = useNavigate();
   return (
     <div className="max-w-7xl mx-auto">
