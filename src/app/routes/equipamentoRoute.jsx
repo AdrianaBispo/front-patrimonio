@@ -1,11 +1,11 @@
 import { Routes, Route } from "react-router-dom";
-import EquipamentosLista from "./views/EquipamentosLista";
-import EquipamentoCadastroView from "./views/EquipamentosCadastroView";
+import EquipamentosListaPage from "../../features/equipamentos/pages/EquipamentosListaPage";
+import EquipamentoCadastroView from "../../features/equipamentos/pages/EquipamentosCadastroView";
 
 export default function EquipamentoRoute() {
   return (
     <Routes>
-      <Route index element={<EquipamentosLista />} />
+      <Route index element={<EquipamentosListaPage />} />
       <Route path="/cadastrar" element={<EquipamentoCadastroView />} />
     </Routes>
   );
