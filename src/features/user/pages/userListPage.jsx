@@ -163,15 +163,11 @@ export default function UserListPage() {
               <tr key={item}>
                 <td className="whitespace-nowrap px-6 py-4">
                   <div className="flex items-center">
-                    <div className="flex h-10 w-10 rounded-full bg-gray-200"></div>
-
-                    <div className="ml-4">
-                      <div className="text-sm font-medium text-text-primary">
-                        Jane Cooper
-                      </div>
-                      <div className="text-sm text-text-primary/60">
-                        jane.cooper@example.com
-                      </div>
+                    <div className="text-sm font-medium text-text-primary">
+                      Jane Cooper
+                    </div>
+                    <div className="text-sm text-text-primary/60">
+                      jane.cooper@example.com
                     </div>
                   </div>
                 </td>
@@ -202,7 +198,7 @@ export default function UserListPage() {
 
                 <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
                   <div className="flex items-center gap-3">
-                    <EditButton onClick={()=> navigate("editar")}/>
+                    <EditButton onClick={() => navigate("editar")} />
                     <DeleteButton onClick={() => setShowPopUp(true)} />{" "}
                     <ErroDialogo
                       showPopUp={showPopUp}
@@ -216,9 +212,9 @@ export default function UserListPage() {
                       }
                       confirmarDialogo={() => {
                         console.log("Deletado com sucesso!");
-                        setShowPopUp(false); 
+                        setShowPopUp(false);
                       }}
-                      fecharDialogo={() => setShowPopUp(false)} 
+                      fecharDialogo={() => setShowPopUp(false)}
                     />
                   </div>
                 </td>
