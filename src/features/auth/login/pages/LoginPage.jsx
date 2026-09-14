@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 
 function LoginPage() {
   const [loading, setLoading] = useState(true);
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
 
   const backgroundImage =
     "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/content-gallery-3.png";
@@ -21,6 +23,15 @@ function LoginPage() {
 
     image.src = backgroundImage;
   }, []);
+
+  async function logar() {
+    try {
+      await login({ email, password: senha });
+      navigate("/users");
+    } catch (error) {
+      console.error(error.response?.data);
+    }
+  }
 
   if (loading) {
     return <LoadingUI />;
@@ -64,6 +75,7 @@ function LoginPage() {
                   maxLength={20}
                   className="input-utilities"
                   placeholder="name@example.com"
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
@@ -79,6 +91,7 @@ function LoginPage() {
                   maxLength={20}
                   className="input-utilities"
                   placeholder="******"
+                  onChange={(e) => setSenha(e.target.value)}
                 />
               </div>
             </div>
@@ -93,7 +106,11 @@ function LoginPage() {
             </div>
 
             <div>
-              <button type="submit" className="btn-primary w-full">
+              <button
+                type="submit"
+                className="btn-primary w-full"
+                onClick={logar}
+              >
                 Login
               </button>
             </div>
