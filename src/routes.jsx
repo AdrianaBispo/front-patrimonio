@@ -11,7 +11,6 @@ export default function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/auth" replace />} />
         <Route path="/auth/*" element={<AuthRoute />} />
         <Route path="/" element={<App />}>
           <Route index element={<Navigate to="/users" replace />} />
