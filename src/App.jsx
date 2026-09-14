@@ -1,7 +1,16 @@
 import SideMenu from "./shared/components/SideMenu";
 import { Outlet } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import { getCookie } from "./utils/getCookie";
 
 export default function App() {
+  const token = getCookie("access_token");
+
+  const isAuthenticated = token !== null && token !== "";
+
+  if (!isAuthenticated) {
+    return <Navigate to="/auth" replace />;
+  }
   return (
     <div className="flex h-screen overflow-hidden bg-bg-primary">
       <aside className="w-64 shrink-0 h-full bg-primary overflow-y-auto">
