@@ -90,7 +90,11 @@ function LoginPage() {
             </div>
 
             <div>
-              <button type="submit" className="btn-primary w-full">
+              <button
+                type="submit"
+                className="btn-primary w-full"
+                onClick={logar}
+              >
                 Login
               </button>
             </div>
