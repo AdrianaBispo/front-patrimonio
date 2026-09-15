@@ -14,10 +14,13 @@ export function useLogin() {
       const result = await authService.login(credentials);
       return result; 
     } catch (err) {
-      const message = axios.isAxiosError(err)
-        ? err.response?.data?.message ?? "Erro ao entrar."
-        : "Erro inesperado.";
-      setError(message);
+      if (axios.isAxiosError(err)) {
+        const message = err.response?.data?.message ?? "Erro ao entrar.";
+        setError(message);
+      } 
+      else {
+        setError("Erro ao entrar.");
+      }
       throw err;
     } finally {
       setIsLoading(false);
