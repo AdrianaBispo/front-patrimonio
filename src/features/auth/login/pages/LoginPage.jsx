@@ -1,28 +1,23 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import LoadingUI from "../../../../shared/components/LoadingUi";
 import { Link } from "react-router-dom";
+import { useLogin } from "../hooks/useLogin";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
-  const [loading, setLoading] = useState(true);
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const { login, error, isLoading } = useLogin();
+  const navigate = useNavigate();
 
-  const backgroundImage =
-    "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/content-gallery-3.png";
+  async function logar() {
+    try {
+      await login({ email, password: senha });
+      navigate("/users");
+    } catch (e) {}
+  }
 
-  useEffect(() => {
-    const image = new Image();
-
-    image.onload = () => {
-      setLoading(false);
-    };
-
-    image.onerror = () => {
-      setLoading(false);
-    };
-
-    image.src = backgroundImage;
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return <LoadingUI />;
   }
 
@@ -53,7 +48,7 @@ function LoginPage() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form action="#" className="space-y-6">
+          <form onSubmit={logar} className="space-y-6">
             <div>
               <label htmlFor="user">Usuário</label>
 
@@ -64,6 +59,7 @@ function LoginPage() {
                   maxLength={20}
                   className="input-utilities"
                   placeholder="name@example.com"
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
@@ -79,6 +75,7 @@ function LoginPage() {
                   maxLength={20}
                   className="input-utilities"
                   placeholder="******"
+                  onChange={(e) => setSenha(e.target.value)}
                 />
               </div>
             </div>
@@ -101,12 +98,7 @@ function LoginPage() {
         </div>
       </div>
 
-      <div
-        className="hidden lg:block bg-cover bg-center"
-        style={{
-          backgroundImage: `url(${backgroundImage})`,
-        }}
-      />
+      <div className="hidden lg:block bg-cover bg-center bg-[url(https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/content-gallery-3.png)]" />
     </div>
   );
 }
