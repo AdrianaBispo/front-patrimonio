@@ -17,10 +17,6 @@ function LoginPage() {
     } catch (e) {}
   }
 
-  if (isLoading) {
-    return <LoadingUI />;
-  }
-
   return (
     <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2 bg-bg-primary">
       <div className="flex min-h-full flex-col justify-center px-6 py-12">
@@ -94,8 +90,15 @@ function LoginPage() {
                 type="submit"
                 className="btn-primary w-full"
                 onClick={logar}
+                disabled={isLoading}
               >
-                Login
+                {isLoading ? (
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="h-6 w-6 animate-spin rounded-full border-2 border-bg-primary border-t-transparent" />
+                  </div>
+                ) : (
+                  "Login"
+                )}
               </button>
             </div>
           </form>
