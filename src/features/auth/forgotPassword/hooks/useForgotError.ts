@@ -1,4 +1,4 @@
-import { useState, FormEvent } from "react";
+import { useCallback, useState } from "react";
 import { z } from "zod";
 import { FormForgotError } from "../types/FormForgotError";
 
@@ -6,29 +6,35 @@ const forgotPasswordSchema = z.object({
   email: z.string().min(1, "E-mail é obrigatório").email("E-mail inválido"),
 });
 
+export interface ForgotCredentials {
+  email?: string;
+}
+
 export function useForgotPassword() {
   const [email, setEmail] = useState("");
   const [errors, setErrors] = useState({} as FormForgotError);
   const [submitLoading, setSubmitLoading] = useState(false);
 
-  function changePassword(e?: React.SyntheticEvent) {
-    if (e) e.preventDefault();
+  const changePassword = useCallback(
+    async (e?: React.SubmitEvent<HTMLFormElement>) => {
 
-    setSubmitLoading(true);
+      setSubmitLoading(true);
 
-    const result = forgotPasswordSchema.safeParse({ email });
+      const result = forgotPasswordSchema.safeParse({ email });
+      await new Promise((resolve) => setTimeout(resolve, 300));
 
-    if (!result.success) {
-      const issueMessage = result.error.issues[0]?.message;
-      setErrors({ email: issueMessage });
+      if (!result.success) {
+        setErrors({ email: result.error.issues[0]?.message });
+        setSubmitLoading(false);
+        return;
+      }
+
+      setErrors({});
+
       setSubmitLoading(false);
-      return;
-    }
-
-    setErrors({});
-
-    setSubmitLoading(false);
-  }
+    },
+    [],
+  );
 
   return {
     email,
