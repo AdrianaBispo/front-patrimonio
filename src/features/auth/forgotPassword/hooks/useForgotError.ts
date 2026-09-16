@@ -11,7 +11,7 @@ export function useForgotPassword() {
   const [errors, setErrors] = useState({} as FormForgotError);
   const [submitLoading, setSubmitLoading] = useState(false);
 
-  function handleSubmit(e?: React.SyntheticEvent) {
+  function changePassword(e?: React.SyntheticEvent) {
     if (e) e.preventDefault();
 
     setSubmitLoading(true);
@@ -35,6 +35,6 @@ export function useForgotPassword() {
     setEmail,
     errors,
     submitLoading,
-    handleSubmit,
+    changePassword,
   };
 }
