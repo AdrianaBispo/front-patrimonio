@@ -2,13 +2,11 @@ import { useCallback, useState } from "react";
 import { z } from "zod";
 import { FormForgotError } from "../types/FormForgotError";
 
+
 const forgotPasswordSchema = z.object({
   email: z.string().min(1, "E-mail é obrigatório").email("E-mail inválido"),
 });
 
-export interface ForgotCredentials {
-  email?: string;
-}
 
 export function useForgotPassword() {
   const [email, setEmail] = useState("");
@@ -31,7 +29,7 @@ export function useForgotPassword() {
       setErrors({});
       setSubmitLoading(false);
     },
-    [email], // <-- Adicionado email aqui para atualizar a função quando o estado mudar
+    [email],
   );
 
   return {
