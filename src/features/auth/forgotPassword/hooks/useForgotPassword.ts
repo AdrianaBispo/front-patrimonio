@@ -16,8 +16,7 @@ export function useForgotPassword() {
   const [submitLoading, setSubmitLoading] = useState(false);
 
   const changePassword = useCallback(
-    async (e?: React.SubmitEvent<HTMLFormElement>) => {
-
+    async () => {
       setSubmitLoading(true);
 
       const result = forgotPasswordSchema.safeParse({ email });
@@ -30,10 +29,9 @@ export function useForgotPassword() {
       }
 
       setErrors({});
-
       setSubmitLoading(false);
     },
-    [],
+    [email], // <-- Adicionado email aqui para atualizar a função quando o estado mudar
   );
 
   return {
