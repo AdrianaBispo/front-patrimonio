@@ -5,7 +5,7 @@ export default function ErrorLabel({ message, children }) {
   if (!content) return null;
 
   return (
-    <span className="text-sm text-red-500 mt-1 block">
+    <span className="text-xs text-red-500 mt-1 block">
       {content}
     </span>
   );
