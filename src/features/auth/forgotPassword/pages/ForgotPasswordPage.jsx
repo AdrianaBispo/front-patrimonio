@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useForgotPassword } from "../hooks/useForgotPassword";
-
+import ErrorLabel from "../../../../shared/components/ErrorLabel";
 function ForgotPasswordPage() {
   const { email, setEmail, errors, submitLoading, changePassword } = useForgotPassword();
 
@@ -51,9 +51,9 @@ async function handleSubmit(e) {
                 />
               </div>
               {errors?.email && (
-                <span className="text-sm text-red-500 mt-1 block">
+                <ErrorLabel>
                   {errors.email}
-                </span>
+                </ErrorLabel>
               )}
             </div>
 
