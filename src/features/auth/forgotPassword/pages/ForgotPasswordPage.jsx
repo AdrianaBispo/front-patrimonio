@@ -6,7 +6,7 @@ function ForgotPasswordPage() {
 
 async function handleSubmit(e) {
     e.preventDefault();
-    await changePassword({ email });
+    await changePassword({ });
   }
 
   return (
