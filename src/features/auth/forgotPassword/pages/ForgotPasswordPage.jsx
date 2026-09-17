@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useForgotPassword } from "../hooks/useForgotError";
+import { useForgotPassword } from "../hooks/useForgotPassword";
 
 function ForgotPasswordPage() {
   const { email, setEmail, errors, submitLoading, changePassword } = useForgotPassword();
