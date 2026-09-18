@@ -14,8 +14,10 @@ function LoginPage() {
   async function logar(e) {
     e.preventDefault();
     try {
-      await login({ email, password: senha });
-      navigate("/users");
+      const result = await login({ email, password: senha });
+      if (result) {
+        navigate("/users");
+      }
     } catch (e) {}
   }
 
