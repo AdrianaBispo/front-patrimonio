@@ -38,6 +38,8 @@ export function useLogin() {
       setIsLoading(false);
       return;
     }
+    setInputsErrors({});
+
     try {
       const result = await authService.login(credentials);
       return result;
@@ -54,5 +56,5 @@ export function useLogin() {
     }
   }, []);
 
-  return { login, isLoading, error, inputsErrors};
+  return { login, isLoading, error, inputsErrors };
 }
