@@ -190,4 +190,29 @@
 
     box-shadow: var(--shadow-card);
   }
+
+  .Toastify__toast {
+    @apply rounded-xl border-none font-sans text-text-secondary;
+    box-shadow: var(--shadow-dropdown); 
+  }
+
+  .Toastify__toast--success {
+    @apply bg-success;
+  }
+
+  .Toastify__toast--error {
+    @apply bg-danger;
+  }
+
+  .Toastify__toast--warning {
+    @apply bg-warning;
+  }
+
+  .Toastify__toast--info {
+    @apply bg-secondary; 
+  }
+  
+  .Toastify__close-button {
+    @apply text-text-secondary opacity-70 hover:opacity-100 transition-opacity;
+  }
 }
