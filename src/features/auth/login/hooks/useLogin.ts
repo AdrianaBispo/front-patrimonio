@@ -22,6 +22,22 @@ export function useLogin() {
     setIsLoading(true);
     setError(null);
 
+    const validation = loginSchema.safeParse(credentials);
+    if (!validation.success) {
+      const errors: LoginInputError = {};
+
+      validation.error.issues.forEach((issue) => {
+        const field = issue.path[0];
+
+        if (field === "email" || field === "password") {
+          errors[field] = issue.message;
+        }
+      });
+
+      setInputsErrors(errors);
+      setIsLoading(false);
+      return;
+    }
     try {
       const result = await authService.login(credentials);
       return result;
@@ -38,5 +54,5 @@ export function useLogin() {
     }
   }, []);
 
-  return { login, isLoading, error };
+  return { login, isLoading, error, inputsErrors};
 }
