@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useLogin } from "../hooks/useLogin";
 import { useNavigate } from "react-router-dom";
 import ErrorLabel from "../../../../shared/components/ErrorLabel";
+import { toast } from "react-toastify";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -18,7 +19,9 @@ function LoginPage() {
       if (result) {
         navigate("/users");
       }
-    } catch (e) {}
+    } catch (e) {
+      toast.error(error);
+    }
   }
 
   return (
