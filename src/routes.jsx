@@ -6,6 +6,8 @@ import UserRoute from "./app/routes/userRoute";
 import EquipamentoRoute from "./app/routes/equipamentoRoute";
 // import FornecedorRoute from "./pages/fornecedor/FornecedorRoute";
 import ColaboradorRoute from "./app/routes/colaboradorRoute";
+import { ToastContainer } from 'react-toastify';
+
 
 export default function Router() {
   return (
@@ -16,11 +18,16 @@ export default function Router() {
           <Route index element={<Navigate to="/users" replace />} />
           <Route path="users/*" element={<UserRoute />} />
           <Route path="equipamentos/*" element={<EquipamentoRoute />} />
-           {/* <Route path="fornecedores/*" element={<FornecedorRoute />} /> */}
-          <Route path="colaboradores/*" element={<ColaboradorRoute />} /> 
+          {/* <Route path="fornecedores/*" element={<FornecedorRoute />} /> */}
+          <Route path="colaboradores/*" element={<ColaboradorRoute />} />
           <Route path="*" element={<Navigate to="/auth" replace />} />
         </Route>
       </Routes>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        theme="colored"
+      />
     </BrowserRouter>
   );
 }
