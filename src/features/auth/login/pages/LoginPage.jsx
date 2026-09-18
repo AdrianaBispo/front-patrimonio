@@ -3,14 +3,16 @@ import LoadingUI from "../../../../shared/components/LoadingUi";
 import { Link } from "react-router-dom";
 import { useLogin } from "../hooks/useLogin";
 import { useNavigate } from "react-router-dom";
+import ErrorLabel from "../../../../shared/components/ErrorLabel";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const { login, error, isLoading } = useLogin();
+  const { login, error, isLoading, inputsErrors } = useLogin();
   const navigate = useNavigate();
 
-  async function logar() {
+  async function logar(e) {
+    e.preventDefault();
     try {
       await login({ email, password: senha });
       navigate("/users");
@@ -59,6 +61,9 @@ function LoginPage() {
                   required
                 />
               </div>
+              {inputsErrors?.email && (
+                <ErrorLabel>{inputsErrors.email}</ErrorLabel>
+              )}
             </div>
 
             <div>
@@ -74,6 +79,9 @@ function LoginPage() {
                   onChange={(e) => setSenha(e.target.value)}
                 />
               </div>
+              {inputsErrors?.password && (
+                <ErrorLabel>{inputsErrors.password}</ErrorLabel>
+              )}
             </div>
 
             <div className="text-sm text-right">
