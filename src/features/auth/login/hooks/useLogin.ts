@@ -7,7 +7,7 @@ import { LoginInputError } from "../loginInputError.type";
 
 export function useLogin() {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [inputsErrors, setInputsErrors] = useState({} as LoginInputError);
 
   const loginSchema = z.object({
