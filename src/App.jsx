@@ -2,13 +2,34 @@ import SideMenu from "./shared/components/SideMenu";
 import { Outlet } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import { getCookie } from "./utils/getCookie";
+import { useEffect, useState } from "react";
+import {authService} from "./features/auth/services/authService";
+import LoadingUI from "./shared/components/LoadingUi";
 
 export default function App() {
-  const token = getCookie("access_token");
+  const [authenticated, setAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const isAuthenticated = token !== null && token !== "";
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        await authService.me();
+        setAuthenticated(true);
+      } catch {
+        setAuthenticated(false);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (!isAuthenticated) {
+    checkAuth();
+  }, []);
+
+  if (loading) {    
+    return <LoadingUI></LoadingUI>;
+  }
+
+  if (!authenticated) {
     return <Navigate to="/auth" replace />;
   }
   return (
