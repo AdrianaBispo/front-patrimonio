@@ -16,7 +16,7 @@ function LoginPage() {
     e.preventDefault();
     try {
       const result = await login({ email, password: senha });
-      if (result) {
+      if (result != null) {
         navigate("/users");
       }
     } catch (e) {
