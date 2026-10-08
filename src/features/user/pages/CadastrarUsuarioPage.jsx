@@ -6,39 +6,45 @@ export default function CadastrarUserPage() {
   return (
     <div className="max-w-7xl mx-auto">
       <div className="gap-2 mb-9">
-        <h3 className=" text-primary/80 mb-2">Register New User</h3>
+        <h3 className="text-primary/80 mb-2">Cadastrar Novo Usuário</h3>
         <p>
-          Create credentials and define access levels for a new team member.
-          Ensure all personal <br />
-          details match official identification for inventory accountability.
+          Crie as credenciais e defina os níveis de acesso para um novo membro
+          da equipe. <br />
+          Certifique-se de que todos os dados pessoais correspondam à
+          identificação oficial para controle do inventário.
         </p>
       </div>
 
       <div className="overflow-hidden bg-bg-secondary px-4 py-3 card">
-        <div class="flex gap-2 mb-5 mt-5 ">
-          <div class="text-secondary">
+        <div className="flex gap-2 mb-5 mt-5">
+          <div className="text-secondary">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              stroke-width="2"
+              strokeWidth="2"
               stroke="currentColor"
-              class="size-5"
+              className="size-5"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
               />
             </svg>
           </div>
 
-          <p className="font-bold">Personal Information</p>
+          <p className="font-bold">Informações Pessoais</p>
         </div>
+
         <div className="flex flex-col mb-5 md:flex-row gap-5">
           <div className="flex-1">
             <label>Nome</label>
-            <input className="input-utilities" type="text" placeholder="Nome" />
+            <input
+              className="input-utilities"
+              type="text"
+              placeholder="Nome"
+            />
           </div>
         </div>
 
@@ -54,7 +60,6 @@ export default function CadastrarUserPage() {
 
           <div className="flex-1">
             <label>E-mail</label>
-
             <input
               className="input-utilities"
               type="email"
@@ -63,44 +68,54 @@ export default function CadastrarUserPage() {
           </div>
         </div>
 
-        <div class="border border-border/60 mt-6 mb-9"></div>
+        <div className="border border-border/60 mt-6 mb-9"></div>
+
         <div>
-          <div class="flex gap-2 mb-5 mt-5 ">
-            <div class="text-secondary">
+          <div className="flex gap-2 mb-5 mt-5">
+            <div className="text-secondary">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke-width="2"
+                strokeWidth="2"
                 stroke="currentColor"
-                class="size-5"
+                className="size-5"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
                 />
               </svg>
             </div>
 
-            <p className="font-bold">Security Credentials</p>
+            <p className="font-bold">Credenciais de Segurança</p>
           </div>
 
           <div className="flex flex-col mb-5 md:flex-row gap-5">
             <div className="flex-1">
-              <label htmlFor="cargo">Perfil de Acesso</label>
+              <label htmlFor="perfil">Perfil de Acesso</label>
 
-              <select id="cargo" name="cargo" className="input-utilities">
+              <select
+                id="perfil"
+                name="perfil"
+                className="input-utilities"
+              >
                 <option value="">Selecione</option>
-                <option value="volvo">Administrador</option>
-                <option value="saab">Técnico</option>
-                <option value="mercedes">Usuário Comum</option>
+                <option value="administrador">Administrador</option>
+                <option value="tecnico">Técnico</option>
+                <option value="usuario">Usuário Comum</option>
               </select>
             </div>
 
             <div className="flex-1">
-              <label htmlFor="cargo">Departamento</label>
-              <select id="cargo" name="cargo" className="input-utilities">
+              <label htmlFor="departamento">Departamento</label>
+
+              <select
+                id="departamento"
+                name="departamento"
+                className="input-utilities"
+              >
                 <option value="">Selecione</option>
                 <option value="volvo">Volvo</option>
                 <option value="saab">Saab</option>
@@ -112,42 +127,43 @@ export default function CadastrarUserPage() {
 
           <div className="flex flex-col mb-5 md:flex-row gap-5">
             <div className="flex-1">
-              <label>Temporary Password</label>
+              <label>Senha Temporária</label>
               <input
                 className="input-utilities"
                 type="password"
-                placeholder="password"
+                placeholder="Digite a senha"
               />
             </div>
           </div>
         </div>
 
-        <div class="flex  items-center gap-2 border border-transparent rounded-md px-4 py-4">
-          <div class="text-secondary">
+        <div className="flex items-center gap-2 border border-transparent rounded-md px-4 py-4">
+          <div className="text-secondary">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              stroke-width="2"
+              strokeWidth="2"
               stroke="currentColor"
-              class="size-5"
+              className="size-5"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0Zm-9-3.75h.008v.008H12V8.25Z"
               />
             </svg>
           </div>
+
           <p>
-            Passwords must be at least 12 characters and contain a mix of
-            uppercase letters, numbers, and symbols for enterprise-grade
-            security.
+            A senha deve ter pelo menos 12 caracteres e conter uma combinação
+            de letras maiúsculas, números e símbolos para garantir segurança
+            de nível empresarial.
           </p>
         </div>
       </div>
 
-      <div class="flex flex-row gap-3 justify-end mt-4">
+      <div className="flex flex-row gap-3 justify-end mt-4">
         <button
           type="button"
           className="btn-secondary items-stretch"
@@ -155,7 +171,11 @@ export default function CadastrarUserPage() {
         >
           Cancelar
         </button>
-        <button type="button" className="btn-primary bg-primary px-8">
+
+        <button
+          type="button"
+          className="btn-primary bg-primary px-8"
+        >
           Criar Usuário
         </button>
       </div>
