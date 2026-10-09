@@ -15,6 +15,11 @@ export const authService = {
     const { data } = await api.get("/auth/user");
     return data;
   },
+
+  async listUsers(){
+    const {data} = await api.get("/auth/user");
+    return data;
+  }
 };
 
 export default authService;
