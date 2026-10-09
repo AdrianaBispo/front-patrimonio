@@ -17,8 +17,8 @@ export const authService = {
   },
 
   async listUsers(){
-    const {data} = await api.get("/auth/user");
-    return data;
+    const {data} = await api.get("/auth/users");
+    return data.users;
   }
 };
 
