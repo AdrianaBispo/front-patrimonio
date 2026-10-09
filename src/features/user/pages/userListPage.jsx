@@ -10,12 +10,14 @@ export default function UserListPage() {
   const navigate = useNavigate();
   const [showPopUp, setShowPopUp] = useState(false);
   const { getRegisters, error, isLoading } = useList();
+  const [listUsers, setListUsers] = useState([]);
 
   useEffect(() => {
     const fetchRegisters = async () => {
       try {
-        const listUsers = await getRegisters();
-        if (listUsers == null) {
+        const result = await getRegisters();
+        setListUsers(result);
+        if (result == null) {
           console.log("");
         }
       } catch (e) {
@@ -175,12 +177,12 @@ export default function UserListPage() {
           </thead>
 
           <tbody className="divide-y divide-border bg-white">
-            {[1, 2, 3].map((item) => (
-              <tr key={item}>
+            {listUsers.map((item) => (
+              <tr key={item.id}>
                 <td className="whitespace-nowrap px-6 py-4">
                   <div className="flex items-center">
                     <div className="text-sm font-medium text-text-primary">
-                      Jane Cooper
+                      {item.nome}
                     </div>
                     <div className="text-sm text-text-primary/60">
                       jane.cooper@example.com
