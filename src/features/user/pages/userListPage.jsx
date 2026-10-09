@@ -1,13 +1,29 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import EditButton from "../../../shared/components/EditButton";
 import DeleteButton from "../../../shared/components/DeleteButton";
 import Cards from "../../../shared/components/Cards";
 import ErroDialogo from "../../../shared/components/ErroDialogo";
+import { useList } from "../hooks/useListHook";
 
 export default function UserListPage() {
   const navigate = useNavigate();
   const [showPopUp, setShowPopUp] = useState(false);
+  const { getRegisters, error, isLoading } = useList();
+
+  useEffect(() => {
+    const fetchRegisters = async () => {
+      try {
+        const listUsers = await getRegisters();
+        if (listUsers == null) {
+          console.log("");
+        }
+      } catch (e) {
+      }
+    };
+
+    fetchRegisters();
+  }, []);
 
   return (
     <div className="max-w-7xl mx-auto">
