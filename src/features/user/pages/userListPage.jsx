@@ -161,7 +161,7 @@ export default function UserListPage() {
                 Nome
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
-                Cargo
+                Celular
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
                 Status
