@@ -222,9 +222,13 @@ export default function UserListPage() {
                           Essa ação não poderá ser desfeita.
                         </>
                       }
-                      confirmarDialogo={() => {
-                        deactivateUser(item.id);
-                        toast.success("Deletado com sucesso!");
+                      confirmarDialogo={async () => {
+                        try {
+                          await deactivateUser(item.id);
+                          toast.success("Deletado com sucesso!");
+                        } catch (error) {
+                          toast.error(error);
+                        }
                         setShowPopUp(false);
                       }}
                       fecharDialogo={() => setShowPopUp(false)}
