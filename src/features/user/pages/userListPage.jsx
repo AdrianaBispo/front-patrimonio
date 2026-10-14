@@ -28,6 +28,13 @@ export default function UserListPage() {
     fetchRegisters();
   }, []);
 
+  const filterUsers = async () => {
+    try {
+      const result = await searchUser(valueFilterUser);
+      setListUsers(result);
+    } catch (error) {}
+  };
+
   return (
     <div className="max-w-7xl mx-auto">
       <div className="gap-2 mb-9 flex justify-between">
