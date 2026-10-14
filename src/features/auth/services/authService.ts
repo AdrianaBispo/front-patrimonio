@@ -20,6 +20,12 @@ export const authService = {
     const {data} = await api.get("/auth/users");
     return data;
   },
+  
+  async filtertUsers(name: string){
+    const {data} = await api.get(`/auth/users/${name}`);
+    return data;
+  },
+
   async deactivateUser(id: string) {
     const { data } = await api.delete(`auth/users/${id}`);
     return data;
