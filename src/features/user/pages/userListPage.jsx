@@ -20,7 +20,9 @@ export default function UserListPage() {
       try {
         const result = await getRegisters();
         setListUsers(result);
-      } catch (e) {}
+      } catch (e) {
+        toast.error(error);
+      }
     };
 
     fetchRegisters();
@@ -30,7 +32,9 @@ export default function UserListPage() {
     try {
       const result = await searchUser(valueFilterUser);
       setListUsers(result);
-    } catch (error) {}
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   return (
