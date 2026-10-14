@@ -50,5 +50,10 @@ export function useList() {
       setIsLoading(false);
     }
   };
+
+
+  const searchUser =  async (name: string) => {
+
+  };
   return { getRegisters, deactivateUser, isLoading, error };
 }
