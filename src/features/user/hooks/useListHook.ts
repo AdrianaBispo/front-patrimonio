@@ -1,7 +1,6 @@
 import { useState, useCallback } from "react";
 import authService from "../../auth/services/authService";
 import axios from "axios";
-import { is } from "zod/v4/locales";
 import { User } from "../types/user";
 
 export function useList() {
@@ -51,9 +50,26 @@ export function useList() {
     }
   };
 
+  const searchUser = async (name: string) => {
+    setIsLoading(true);
+    setError(null);
 
-  const searchUser =  async (name: string) => {
-
+    try {
+     const result: User[] = await authService.filtertUsers(name);
+     return result;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const message =
+          error.response?.data?.message ??
+          "Ocorreu um erro interno no servidor";
+        setError(message);
+      } else {
+        setError("Ocorreu um erro ao obter os dados");
+      }
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
   };
-  return { getRegisters, deactivateUser, isLoading, error };
+  return { getRegisters, deactivateUser, searchUser, isLoading, error };
 }
