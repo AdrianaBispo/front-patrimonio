@@ -10,8 +10,10 @@ import { toast } from "react-toastify";
 export default function UserListPage() {
   const navigate = useNavigate();
   const [showPopUp, setShowPopUp] = useState(false);
-  const { getRegisters, error, isLoading, deactivateUser } = useList();
+  const { getRegisters, error, isLoading, deactivateUser, searchUser } =
+    useList();
   const [listUsers, setListUsers] = useState([]);
+  const [valueFilterUser, setValueFilterUser] = useState("");
 
   useEffect(() => {
     const fetchRegisters = async () => {
@@ -157,6 +159,12 @@ export default function UserListPage() {
               placeholder="Pesquisar usuário..."
               class="px-1.5"
               className="input-utilities w-full pl-10 pr-2 py-2 bg-bg-primary"
+              onChange={(e) => setValueFilterUser(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  filterUsers();
+                }
+              }}
             />
           </div>
         </div>
