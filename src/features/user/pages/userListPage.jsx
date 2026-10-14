@@ -5,6 +5,7 @@ import DeleteButton from "../../../shared/components/DeleteButton";
 import Cards from "../../../shared/components/Cards";
 import ErroDialogo from "../../../shared/components/ErroDialogo";
 import { useList } from "../hooks/useListHook";
+import { toast } from "react-toastify";
 
 export default function UserListPage() {
   const navigate = useNavigate();
@@ -189,7 +190,7 @@ export default function UserListPage() {
 
                 <td className="whitespace-nowrap px-6 py-4">
                   <div className="text-sm text-text-primary">
-                  {item.celular}
+                    {item.celular}
                   </div>
                 </td>
 
@@ -223,8 +224,7 @@ export default function UserListPage() {
                       }
                       confirmarDialogo={() => {
                         deactivateUser(item.id);
-                        console.log("Deletado com sucesso!");
-                        //TODO: EXIBIR POP UP DE SUCESSO
+                        toast.success("Deletado com sucesso!");
                         setShowPopUp(false);
                       }}
                       fecharDialogo={() => setShowPopUp(false)}
