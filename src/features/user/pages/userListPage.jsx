@@ -9,7 +9,7 @@ import { useList } from "../hooks/useListHook";
 export default function UserListPage() {
   const navigate = useNavigate();
   const [showPopUp, setShowPopUp] = useState(false);
-  const { getRegisters, error, isLoading } = useList();
+  const { getRegisters, error, isLoading, deactivateUser } = useList();
   const [listUsers, setListUsers] = useState([]);
 
   useEffect(() => {
@@ -222,7 +222,9 @@ export default function UserListPage() {
                         </>
                       }
                       confirmarDialogo={() => {
+                        deactivateUser(item.id);
                         console.log("Deletado com sucesso!");
+                        //TODO: EXIBIR POP UP DE SUCESSO
                         setShowPopUp(false);
                       }}
                       fecharDialogo={() => setShowPopUp(false)}
