@@ -27,7 +27,7 @@ export const authService = {
   },
 
   async deactivateUser(id: string) {
-    const { data } = await api.delete(`auth/users/${id}`);
+    const { data } = await api.delete(`/auth/users/${id}`);
     return data;
   }
 }
