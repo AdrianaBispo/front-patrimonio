@@ -19,11 +19,7 @@ export default function UserListPage() {
     const fetchRegisters = async () => {
       try {
         const result = await getRegisters();
-        console.log("Retorno da API:", result);
         setListUsers(result);
-        if (result == null) {
-          console.log("");
-        }
       } catch (e) {}
     };
 
