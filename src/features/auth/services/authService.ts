@@ -19,7 +19,10 @@ export const authService = {
   async listUsers(){
     const {data} = await api.get("/auth/users");
     return data;
+  },
+  async deactivateUser(id: string) {
+    const { data } = await api.delete(`auth/users/${id}`);
+    return data;
   }
-};
-
+}
 export default authService;
