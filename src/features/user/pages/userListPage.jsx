@@ -16,12 +16,12 @@ export default function UserListPage() {
     const fetchRegisters = async () => {
       try {
         const result = await getRegisters();
+        console.log("Retorno da API:", result);
         setListUsers(result);
         if (result == null) {
           console.log("");
         }
-      } catch (e) {
-      }
+      } catch (e) {}
     };
 
     fetchRegisters();
@@ -164,13 +164,13 @@ export default function UserListPage() {
                 Celular
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
+                E-mail
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
                 Status
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
                 Perfil de Acesso
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
-                E-mail
               </th>
               <th className="px-6 py-3"></th>
             </tr>
@@ -184,20 +184,17 @@ export default function UserListPage() {
                     <div className="text-sm font-medium text-text-primary">
                       {item.nome}
                     </div>
-                    <div className="text-sm text-text-primary/60">
-                      jane.cooper@example.com
-                    </div>
                   </div>
                 </td>
 
                 <td className="whitespace-nowrap px-6 py-4">
                   <div className="text-sm text-text-primary">
-                    Regional Paradigm Technician
+                  {item.celular}
                   </div>
+                </td>
 
-                  <div className="text-sm text-text-primary/60">
-                    Optimization
-                  </div>
+                <td className="whitespace-nowrap px-6 py-4 text-sm text-text-primary/60">
+                  {item.email}
                 </td>
 
                 <td className="whitespace-nowrap px-6 py-4">
@@ -207,11 +204,7 @@ export default function UserListPage() {
                 </td>
 
                 <td className="whitespace-nowrap px-6 py-4 text-sm text-text-primary/60">
-                  Admin
-                </td>
-
-                <td className="whitespace-nowrap px-6 py-4 text-sm text-text-primary/60">
-                  jane.cooper@example.com
+                  {item.celular}
                 </td>
 
                 <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
