@@ -171,7 +171,6 @@ export default function UserListPage() {
 
         <table className="min-w-full divide-y divide-border">
           <thead className=" text-center text-xs font-medium tracking-wider text-text-primary">
-            {" "}
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
                 Nome
