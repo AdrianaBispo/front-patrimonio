@@ -50,12 +50,12 @@ export function useList() {
     }
   };
 
-  const searchUser = async (name: string) => {
+  const searchUser = async (name: string, id:string | null) => {
     setIsLoading(true);
     setError(null);
 
     try {
-     const result: User[] = await authService.filtertUsers(name);
+     const result: User[] = await authService.filtertUsers(name, id);
      return result;
     } catch (error) {
       if (axios.isAxiosError(error)) {
