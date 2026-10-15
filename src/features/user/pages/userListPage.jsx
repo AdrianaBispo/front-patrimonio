@@ -228,10 +228,11 @@ export default function UserListPage() {
                     <DeleteButton onClick={() => setShowPopUp(true)} />{" "}
                     <ErroDialogo
                       showPopUp={showPopUp}
-                      titulo="Excluir Usuário"
+                      titulo="Desativar Usuário"
+                      isLoading={isLoading}
                       mensagem={
                         <>
-                          Tem certeza que deseja excluir este usuário?
+                          Tem certeza que deseja desativar este usuário?
                           <br />
                           Essa ação não poderá ser desfeita.
                         </>
@@ -239,7 +240,7 @@ export default function UserListPage() {
                       confirmarDialogo={async () => {
                         try {
                           await deactivateUser(item.id);
-                          toast.success("Deletado com sucesso!");
+                          toast.success("Desativado com sucesso!");
                         } catch (error) {
                           toast.error(error);
                         }
