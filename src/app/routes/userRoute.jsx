@@ -10,7 +10,7 @@ export default function UserRoute() {
       <Route index element={<UserListView />} />
 
       <Route path="/cadastrar" element={<CadastrarUserPage />} />
-      <Route path="/editar" element={<EditarUsuarioPage />}></Route>
+      <Route path="/editar/:id" element={<EditarUsuarioPage />}></Route>
     </Routes>
   );
 }
