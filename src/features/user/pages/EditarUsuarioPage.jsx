@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 
 export default function EditarUsuarioPage() {
   const navigate = useNavigate();
+  const { id } = useParams();
 
   return (
     <div className="max-w-7xl mx-auto">
