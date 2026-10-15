@@ -224,7 +224,7 @@ export default function UserListPage() {
 
                 <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
                   <div className="flex items-center gap-3">
-                    <EditButton onClick={() => navigate("editar")} />
+              <EditButton onClick={() => navigate(`editar/${item.id}`)} />
                     <DeleteButton onClick={() => setShowPopUp(true)} />{" "}
                     <ErroDialogo
                       showPopUp={showPopUp}
