@@ -16,14 +16,14 @@ export const authService = {
     return data;
   },
 
-  async listUsers(){
-    const {data} = await api.get("/auth/users");
+  async listUsers() {
+    const { data } = await api.get("/auth/users");
     return data;
   },
 
-  async filtertUsers(value: string) {
+  async filtertUsers(nameFilter: string, idFilter?: string | null) {
     const { data } = await api.get(`/auth/users/`, {
-      params: { name: `${value}` },
+      params: { name: `${nameFilter}`, id: `${idFilter}` },
     });
     return data;
   },
