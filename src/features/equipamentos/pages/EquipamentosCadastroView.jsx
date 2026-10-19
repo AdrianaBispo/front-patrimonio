@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function EquipamentoCadastroView() {
   const navigate = useNavigate();
+  console.log(import.meta.env.VITE_APP_TITLE);
 
   return (
     <div className="max-w-7xl mx-auto">

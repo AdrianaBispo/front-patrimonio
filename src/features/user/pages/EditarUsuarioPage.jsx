@@ -2,8 +2,30 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from 'react-router-dom';
 
 export default function EditarUsuarioPage() {
+  
   const navigate = useNavigate();
   const { id } = useParams();
+   useEffect(() => {
+      const fetchRegisters = async () => {
+        try {
+          const result = await getRegisters();
+          setListUsers(result);
+        } catch (e) {
+          toast.error(error);
+        }
+      };
+  
+      fetchRegisters();
+    }, []);
+  
+    const filterUsers = async () => {
+      try {
+        const result = await searchUser(valueFilterUser);
+        setListUsers(result);
+      } catch (error) {
+        toast.error(error);
+      }
+    };
 
   return (
     <div className="max-w-7xl mx-auto">
