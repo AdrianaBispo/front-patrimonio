@@ -102,7 +102,7 @@ function LoginPage() {
               <button
                 type="submit"
                 className="btn-primary w-full"
-                onClick={logar}
+                // onClick={logar}
                 disabled={isLoading}
               >
                 {isLoading ? (
