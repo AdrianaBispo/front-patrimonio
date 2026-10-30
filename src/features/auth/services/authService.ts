@@ -4,6 +4,10 @@ import { LoginCredentials, AuthResult } from "../types/auth.types";
 const api = axios.create({
   baseURL: "http://localhost:8000/api",
   withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
 });
 
 export const authService = {
