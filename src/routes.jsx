@@ -7,6 +7,7 @@ import EquipamentoRoute from "./app/routes/equipamentoRoute";
 // import FornecedorRoute from "./pages/fornecedor/FornecedorRoute";
 import ColaboradorRoute from "./app/routes/colaboradorRoute";
 import { ToastContainer } from 'react-toastify';
+import CategoriaRoute from "./app/routes/categoriaRoutes";
 
 
 export default function Router() {
@@ -20,6 +21,7 @@ export default function Router() {
           <Route path="equipamentos/*" element={<EquipamentoRoute />} />
           {/* <Route path="fornecedores/*" element={<FornecedorRoute />} /> */}
           <Route path="colaboradores/*" element={<ColaboradorRoute />} />
+          <Route path="categoria/*" element={<CategoriaRoute/>}/>
           <Route path="*" element={<Navigate to="/auth" replace />} />
         </Route>
       </Routes>
