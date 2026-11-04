@@ -1,14 +1,9 @@
-interface ViteTypeOptions {
-  // By adding this line, you can make the type of ImportMetaEnv strict
-  // to disallow unknown keys.
-  // strictImportMetaEnv: unknown
-}
+/// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly BASEURL: string
-  // more env variables...
+  readonly VITE_BASEURL: string;
 }
 
 interface ImportMeta {
-  readonly env: ImportMetaEnv
-}  
+  readonly env: ImportMetaEnv;
+}
