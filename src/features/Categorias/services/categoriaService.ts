@@ -19,6 +19,11 @@ export const categoriaService = {
   async getCategoria(){
     const { data } = await api.get(`/categoria/all`);
     return data;
+  },
+
+  async updateCategoria(id: string) {
+    const { data } = await api.put(`/categoria/update/${id}`);
+    return data;
   }
 };
 
