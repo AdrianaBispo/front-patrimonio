@@ -15,7 +15,11 @@ export function useCadastroCategoriaHook() {
       .string()
       .min(1, "O nome é obrigatório")
       .max(70, "O nome deve ter no máximo 70 caracteres"),
-    tipo: z.string().min(1, "O tipo é obrigatório"),
+    tipo: z
+      .string()
+      .min(1, "O tipo é obrigatório")
+      .max(2, "O tipo deve ter no máximo 2 caracteres"),
+
     notas: z
       .string()
       .max(500, "O máximo de caracteres para o campo notas são 500 caracteres"),
