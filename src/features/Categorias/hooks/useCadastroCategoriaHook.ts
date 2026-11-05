@@ -11,7 +11,10 @@ export function useCadastroCategoriaHook() {
   const [inputsErrors, setInputsErrors] = useState({} as CategoriaError);
 
   const cadastroSchema = z.object({
-    nome: z.string().min(1, "O nome é obrigatório"),
+    nome: z
+      .string()
+      .min(1, "O nome é obrigatório")
+      .max(70, "O nome deve ter no máximo 70 caracteres"),
     tipo: z.string().min(1, "O tipo é obrigatório"),
     notas: z
       .string()

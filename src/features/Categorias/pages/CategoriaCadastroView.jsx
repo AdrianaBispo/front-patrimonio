@@ -44,13 +44,14 @@ export default function CadastrarCategoriaPage() {
                 className="input-utilities"
                 type="text"
                 placeholder="Nome"
+                maxLength={70}
                 value={nome}
                 onChange={(e) => setNome(e.target.value)}
                 required
               />
-     {inputsErrors?.nome && (
+              {inputsErrors?.nome && (
                 <ErrorLabel>{inputsErrors.nome}</ErrorLabel>
-              )}              
+              )}
             </div>
 
             <div className="flex-1">
