@@ -2,6 +2,8 @@ import { useState, useCallback } from "react";
 import { z } from "zod";
 import { CategoriaType } from "../types/categoriaType";
 import { CategoriaError } from "../types/categoriaError";
+import categoriaService from "../services/categoriaService";
+import axios from "axios";
 
 export function useCadastroCategoriaHook() {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,6 +13,9 @@ export function useCadastroCategoriaHook() {
   const cadastroSchema = z.object({
     nome: z.string().min(1, "O nome é obrigatório"),
     tipo: z.string().min(1, "O tipo é obrigatório"),
+    notas: z
+      .string()
+      .max(500, "O máximo de caracteres para o campo notas são 500 caracteres"),
   });
 
   const cadastro = useCallback(async (categoria: CategoriaType) => {
@@ -18,17 +23,35 @@ export function useCadastroCategoriaHook() {
     setError(null);
 
     const validar = cadastroSchema.safeParse(categoria);
+    console.log(categoria);
 
     if (!validar.success) {
       const errors: CategoriaError = {};
 
       validar.error.issues.forEach((issue) => {
-        const campo = issue.path[0];
+        const campo = issue.path[0] as keyof CategoriaError;
+        errors[campo] = issue.message;
       });
 
       setInputsErrors(errors);
       setIsLoading(false);
-      return;
+      try {
+        const result = await categoriaService.createCategoria(categoria);
+        return result;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const message =
+            error.response?.data?.message ??
+            "Ocorreu um erro interno no servidor";
+          setError(message);
+        } else {
+          setError("Ocorreu um erro ao cadastrar os dados");
+        }
+        throw error;
+      } finally {
+        setIsLoading(false);
+        return;
+      }
     }
     setInputsErrors({});
   }, []);
