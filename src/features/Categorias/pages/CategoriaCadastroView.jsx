@@ -71,6 +71,9 @@ export default function CadastrarCategoriaPage() {
                 <option value="LI">Licença</option>
                 <option value="CP">Componente</option>
               </select>
+              {inputsErrors?.tipo && (
+                <ErrorLabel>{inputsErrors.tipo}</ErrorLabel>
+              )}
             </div>
           </div>
 
