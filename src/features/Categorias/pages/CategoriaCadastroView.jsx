@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCadastroCategoriaHook } from "../hooks/useCadastroCategoriaHook";
+import ErrorLabel from "../../../shared/components/ErrorLabel";
 
 export default function CadastrarCategoriaPage() {
   const navigate = useNavigate();
@@ -47,6 +48,9 @@ export default function CadastrarCategoriaPage() {
                 onChange={(e) => setNome(e.target.value)}
                 required
               />
+     {inputsErrors?.nome && (
+                <ErrorLabel>{inputsErrors.nome}</ErrorLabel>
+              )}              
             </div>
 
             <div className="flex-1">
