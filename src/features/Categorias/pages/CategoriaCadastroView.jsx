@@ -91,6 +91,7 @@ export default function CadastrarCategoriaPage() {
                 onChange={(e) => setNota(e.target.value)}
               />
             </div>
+            {inputsErrors?.nota && <ErrorLabel>{inputsErrors.nota}</ErrorLabel>}
           </div>
         </div>
 
