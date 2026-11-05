@@ -2,10 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCadastroCategoriaHook } from "../hooks/useCadastroCategoriaHook";
 import ErrorLabel from "../../../shared/components/ErrorLabel";
+import { toast } from "react-toastify";
 
 export default function CadastrarCategoriaPage() {
   const navigate = useNavigate();
-  const { cadastro, error, inputsErrors } = useCadastroCategoriaHook();
+  const { cadastro, error, inputsErrors, isLoading } =
+    useCadastroCategoriaHook();
 
   const [nome, setNome] = useState("");
   const [tipo, setTipo] = useState("");
@@ -20,9 +22,9 @@ export default function CadastrarCategoriaPage() {
         tipo,
         nota: nota,
       });
-      navigate(-1);
       toast.success("Registro salvo!");
-    } catch (error) {
+      navigate(-1);
+    } catch (e) {
       toast.error(error);
     }
   }
@@ -105,7 +107,13 @@ export default function CadastrarCategoriaPage() {
           </button>
 
           <button type="submit" className="btn-primary bg-primary px-8">
-            Salvar
+            {isLoading ? (
+              <div className="flex flex-col items-center gap-4">
+                <div className="h-6 w-6 animate-spin rounded-full border-2 border-bg-primary border-t-transparent" />
+              </div>
+            ) : (
+              "Salvar"
+            )}
           </button>
         </div>
       </form>
