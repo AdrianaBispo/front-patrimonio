@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FormularioCategoria } from "../components/FormularioCategoria";
 import { useCadastroCategoriaHook } from "../hooks/useCadastroCategoriaHook";
@@ -13,6 +13,23 @@ export default function EditarCategoriaPage() {
 
   const { getCategoria, editarCategoria, error, inputsErrors, isLoading } =
     useCadastroCategoriaHook();
+
+  useEffect(() => {
+    const getCategoriaById = async () => {
+      if (!id) return;
+
+      try {
+        const categoriaById = await getCategoria(nome,id);
+        setNome(categoriaById.data[0].nome);
+        setNota(categoriaById.data[0].nota ?? "");
+        setTipo(categoriaById.data[0].tipo);
+      } catch (error) {
+        console.error("Erro ao buscar categoria:", error);
+      }
+    };
+
+    getCategoriaById();
+  }, [id]);
 
   async function handleSubmit(e) {
     e.preventDefault();
