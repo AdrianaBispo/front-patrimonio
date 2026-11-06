@@ -30,6 +30,14 @@ export default function CategoriaListaPage() {
     fetchRegisters();
   }, []);
 
+  const filterCategoria = async () => {
+    try {
+      const result = await getCategoria(valueFilterCategoria);
+      setValueFilterCategoria(result);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -84,6 +92,13 @@ export default function CategoriaListaPage() {
               placeholder="Pesquisar categoria..."
               class="px-1.5"
               className="input-utilities w-full pl-10 pr-2 py-2 bg-bg-primary"
+              onChange={(e) => setValueFilterCategoria(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  filterCategoria();
+                }
+              }}
+              
             />
           </div>
         </div>
