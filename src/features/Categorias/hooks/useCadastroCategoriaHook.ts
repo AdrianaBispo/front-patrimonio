@@ -63,42 +63,70 @@ export function useCadastroCategoriaHook() {
     setInputsErrors({});
   }, []);
 
-  const editarCategoria = useCallback(async (id: string, categoria: CategoriaType) => {
-  setIsLoading(true);
+  const editarCategoria = useCallback(
+    async (id: string, categoria: CategoriaType) => {
+      setIsLoading(true);
+      setError(null);
+
+      const validar = cadastroSchema.safeParse(categoria);
+      console.log(categoria);
+
+      if (!validar.success) {
+        const errors: CategoriaError = {};
+
+        validar.error.issues.forEach((issue) => {
+          const campo = issue.path[0] as keyof CategoriaError;
+          errors[campo] = issue.message;
+        });
+
+        setInputsErrors(errors);
+        setIsLoading(false);
+        try {
+          const result = await categoriaService.updateCategoria(id, categoria);
+          return result;
+        } catch (error) {
+          if (axios.isAxiosError(error)) {
+            const message =
+              error.response?.data?.message ??
+              "Ocorreu um erro interno no servidor";
+            setError(message);
+          } else {
+            setError("Ocorreu um erro ao atualizar os dados");
+          }
+          throw error;
+        } finally {
+          setIsLoading(false);
+          return;
+        }
+      }
+    },
+    [],
+  );
+
+  const getCategoria = useCallback(async (nome: string, id: string) => {
+    setIsLoading(true);
     setError(null);
 
-    const validar = cadastroSchema.safeParse(categoria);
-    console.log(categoria);
-
-    if (!validar.success) {
-      const errors: CategoriaError = {};
-
-      validar.error.issues.forEach((issue) => {
-        const campo = issue.path[0] as keyof CategoriaError;
-        errors[campo] = issue.message;
-      });
-
-      setInputsErrors(errors);
-      setIsLoading(false);
-      try {
-        const result = await categoriaService.updateCategoria(id, categoria);
-        return result;
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          const message =
-            error.response?.data?.message ??
-            "Ocorreu um erro interno no servidor";
-          setError(message);
-        } else {
-          setError("Ocorreu um erro ao atualizar os dados");
-        }
-        throw error;
-      } finally {
-        setIsLoading(false);
-        return;
+    try {
+      const result: CategoriaType[] = await categoriaService.getCategoria(
+        nome,
+        id,
+      );
+      return result;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const message =
+          error.response?.data?.message ??
+          "Ocorreu um erro interno no servidor";
+        setError(message);
+      } else {
+        setError("Ocorreu um erro ao obter os dados");
       }
+      throw error;
+    } finally {
+      setIsLoading(false);
     }
-  },[]);
+  }, []);
 
-  return { cadastro, editarCategoria, isLoading, error, inputsErrors };
+  return { cadastro, editarCategoria, getCategoria, isLoading, error, inputsErrors };
 }
