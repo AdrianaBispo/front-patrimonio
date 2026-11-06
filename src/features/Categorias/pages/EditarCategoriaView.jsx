@@ -10,12 +10,23 @@ export default function EditarCategoriaPage() {
   const [nome, setNome] = useState("");
   const [tipo, setTipo] = useState("");
   const [nota, setNota] = useState("");
-  
-  const { cadastro, error, inputsErrors, isLoading } =
+
+  const { getCategoria, editarCategoria, error, inputsErrors, isLoading } =
     useCadastroCategoriaHook();
 
   async function handleSubmit(e) {
     e.preventDefault();
+    try {
+      const sucesso = await editarCategoria({
+        nome,
+        tipo,
+        nota: nota,
+      });
+      toast.success("Registro salvo!");
+      navigate(-1);
+    } catch (e) {
+      toast.error(error);
+    }
   }
 
   return (
