@@ -63,5 +63,42 @@ export function useCadastroCategoriaHook() {
     setInputsErrors({});
   }, []);
 
-  return { cadastro, isLoading, error, inputsErrors };
+  const editarCategoria = useCallback(async (id: string, categoria: CategoriaType) => {
+  setIsLoading(true);
+    setError(null);
+
+    const validar = cadastroSchema.safeParse(categoria);
+    console.log(categoria);
+
+    if (!validar.success) {
+      const errors: CategoriaError = {};
+
+      validar.error.issues.forEach((issue) => {
+        const campo = issue.path[0] as keyof CategoriaError;
+        errors[campo] = issue.message;
+      });
+
+      setInputsErrors(errors);
+      setIsLoading(false);
+      try {
+        const result = await categoriaService.updateCategoria(id, categoria);
+        return result;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const message =
+            error.response?.data?.message ??
+            "Ocorreu um erro interno no servidor";
+          setError(message);
+        } else {
+          setError("Ocorreu um erro ao atualizar os dados");
+        }
+        throw error;
+      } finally {
+        setIsLoading(false);
+        return;
+      }
+    }
+  },[]);
+
+  return { cadastro, editarCategoria, isLoading, error, inputsErrors };
 }
