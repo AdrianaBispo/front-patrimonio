@@ -14,6 +14,18 @@ export default function EditarCategoriaPage() {
     <div className="gap-2 mb-9">
       <h3 className="text-primary/80 mb-2">Editar Categoria</h3>
     </div>
+    <FormularioCategoria
+    nome={nome}
+    setNome={setNome}
+    tipo={tipo}
+    setTipo={setTipo}
+    nota={nota}
+    setNota={setNota}
+    isLoading={isLoading}
+    inputsErrors={inputsErrors}
+    handleSubmit={handleSubmit}
+    navigate={navigate}
+    />
   </div>
   );
 }
