@@ -6,11 +6,17 @@ import EditButton from "../../../shared/components/EditButton";
 import DeleteButton from "../../../shared/components/DeleteButton";
 import ErroDialogo from "../../../shared/components/ErroDialogo";
 import { useList } from "../../user/hooks/useListHook";
+import { useCadastroCategoriaHook } from "../hooks/useCadastroCategoriaHook";
 
 export default function CategoriaListaPage() {
   const navigate = useNavigate();
   const [showPopUp, setShowPopUp] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const { getCategoria, error, inputsErrors, isLoading } =
+    useCadastroCategoriaHook();
+      const [listCategoria, setListCategoria] = useState([]);
+
+  const [valueFilterUser, setValueFilterUser] = useState(""); 
+
   return (
     <div className="max-w-7xl mx-auto">
       <div className="gap-2 mb-9 flex justify-between">
@@ -82,24 +88,24 @@ export default function CategoriaListaPage() {
           </thead>
 
           <tbody className="divide-y divide-border bg-white">
-            {[1, 2, 3].map((item) => (
+            {listCategoria.map((item) => (
               <tr key={item}>
                 <td className="whitespace-nowrap px-6 py-4">
                   <div className="text-sm font-medium text-text-primary">
-                    DJI Matrice 300 RTK
+                    {item.nome}
                   </div>
                 </td>
 
                 <td className="whitespace-nowrap px-6 py-4">
                   <div className="text-sm text-text-primary">
-                    DJI Matrice 300 RTK
+                    {item.tipo}
                   </div>
                 </td>
 
                 <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
                   <div className="flex items-center justify-end gap-3">
                     <EditButton onClick={() => navigate(`editar/${item.id}`)} />
-                    <DeleteButton onClick={() => setShowPopUp(true)} />{" "}
+                    <DeleteButton onClick={() => setShowPopUp(true)} />
                     <ErroDialogo
                       showPopUp={showPopUp}
                       titulo="Desativar Categoria"
