@@ -11,11 +11,25 @@ import { useCadastroCategoriaHook } from "../hooks/useCadastroCategoriaHook";
 export default function CategoriaListaPage() {
   const navigate = useNavigate();
   const [showPopUp, setShowPopUp] = useState(false);
-  const { getCategoria, error, inputsErrors, isLoading } =
+  const { getCategoria, error, isLoading } =
     useCadastroCategoriaHook();
   const [listCategoria, setListCategoria] = useState([]);
 
-  const [valueFilterUser, setValueFilterUser] = useState("");
+  const [valueFilterCategoria, setValueFilterCategoria] = useState("");
+
+    useEffect(() => {
+    const fetchRegisters = async () => {
+      try {
+        const result = await getCategoria();
+        setListCategoria(result);
+      } catch (e) {
+        toast.error(error);
+      }
+    };
+
+    fetchRegisters();
+  }, []);
+
 
   return (
     <div className="max-w-7xl mx-auto">
