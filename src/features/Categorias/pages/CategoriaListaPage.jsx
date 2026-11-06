@@ -13,9 +13,9 @@ export default function CategoriaListaPage() {
   const [showPopUp, setShowPopUp] = useState(false);
   const { getCategoria, error, inputsErrors, isLoading } =
     useCadastroCategoriaHook();
-      const [listCategoria, setListCategoria] = useState([]);
+  const [listCategoria, setListCategoria] = useState([]);
 
-  const [valueFilterUser, setValueFilterUser] = useState(""); 
+  const [valueFilterUser, setValueFilterUser] = useState("");
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -97,9 +97,7 @@ export default function CategoriaListaPage() {
                 </td>
 
                 <td className="whitespace-nowrap px-6 py-4">
-                  <div className="text-sm text-text-primary">
-                    {item.tipo}
-                  </div>
+                  <div className="text-sm text-text-primary">{item.tipo}</div>
                 </td>
 
                 <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
