@@ -16,15 +16,15 @@ export const categoriaService = {
     return data;
   },
 
-  async getCategoria(nomeFilter: string, idFilter: string) {
+  async getCategoria(nomeFilter: string, idFilter?: string | null) {
     const { data } = await api.get(`/categoria/all`, {
       params: { search: `${nomeFilter}`, id: `${idFilter}` },
     });
     return data;
   },
 
-  async updateCategoria(id: string) {
-    const { data } = await api.put(`/categoria/update/${id}`);
+  async updateCategoria(id: string, categoria: CategoriaType) {
+    const { data } = await api.put(`/categoria/update/${id}`, categoria);
     return data;
   },
 };
