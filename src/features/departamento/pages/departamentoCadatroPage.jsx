@@ -7,9 +7,6 @@ export default function CadastrarDepartamentoPage() {
   const [gestor, setGestor] = useState("");
   const [gestoresList, setGestorsList] = useState([]);
   const [nota, setNota] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [inputsErrors, setInputsErrors] = useState({});
-  const [handleSubmit, setHandleSubmit] = useState(false);
   const { cadastro, getNomeList, isLoading, error, inputsErrors, nomeList } = useDepartamentoHook();
 
   useEffect(() => {
