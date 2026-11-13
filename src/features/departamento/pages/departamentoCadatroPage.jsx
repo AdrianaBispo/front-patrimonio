@@ -10,14 +10,12 @@ export default function CadastrarDepartamentoPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [inputsErrors, setInputsErrors] = useState({});
   const [handleSubmit, setHandleSubmit] = useState(false);
-  const [nomeList, setNomeList] = useState<Map<number, string[]>>(new Map());
-  const { createGestor, getGestor, updateGestor, deleteGestor, getNomeList } = useGestorHook();
+  const { cadastro, getNomeList, isLoading, error, inputsErrors, nomeList } = useDepartamentoHook();
 
   useEffect(() => {
     const fetchNomeList = async () => {
       try {
-        const result = await getNomeList();
-        setNomeList(result);
+        await getNomeList();
       } catch (error) {
         toast.error(error);
       }
@@ -25,7 +23,21 @@ export default function CadastrarDepartamentoPage() {
     fetchNomeList();
   }, []);
 
+  async function handleSubmit(e) {
+    e.preventDefault();
 
+    try {
+      const sucesso = await createDepartamento({
+        nome,
+        tipo,
+        nota: nota,
+      });
+      toast.success("Registro salvo!");
+      navigate(-1);
+    } catch (e) {
+      toast.error(error);
+    }
+  }
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -33,13 +45,12 @@ export default function CadastrarDepartamentoPage() {
         <h3 className="text-primary/80 mb-2">Cadastrar Novo Departamento</h3>
       </div>
 
-      
       <FormularioDepartamento
         nome={nome}
         setNome={setNome}
         gestor={gestor}
         setGestor={setGestor}
-        gestoresList={gestoresList}
+        gestoresList={getNomeList}
         nota={nota}
         setNota={setNota}
         isLoading={isLoading}
