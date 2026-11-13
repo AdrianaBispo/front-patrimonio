@@ -3,7 +3,7 @@ import axios from "axios";
 import { TipoEquipamento } from "../types/tipoEquipamento.types";
 import { tipoEquipamentoService } from "../services/tipoEquipamentoService";
 
-export function useTipoEquipamento() {
+export function useTipoEquipamentoHook() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
