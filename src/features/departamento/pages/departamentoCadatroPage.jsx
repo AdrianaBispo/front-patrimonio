@@ -1,7 +1,31 @@
 import { useNavigate } from "react-router-dom";
+import { FormularioDepartamento } from "../components/FormularioDepartamento";
 
-export default function CadastrarCategoriaPage() {
+export default function CadastrarDepartamentoPage() {
   const navigate = useNavigate();
+  const [nome, setNome] = useState("");
+  const [gestor, setGestor] = useState("");
+  const [gestoresList, setGestorsList] = useState([]);
+  const [nota, setNota] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [inputsErrors, setInputsErrors] = useState({});
+  const [handleSubmit, setHandleSubmit] = useState(false);
+  const [nomeList, setNomeList] = useState<Map<number, string[]>>(new Map());
+  const { createGestor, getGestor, updateGestor, deleteGestor, getNomeList } = useGestorHook();
+
+  useEffect(() => {
+    const fetchNomeList = async () => {
+      try {
+        const result = await getNomeList();
+        setNomeList(result);
+      } catch (error) {
+        toast.error(error);
+      }
+    };
+    fetchNomeList();
+  }, []);
+
+
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -9,51 +33,20 @@ export default function CadastrarCategoriaPage() {
         <h3 className="text-primary/80 mb-2">Cadastrar Novo Departamento</h3>
       </div>
 
-      <div className="overflow-hidden bg-bg-secondary px-4 py-3 card">
-        <div className="flex flex-col mb-5 md:flex-row gap-5">
-          <div className="flex-1">
-            <label>Nome</label>
-            <input className="input-utilities" type="text" placeholder="Nome" />
-          </div>
-
-          <div className="flex-1">
-            <label htmlFor="perfil">Gestor</label>
-
-            <select id="perfil" name="perfil" className="input-utilities">
-              <option value="">Selecione</option>
-              <option value="AC">Acessório</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="flex flex-col mb-5 md:flex-row gap-5">
-          <div className="flex-1">
-            <label>Nota</label>
-            <textarea
-              className="input-utilities"
-              name="comentario"
-              rows="5"
-              cols="40"
-              maxlength="500"
-              placeholder="Adicionar uma nota..."
-            ></textarea>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex flex-row gap-3 justify-end mt-4">
-        <button
-          type="button"
-          className="btn-secondary items-stretch"
-          onClick={() => navigate(-1)}
-        >
-          Cancelar
-        </button>
-
-        <button type="button" className="btn-primary bg-primary px-8">
-          Salvar
-        </button>
-      </div>
+      
+      <FormularioDepartamento
+        nome={nome}
+        setNome={setNome}
+        gestor={gestor}
+        setGestor={setGestor}
+        gestoresList={gestoresList}
+        nota={nota}
+        setNota={setNota}
+        isLoading={isLoading}
+        inputsErrors={inputsErrors}
+        handleSubmit={handleSubmit}
+        navigate={navigate}
+      />
     </div>
   );
 }
