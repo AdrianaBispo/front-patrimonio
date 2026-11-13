@@ -4,13 +4,27 @@ import axios from "axios";
 import { DepartamentoErroType } from "../types/depatamento.erro.types";
 import { DepartamentoType } from "../types/departamento.types";
 import departamentoService from "../services/departamentoService";
+import authService from "../../auth/services/authService";
 
 export function useDepartamentoHook() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [inputsErrors, setInputsErrors] = useState({} as DepartamentoErroType);
-
+  const [nomeList, setNomeList] = useState<Map<number, string[]>>(new Map());
   const departamentoSchema = z.object({});
+
+  const getNomeList = useCallback(async (): Promise<void> => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const result: Map<number, string[]> = await authService.getNomeList();
+      setNomeList(result);
+    } catch (error) {
+      setError("Ocorreu um erro ao obter os dados");
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   const cadastro = useCallback(async (departamento: DepartamentoType) => {
     setIsLoading(true);
@@ -48,4 +62,5 @@ export function useDepartamentoHook() {
     }
     setInputsErrors({});
   }, []);
-}
+
+  return { cadastro, getNomeList, isLoading, error, inputsErrors, nomeList };
