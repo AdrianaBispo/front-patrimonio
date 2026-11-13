@@ -9,7 +9,7 @@ export function useGestorHook() {
     const [error, setError] = useState<string | null>(null);
     const [nomeList, setNomeList] = useState<Map<number, string[]>>(new Map());
 
-    const getNomeList = useCallback(async (): Promise<Map<number, string[]>> => {
+    const getNomeList = useCallback(async (): Promise<void> => {
         setIsLoading(true);
         setError(null);
         try {
@@ -20,7 +20,6 @@ export function useGestorHook() {
         } finally {
             setIsLoading(false);
         }
-        return nomeList;
     }, []);
 
 
