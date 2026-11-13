@@ -19,6 +19,7 @@ export default function Router() {
           <Route index element={<Navigate to="/users" replace />} />
           <Route path="users/*" element={<UserRoute />} />
           <Route path="equipamentos/*" element={<EquipamentoRoute />} />
+          <Route path="categorias/*" element={<CategoriaRoute/>}/>
           {/* <Route path="fornecedores/*" element={<FornecedorRoute />} /> */}
           <Route path="colaboradores/*" element={<ColaboradorRoute />} />
           <Route path="categoria/*" element={<CategoriaRoute/>}/>
