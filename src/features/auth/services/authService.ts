@@ -36,5 +36,10 @@ export const authService = {
     const { data } = await api.delete(`/auth/users/${id}`);
     return data;
   },
+
+  async getNomeList() {
+    const { data } = await api.get("/auth/users/nome-list");
+    return data;
+  },
 };
 export default authService;
