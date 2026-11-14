@@ -18,12 +18,12 @@ export function useTipoEquipamentoHook() {
   });
 
 
-  const getRegisters = useCallback(async (): Promise<TipoEquipamento[]> => {
+  const getRegisters = useCallback(async (nomeFilter: string, idFilter: string): Promise<TipoEquipamento[]> => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const result: TipoEquipamento[] = await tipoEquipamentoService.getTipoEquipamento();
+      const result: TipoEquipamento[] = await tipoEquipamentoService.getTipoEquipamento(nomeFilter, idFilter);
       return result;
     } catch (error) {
       if (axios.isAxiosError(error)) {
