@@ -23,7 +23,10 @@ export const tipoEquipamentoService = {
     return response.data;
   },
 
-  async updateTipoEquipamento(id: string, tipoEquipamento: TipoEquipamento) {},
+  async updateTipoEquipamento(id: string, tipoEquipamento: TipoEquipamento) {
+    const response = await api.put(`/tipo-equipamento/${id}`, tipoEquipamento);
+    return response.data;
+  },
 
   async deleteTipoEquipamento(id: string){}
 
