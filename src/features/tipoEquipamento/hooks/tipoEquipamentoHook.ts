@@ -2,10 +2,21 @@ import { useState, useCallback } from "react";
 import axios from "axios";
 import { TipoEquipamento } from "../types/tipoEquipamento.types";
 import { tipoEquipamentoService } from "../services/tipoEquipamentoService";
+import { z } from "zod";
 
 export function useTipoEquipamentoHook() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+
+  const tipoEquipamentoSchema = z.object({
+    nome: z.string().min(1, "Nome é obrigatório")
+      .max(70, "Nome deve ter no máximo 70 caracteres"),
+    descricao: z.string().min(1, "Descrição é obrigatória").
+      max(150, "Descrição deve ter no máximo 150 caracteres"),
+    ativo: z.boolean().default(true),
+  });
+
 
   const getRegisters = useCallback(async (): Promise<TipoEquipamento[]> => {
     setIsLoading(true);
@@ -50,13 +61,13 @@ export function useTipoEquipamentoHook() {
     }
   };
 
-  const searchTipoEquipamento = async (name: string, id:string | null) => {
+  const searchTipoEquipamento = async (name: string, id: string | null) => {
     setIsLoading(true);
     setError(null);
 
     try {
-     const result: TipoEquipamento[] = await tipoEquipamentoService.getTipoEquipamento(name, id);
-     return result;
+      const result: TipoEquipamento[] = await tipoEquipamentoService.getTipoEquipamento(name, id);
+      return result;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const message =
