@@ -16,7 +16,12 @@ export const tipoEquipamentoService = {
     return response.data;
   },
 
-  async getTipoEquipamento(nomeFilter: string, idFilter: string){},
+  async getTipoEquipamento(nomeFilter: string, idFilter: string){
+    const response = await api.get("/tipo-equipamento", {
+      params: { nomeFilter, idFilter },
+    });
+    return response.data;
+  },
 
   async updateTipoEquipamento(id: string, tipoEquipamento: TipoEquipamento) {},
 
