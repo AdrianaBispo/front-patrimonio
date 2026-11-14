@@ -66,7 +66,7 @@ export function useTipoEquipamentoHook() {
     setError(null);
 
     try {
-      const result: TipoEquipamento[] = await tipoEquipamentoService.getTipoEquipamento(name, id);
+      const result: TipoEquipamento[] = await tipoEquipamentoService.getTipoEquipamento(name, id ?? "");
       return result;
     } catch (error) {
       if (axios.isAxiosError(error)) {
