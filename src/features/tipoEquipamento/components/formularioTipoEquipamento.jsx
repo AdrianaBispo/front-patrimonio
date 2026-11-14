@@ -17,7 +17,9 @@ export function FormularioTipoEquipamento({
       <div className="overflow-hidden bg-bg-secondary px-4 py-3 card">
         <div className="flex flex-col mb-5 md:flex-row gap-5">
           <div className="flex-1">
-            <label htmlFor="nome">Nome</label>
+            <label htmlFor="nome">
+              Nome <span className="text-red-500">*</span>
+            </label>
             <input
               id="nome"
               name="nome"
@@ -27,7 +29,6 @@ export function FormularioTipoEquipamento({
               maxLength={70}
               value={nome}
               onChange={(e) => setNome(e.target.value)}
-              required
             />
             {inputsErrors?.nome && <ErrorLabel>{inputsErrors.nome}</ErrorLabel>}
           </div>
@@ -49,7 +50,9 @@ export function FormularioTipoEquipamento({
         </div>
 
         <div className="flex flex-col mb-5">
-          <label htmlFor="descricao">Descrição</label>
+          <label htmlFor="descricao">
+            Descrição <span className="text-red-500">*</span>
+          </label>
           <textarea
             id="descricao"
             name="descricao"
@@ -59,7 +62,6 @@ export function FormularioTipoEquipamento({
             placeholder="Descrição do tipo de equipamento"
             value={descricao}
             onChange={(e) => setDescricao(e.target.value)}
-            required
           />
           {inputsErrors?.descricao && (
             <ErrorLabel>{inputsErrors.descricao}</ErrorLabel>
