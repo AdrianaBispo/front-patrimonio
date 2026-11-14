@@ -11,7 +11,10 @@ const api = axios.create({
 });
 
 export const tipoEquipamentoService = {
-  async createTipoEquipamento(tipoEquipamento: TipoEquipamento){},
+  async createTipoEquipamento(tipoEquipamento: TipoEquipamento){
+    const response = await api.post("/tipo-equipamento", tipoEquipamento);
+    return response.data;
+  },
 
   async getTipoEquipamento(nomeFilter: string, idFilter: string){},
 
