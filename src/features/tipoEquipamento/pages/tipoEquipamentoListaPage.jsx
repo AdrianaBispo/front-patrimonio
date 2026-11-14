@@ -19,7 +19,7 @@ export default function TipoEquipamentoListaPage() {
     useEffect(() => {
         const fetchRegisters = async () => {
             try {
-                const result = await getTipoEquipamento();
+                const result = await searchTipoEquipamento(valueFilter, null);
                 setListTipoEquipamento(result);
             } catch (e) {
                 toast.error(error);
@@ -31,7 +31,7 @@ export default function TipoEquipamentoListaPage() {
 
     const filter = async () => {
         try {
-            const result = await searchTipoEquipamento(valueFilterTipoEquipamento);
+            const result = await searchTipoEquipamento(valueFilterTipoEquipamento, null);
             setValueFilterTipoEquipamento(result);
         } catch (error) {
             toast.error(error);
