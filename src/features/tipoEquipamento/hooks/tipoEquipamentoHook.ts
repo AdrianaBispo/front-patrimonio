@@ -3,11 +3,15 @@ import axios from "axios";
 import { TipoEquipamento } from "../types/tipoEquipamento.types";
 import { tipoEquipamentoService } from "../services/tipoEquipamentoService";
 import { z } from "zod";
+import { TipoEquipamentoError } from "../types/tipoEquipamentoErro.types";
 
 export function useTipoEquipamentoHook() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
+  const [nome, setNome] = useState<string>("");
+  const [descricao, setDescricao] = useState<string>("");
+  const [ativo, setAtivo] = useState<boolean>(true);
+  const [inputsErrors, setInputsErrors] = useState<Record<string, string>>({});
 
   const tipoEquipamentoSchema = z.object({
     nome: z.string().min(1, "Nome é obrigatório")
@@ -82,5 +86,37 @@ export function useTipoEquipamentoHook() {
       setIsLoading(false);
     }
   };
-  return { getRegisters, deactivateTipoEquipamento, searchTipoEquipamento, isLoading, error };
-}
+
+  const cadastro = useCallback(async (tipoEquipamento: TipoEquipamento) => {
+    setIsLoading(true);
+    setError(null);
+    const validar = tipoEquipamentoSchema.safeParse(tipoEquipamento);
+    if (!validar.success) {
+      const errors: TipoEquipamentoError = {};
+      validar.error.issues.forEach((issue) => {
+        const campo = issue.path[0] as keyof TipoEquipamentoError;
+        errors[campo] = issue.message;
+      });
+      setInputsErrors(errors);
+      setIsLoading(false);
+      return;
+    }
+    try {
+      const result = await tipoEquipamentoService.createTipoEquipamento(tipoEquipamento);
+      return result;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const message = error.response?.data?.message ?? "Ocorreu um erro interno no servidor";
+        setError(message);
+      } else {
+        setError("Ocorreu um erro ao cadastrar o tipo de equipamento");
+      }
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+
+  }, []);
+
+  return {cadastro, getRegisters, deactivateTipoEquipamento, searchTipoEquipamento, isLoading, error, inputsErrors };
+};
