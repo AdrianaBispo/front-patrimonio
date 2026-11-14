@@ -5,8 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import EditButton from "../../../shared/components/EditButton";
 import DeleteButton from "../../../shared/components/DeleteButton";
 import ErroDialogo from "../../../shared/components/ErroDialogo";
-import { useList } from "../../user/hooks/useListHook";
-    import { useCadastroHook } from "../hooks/useCadastroHook";
+import { useTipoEquipamentoHook } from "../hooks/tipoEquipamentoHook";
 
 export default function TipoEquipamentoListaPage() {
     const navigate = useNavigate();
@@ -42,7 +41,7 @@ export default function TipoEquipamentoListaPage() {
     return (
         <div className="max-w-7xl mx-auto">
             <div className="gap-2 mb-9 flex justify-between">
-                <h3 className=" text-primary/80 mb-2">s</h3>
+                <h3 className=" text-primary/80 mb-2">Tipo de Equipamentos</h3>
                 <button
                     className="flex justify-center gap-2 items-center rounded-md bg-primary px-8 py-1.5 text-sm/6 font-semibold text-white hover:bg-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary active:bg-primary/65"
                     onClick={() => navigate("cadastrar")}
