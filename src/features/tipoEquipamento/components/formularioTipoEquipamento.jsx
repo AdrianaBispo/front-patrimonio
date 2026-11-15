@@ -3,8 +3,8 @@ import ErrorLabel from "../../../shared/components/ErrorLabel";
 export function FormularioTipoEquipamento({
   nome,
   setNome,
-  descricao,
-  setDescricao,
+  nota,
+  setNota,
   ativo,
   setAtivo,
   isLoading,
@@ -50,21 +50,21 @@ export function FormularioTipoEquipamento({
         </div>
 
         <div className="flex flex-col mb-5">
-          <label htmlFor="descricao">
-            Descrição <span className="text-red-500">*</span>
+          <label htmlFor="nota">
+            Nota <span className="text-red-500">*</span>
           </label>
           <textarea
-            id="descricao"
-            name="descricao"
+            id="nota"
+            name="nota"
             className="input-utilities"
             rows={5}
-            maxLength={150}
-            placeholder="Descrição do tipo de equipamento"
-            value={descricao}
-            onChange={(e) => setDescricao(e.target.value)}
+            maxLength={500}
+            placeholder="Adicionar uma nota..."
+            value={nota}
+            onChange={(e) => setNota(e.target.value)}
           />
-          {inputsErrors?.descricao && (
-            <ErrorLabel>{inputsErrors.descricao}</ErrorLabel>
+          {inputsErrors?.nota && (
+            <ErrorLabel>{inputsErrors.nota}</ErrorLabel>
           )}
         </div>
       </div>
