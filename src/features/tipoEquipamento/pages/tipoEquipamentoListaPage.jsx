@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
 
 import EditButton from "../../../shared/components/EditButton";
-import DeleteButton from "../../../shared/components/DeleteButton";
 import ErroDialogo from "../../../shared/components/ErroDialogo";
 import Pagination from "../../../shared/components/Pagination";
 import { useTipoEquipamentoHook } from "../hooks/tipoEquipamentoHook";
@@ -43,8 +42,8 @@ function extrairPaginacao(result) {
 
 export default function TipoEquipamentoListaPage() {
     const navigate = useNavigate();
-    const [showPopUp, setShowPopUp] = useState(false);
-    const { isLoading, deactivateTipoEquipamento, searchTipoEquipamento } =
+    const [itemSelecionado, setItemSelecionado] = useState(null);
+    const { isLoading, desactivateTipoEquipamento, activateTipoEquipamento, searchTipoEquipamento } =
         useTipoEquipamentoHook();
     const [listTipoEquipamento, setListTipoEquipamento] = useState([]);
     const [paginacao, setPaginacao] = useState(paginacaoInicial);
@@ -70,6 +69,35 @@ export default function TipoEquipamentoListaPage() {
 
     const filter = () => {
         carregarPagina(valueFilter, 1);
+    };
+
+    const registroAtivo = (item) =>
+        item?.ativo === true || item?.ativo === 1 || item?.ativo === "1";
+
+    const confirmarAlteracao = async () => {
+        if (!itemSelecionado) return;
+
+        const ativo = registroAtivo(itemSelecionado);
+
+        try {
+            if (ativo) {
+                await desactivateTipoEquipamento(itemSelecionado.id);
+                toast.success("Desativado com sucesso!");
+            } else {
+                await activateTipoEquipamento(itemSelecionado.id);
+                toast.success("Ativado com sucesso!");
+            }
+            carregarPagina(valueFilter, paginacao.currentPage);
+        } catch (error) {
+            toast.error(
+                error?.response?.data?.message ??
+                    (ativo
+                        ? "Ocorreu um erro ao desativar o tipo de equipamento"
+                        : "Ocorreu um erro ao ativar o tipo de equipamento")
+            );
+        }
+
+        setItemSelecionado(null);
     };
 
     return (
@@ -179,30 +207,51 @@ export default function TipoEquipamentoListaPage() {
                                 <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
                                     <div className="flex items-center justify-end gap-3">
                                         <EditButton onClick={() => navigate(`editar/${item.id}`)} />
-                                        <DeleteButton onClick={() => setShowPopUp(true)} />
-                                        <ErroDialogo
-                                            showPopUp={showPopUp}
-                                            titulo="Desativar "
-                                            isLoading={isLoading}
-                                            mensagem={
-                                                <>
-                                                    Tem certeza que deseja desativar este tipo de equipamento?
-                                                    <br />
-                                                    Essa ação não poderá ser desfeita.
-                                                </>
-                                            }
-                                            confirmarDialogo={async () => {
-                                                try {
-                                                    await deactivateTipoEquipamento(item.id);
-                                                    toast.success("Desativado com sucesso!");
-                                                    carregarPagina(valueFilter, paginacao.currentPage);
-                                                } catch (error) {
-                                                    toast.error("Ocorreu um erro ao desativar o tipo de equipamento");
-                                                }
-                                                setShowPopUp(false);
-                                            }}
-                                            fecharDialogo={() => setShowPopUp(false)}
-                                        />
+                                        {registroAtivo(item) ? (
+                                            <button
+                                                type="button"
+                                                onClick={() => setItemSelecionado(item)}
+                                                title="Desativar"
+                                                className="p-2 rounded-md transition-colors text-red-600 hover:bg-red-50"
+                                            >
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    strokeWidth="1.5"
+                                                    stroke="currentColor"
+                                                    className="size-4.5"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636"
+                                                    />
+                                                </svg>
+                                            </button>
+                                        ) : (
+                                            <button
+                                                type="button"
+                                                onClick={() => setItemSelecionado(item)}
+                                                title="Ativar"
+                                                className="p-2 rounded-md transition-colors text-green-600 hover:bg-green-50"
+                                            >
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    strokeWidth="1.5"
+                                                    stroke="currentColor"
+                                                    className="size-4.5"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                                    />
+                                                </svg>
+                                            </button>
+                                        )}
                                     </div>
                                 </td>
                             </tr>
@@ -220,6 +269,19 @@ export default function TipoEquipamentoListaPage() {
                     onPageChange={(page) => carregarPagina(valueFilter, page)}
                 />
             </div>
+
+            <ErroDialogo
+                showPopUp={Boolean(itemSelecionado)}
+                titulo={registroAtivo(itemSelecionado) ? "Desativar" : "Ativar"}
+                loading={isLoading}
+                mensagem={
+                    registroAtivo(itemSelecionado)
+                        ? "Tem certeza que deseja desativar este tipo de equipamento?"
+                        : "Tem certeza que deseja ativar este tipo de equipamento?"
+                }
+                confirmarDialogo={confirmarAlteracao}
+                fecharDialogo={() => setItemSelecionado(null)}
+            />
         </div>
     );
 }
