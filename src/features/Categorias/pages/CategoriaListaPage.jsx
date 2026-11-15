@@ -21,7 +21,7 @@ export default function CategoriaListaPage() {
     const fetchRegisters = async () => {
       try {
         const result = await getCategoria();
-        setListCategoria(result);
+        setListCategoria(result.data);
       } catch (e) {
         toast.error(error);
       }
