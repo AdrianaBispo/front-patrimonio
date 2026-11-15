@@ -16,9 +16,9 @@ export const tipoEquipamentoService = {
     return response.data;
   },
 
-  async getTipoEquipamento(nomeFilter: string, idFilter: string){
+  async getTipoEquipamento(nomeFilter: string, idFilter: string, page = 1){
     const response = await api.get("/all", {
-      params: { nomeFilter, idFilter },
+      params: { nomeFilter, idFilter, page },
     });
     return response.data;
   },
@@ -28,6 +28,14 @@ export const tipoEquipamentoService = {
     return response.data;
   },
 
-  async deleteTipoEquipamento(id: string){}
+  async desactivateTipoEquipamento(id: string){
+    const response = await api.put(`/desactivate/${id}`);
+    return response.data;
+  },
+
+  async activateTipoEquipamento(id: string){
+    const response = await api.put(`/activate/${id}`);
+    return response.data;
+  }
 
 }
