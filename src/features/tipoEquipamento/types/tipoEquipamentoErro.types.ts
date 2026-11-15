@@ -1,6 +1,6 @@
 export type TipoEquipamentoError = {
     id?: string;
     nome?: string;
-    descricao?: string;
+    nota?: string;
     ativo?: string;
 }
