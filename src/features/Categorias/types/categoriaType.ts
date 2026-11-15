@@ -3,4 +3,5 @@ export type CategoriaType = {
     nome?: String;
     nota?: String;
     tipo?: String;
+    tipo_nome?: String;
 }
