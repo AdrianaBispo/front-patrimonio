@@ -21,7 +21,7 @@ export default function CategoriaListaPage() {
     const fetchRegisters = async () => {
       try {
         const result = await getCategoria(null, null);
-        setListCategoria(result);
+        setListCategoria(result.data);
       } catch (e) {
         toast.error(error);
       }
@@ -126,7 +126,7 @@ export default function CategoriaListaPage() {
                 </td>
 
                 <td className="whitespace-nowrap px-6 py-4">
-                  <div className="text-sm text-text-primary">{item.tipo}</div>
+                  <div className="text-sm text-text-primary">{item.tipo_nome}</div>
                 </td>
 
                 <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
