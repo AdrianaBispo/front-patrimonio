@@ -20,7 +20,7 @@ export default function TipoEquipamentoListaPage() {
         const fetchRegisters = async () => {
             try {
                 const result = await searchTipoEquipamento(valueFilter, null);
-                setListTipoEquipamento(result);
+                setListTipoEquipamento(result.data.data);
             } catch (e) {
                 toast.error(error);
             }
@@ -120,7 +120,7 @@ export default function TipoEquipamentoListaPage() {
                             <tr key={item.id}>
                                 <td className="whitespace-nowrap px-6 py-4">
                                     <div className="text-sm font-medium text-text-primary">
-                                        {item.nome}
+                                        {item.id}
                                     </div>
                                 </td>
 
