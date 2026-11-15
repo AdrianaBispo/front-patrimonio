@@ -103,14 +103,16 @@ export function useCadastroCategoriaHook() {
     [],
   );
 
-  const getCategoria = useCallback(async (nome: string, id: string) => {
+  const getCategoria = useCallback(async (nome: string, id?: string | null, page = 1, perPage = 0) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const result: CategoriaType[] = await categoriaService.getCategoria(
+      const result = await categoriaService.getCategoria(
         nome,
         id,
+        page,
+        perPage,
       );
       return result;
     } catch (error) {
