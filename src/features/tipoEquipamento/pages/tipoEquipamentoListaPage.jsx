@@ -106,10 +106,10 @@ export default function TipoEquipamentoListaPage() {
                     <thead className=" text-center text-xs font-medium tracking-wider text-text-primary">
                         <tr>
                             <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
-                                Nome
+                                Id
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
-                                Tipo
+                                Nome
                             </th>
                             <th className="px-6 py-3"></th>
                         </tr>
