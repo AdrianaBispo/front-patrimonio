@@ -22,12 +22,12 @@ export function useTipoEquipamentoHook() {
   });
 
 
-  const getRegisters = useCallback(async (nomeFilter: string, idFilter: string): Promise<TipoEquipamento[]> => {
+  const getRegisters = useCallback(async (nomeFilter: string, idFilter: string, page = 1): Promise<TipoEquipamento[]> => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const result: TipoEquipamento[] = await tipoEquipamentoService.getTipoEquipamento(nomeFilter, idFilter);
+      const result: TipoEquipamento[] = await tipoEquipamentoService.getTipoEquipamento(nomeFilter, idFilter, page);
       return result;
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -44,12 +44,12 @@ export function useTipoEquipamentoHook() {
     }
   }, []);
 
-  const deactivateTipoEquipamento = async (idTipoEquipamento: string) => {
+  const desactivateTipoEquipamento = async (idTipoEquipamento: string) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      await tipoEquipamentoService.deleteTipoEquipamento(idTipoEquipamento);
+      await tipoEquipamentoService.desactivateTipoEquipamento(idTipoEquipamento);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const message =
@@ -57,7 +57,7 @@ export function useTipoEquipamentoHook() {
           "Ocorreu um erro interno no servidor";
         setError(message);
       } else {
-        setError("Ocorreu um erro ao obter os dados");
+        setError("Ocorreu um erro ao desativar o tipo de equipamento");
       }
       throw error;
     } finally {
@@ -65,12 +65,33 @@ export function useTipoEquipamentoHook() {
     }
   };
 
-  const searchTipoEquipamento = async (name: string, id: string | null) => {
+  const activateTipoEquipamento = async (idTipoEquipamento: string) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const result: TipoEquipamento[] = await tipoEquipamentoService.getTipoEquipamento(name, id ?? "");
+      await tipoEquipamentoService.activateTipoEquipamento(idTipoEquipamento);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const message =
+          error.response?.data?.message ??
+          "Ocorreu um erro interno no servidor";
+        setError(message);
+      } else {
+        setError("Ocorreu um erro ao ativar o tipo de equipamento");
+      }
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const searchTipoEquipamento = async (name: string, id: string | null, page = 1) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const result: TipoEquipamento[] = await tipoEquipamentoService.getTipoEquipamento(name, id ?? "", page);
       return result;
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -137,5 +158,7 @@ export function useTipoEquipamentoHook() {
 
   }, []);
 
-  return {cadastro, getRegisters, deactivateTipoEquipamento, searchTipoEquipamento, isLoading, error, inputsErrors };
+  
+
+  return {cadastro, getRegisters, desactivateTipoEquipamento, activateTipoEquipamento, searchTipoEquipamento, isLoading, error, inputsErrors };
 };
