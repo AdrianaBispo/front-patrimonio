@@ -11,7 +11,12 @@ export function useDepartamentoHook() {
   const [error, setError] = useState<string | null>(null);
   const [inputsErrors, setInputsErrors] = useState({} as DepartamentoErroType);
   const [nomeList, setNomeList] = useState<Map<number, string[]>>(new Map());
-  const departamentoSchema = z.object({});
+
+  const departamentoSchema = z.object({
+    nome: z.string().min(1, "Nome é obrigatório"),
+    gestor: z.string().min(1, "Gestor é obrigatório"),
+    nota: z.string().min(1, "Nota é obrigatória"),
+  });
 
   const getNomeList = useCallback(async (): Promise<void> => {
     setIsLoading(true);
