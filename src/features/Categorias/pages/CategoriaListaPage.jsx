@@ -20,8 +20,8 @@ export default function CategoriaListaPage() {
     useEffect(() => {
     const fetchRegisters = async () => {
       try {
-        const result = await getCategoria();
-        setListCategoria(result.data);
+        const result = await getCategoria(null, null);
+        setListCategoria(result);
       } catch (e) {
         toast.error(error);
       }
