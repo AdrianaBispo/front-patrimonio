@@ -1,41 +1,75 @@
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import EditButton from "../../../shared/components/EditButton";
 import DeleteButton from "../../../shared/components/DeleteButton";
 import ErroDialogo from "../../../shared/components/ErroDialogo";
+import Pagination from "../../../shared/components/Pagination";
 import { useTipoEquipamentoHook } from "../hooks/tipoEquipamentoHook";
+
+const paginacaoInicial = {
+    currentPage: 1,
+    lastPage: 1,
+    total: 0,
+    from: 0,
+    to: 0,
+};
+
+function extrairPaginacao(result) {
+    if (result?.meta && Array.isArray(result?.data)) {
+        return {
+            items: result.data,
+            currentPage: result.meta.current_page ?? 1,
+            lastPage: result.meta.last_page ?? 1,
+            total: result.meta.total ?? result.data.length,
+            from: result.meta.from ?? 0,
+            to: result.meta.to ?? 0,
+        };
+    }
+
+    const paginator = result?.data?.current_page != null ? result.data : result;
+    const items = Array.isArray(paginator?.data) ? paginator.data : [];
+
+    return {
+        items,
+        currentPage: paginator?.current_page ?? 1,
+        lastPage: paginator?.last_page ?? 1,
+        total: paginator?.total ?? items.length,
+        from: paginator?.from ?? (items.length ? 1 : 0),
+        to: paginator?.to ?? items.length,
+    };
+}
 
 export default function TipoEquipamentoListaPage() {
     const navigate = useNavigate();
     const [showPopUp, setShowPopUp] = useState(false);
-    const { getTipoEquipamento, error, isLoading, deactivateTipoEquipamento, searchTipoEquipamento } =
+    const { isLoading, deactivateTipoEquipamento, searchTipoEquipamento } =
         useTipoEquipamentoHook();
     const [listTipoEquipamento, setListTipoEquipamento] = useState([]);
-
+    const [paginacao, setPaginacao] = useState(paginacaoInicial);
     const [valueFilter, setValueFilter] = useState("");
 
-    useEffect(() => {
-        const fetchRegisters = async () => {
-            try {
-                const result = await searchTipoEquipamento(valueFilter, null);
-                setListTipoEquipamento(result.data.data);
-            } catch (e) {
-                toast.error(error);
-            }
-        };
+    const carregarPagina = async (filterValue, pageNumber) => {
+        try {
+            const result = await searchTipoEquipamento(filterValue, null, pageNumber);
+            const pagina = extrairPaginacao(result);
+            setListTipoEquipamento(pagina.items);
+            setPaginacao(pagina);
+        } catch (e) {
+            const message =
+                e?.response?.data?.message ??
+                "Ocorreu um erro ao obter os dados";
+            toast.error(message);
+        }
+    };
 
-        fetchRegisters();
+    useEffect(() => {
+        carregarPagina("", 1);
     }, []);
 
-    const filter = async () => {
-        try {
-            const result = await searchTipoEquipamento(valueFilterTipoEquipamento, null);
-            setValueFilterTipoEquipamento(result);
-        } catch (error) {
-            toast.error(error);
-        }
+    const filter = () => {
+        carregarPagina(valueFilter, 1);
     };
 
     return (
@@ -116,7 +150,21 @@ export default function TipoEquipamentoListaPage() {
                     </thead>
 
                     <tbody className="divide-y divide-border bg-white">
-                        {listTipoEquipamento.map((item) => (
+                        {isLoading ? (
+                            <tr>
+                                <td colSpan={3} className="px-6 py-10">
+                                    <div className="flex justify-center">
+                                        <div className="h-8 w-8 animate-spin rounded-full border-4 border-secondary border-t-transparent" />
+                                    </div>
+                                </td>
+                            </tr>
+                        ) : listTipoEquipamento.length === 0 ? (
+                            <tr>
+                                <td colSpan={3} className="px-6 py-8 text-center text-sm text-text-primary/70">
+                                    Nenhum tipo de equipamento encontrado.
+                                </td>
+                            </tr>
+                        ) : listTipoEquipamento.map((item) => (
                             <tr key={item.id}>
                                 <td className="whitespace-nowrap px-6 py-4">
                                     <div className="text-sm font-medium text-text-primary">
@@ -147,8 +195,9 @@ export default function TipoEquipamentoListaPage() {
                                                 try {
                                                     await deactivateTipoEquipamento(item.id);
                                                     toast.success("Desativado com sucesso!");
+                                                    carregarPagina(valueFilter, paginacao.currentPage);
                                                 } catch (error) {
-                                                    toast.error(error);
+                                                    toast.error("Ocorreu um erro ao desativar o tipo de equipamento");
                                                 }
                                                 setShowPopUp(false);
                                             }}
@@ -160,6 +209,16 @@ export default function TipoEquipamentoListaPage() {
                         ))}
                     </tbody>
                 </table>
+
+                <Pagination
+                    currentPage={paginacao.currentPage}
+                    lastPage={paginacao.lastPage}
+                    total={paginacao.total}
+                    from={paginacao.from}
+                    to={paginacao.to}
+                    isLoading={isLoading}
+                    onPageChange={(page) => carregarPagina(valueFilter, page)}
+                />
             </div>
         </div>
     );
