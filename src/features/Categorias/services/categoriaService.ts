@@ -7,9 +7,9 @@ export const categoriaService = {
     return data;
   },
 
-  async getCategoria(nomeFilter: string, idFilter?: string | null) {
+  async getCategoria(nomeFilter: string, idFilter?: string | null, page = 1, perPage = 0) {
     const { data } = await api.get(`/categoria/all`, {
-      params: { search: `${nomeFilter}`, id: `${idFilter}` },
+      params: { search: nomeFilter ?? "", id: idFilter ?? "", page, per_page: perPage },
     });
     return data;
   },
