@@ -1,6 +1,6 @@
 export type TipoEquipamento = {
     id?: string;
     nome?: string;
-    descricao?: string;
+    nota?: string;
     ativo: boolean;
 }
