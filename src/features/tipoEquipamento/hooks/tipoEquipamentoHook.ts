@@ -158,7 +158,57 @@ export function useTipoEquipamentoHook() {
 
   }, []);
 
-  
+  const editar = useCallback(async (id: string, tipoEquipamento: TipoEquipamento) => {
+    setIsLoading(true);
+    setError(null);
 
-  return {cadastro, getRegisters, desactivateTipoEquipamento, activateTipoEquipamento, searchTipoEquipamento, isLoading, error, inputsErrors };
+    const validar = tipoEquipamentoSchema.safeParse(tipoEquipamento);
+    if (!validar.success) {
+      const fieldErrors = z.flattenError(validar.error).fieldErrors;
+      const errors: TipoEquipamentoError = {};
+      Object.entries(fieldErrors).forEach(([campo, mensagens]) => {
+        const mensagem = mensagens?.[0];
+        if (mensagem) errors[campo as keyof TipoEquipamentoError] = mensagem;
+      });
+      setInputsErrors(errors);
+      setIsLoading(false);
+      return;
+    }
+
+    setInputsErrors({});
+
+    try {
+      const result = await tipoEquipamentoService.updateTipoEquipamento(id, {
+        id,
+        ...validar.data,
+      });
+      return result;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const apiErrors = error.response?.data?.errors;
+        if (apiErrors && typeof apiErrors === "object") {
+          const errors: TipoEquipamentoError = {};
+          Object.entries(apiErrors).forEach(([campo, valor]) => {
+            const mensagem = Array.isArray(valor) ? valor[0] : valor;
+            if (typeof mensagem === "string") {
+              errors[campo as keyof TipoEquipamentoError] = mensagem;
+            }
+          });
+          if (Object.keys(errors).length > 0) {
+            setInputsErrors(errors);
+            return;
+          }
+        }
+        const message = error.response?.data?.message ?? "Ocorreu um erro interno no servidor";
+        setError(message);
+      } else {
+        setError("Ocorreu um erro ao editar o tipo de equipamento");
+      }
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  return {cadastro, editar, getRegisters, desactivateTipoEquipamento, activateTipoEquipamento, searchTipoEquipamento, isLoading, error, inputsErrors };
 };
