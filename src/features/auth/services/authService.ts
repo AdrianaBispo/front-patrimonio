@@ -1,14 +1,5 @@
-import axios from "axios";
+import api from "../../../shared/api/axios";
 import { LoginCredentials, AuthResult } from "../types/auth.types";
-
-const api = axios.create({
-  baseURL: "http://localhost:8000/api",
-  withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  },
-});
 
 export const authService = {
   async login(credentials: LoginCredentials): Promise<AuthResult> {
@@ -17,6 +8,11 @@ export const authService = {
   },
   async me() {
     const { data } = await api.get("/auth/user");
+    return data;
+  },
+
+  async logout() {
+    const { data } = await api.post("/auth/logout");
     return data;
   },
 
