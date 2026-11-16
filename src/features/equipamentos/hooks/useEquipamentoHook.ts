@@ -255,6 +255,13 @@ export function useEquipamentoHook() {
       setIsLoading(false);
       return undefined;
     }
+    if (payload.imagem_url) {
+      const image = await equipamentService.uploadImage(new File([payload.imagem_url], "image.jpg", { type: "image/jpeg" }));
+      if (!image) {
+        return tratarErroApi(new Error("Erro ao fazer upload da imagem"), "Erro ao fazer upload da imagem");
+      }
+      payload.imagem_url = image.url;
+    }
 
     try {
       const result = await equipamentService.createEquipamento(payload);
