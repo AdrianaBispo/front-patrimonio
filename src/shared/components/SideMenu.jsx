@@ -80,7 +80,7 @@ export default function SideMenu() {
 
           <button
             type="button"
-            className="sidebar-item-utilities w-full !text-white hover:!text-white"
+            className="sidebar-item-utilities w-full"
             aria-expanded={configuracoesAbertas}
             aria-controls="submenu-configuracoes"
             onClick={() => setConfiguracoesAbertas((aberto) => !aberto)}
@@ -110,7 +110,7 @@ export default function SideMenu() {
                 <NavLink
                   to="/categorias"
                   href="#"
-                  className="sidebar-item-utilities w-full !text-white hover:!text-white"
+                  className="sidebar-item-utilities w-full"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -134,7 +134,7 @@ export default function SideMenu() {
                 <NavLink
                   to="/tipo-equipamento"
                   href="#"
-                  className="sidebar-item-utilities w-full !text-white hover:!text-white"
+                  className="sidebar-item-utilities w-full"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -158,7 +158,7 @@ export default function SideMenu() {
                 <NavLink
                   to="/equipamentos"
                   href="#"
-                  className="sidebar-item-utilities w-full !text-white hover:!text-white"
+                  className="sidebar-item-utilities w-full"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
