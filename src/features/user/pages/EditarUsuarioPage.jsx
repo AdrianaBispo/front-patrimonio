@@ -1,188 +1,113 @@
-import { useNavigate } from "react-router-dom";
-import { useParams } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+
+import FormularioUsuario from "../components/FormularioUsuario";
+import { useUsuarioFormHook } from "../hooks/useUsuarioFormHook";
 
 export default function EditarUsuarioPage() {
-  
-  const navigate = useNavigate();
   const { id } = useParams();
-   useEffect(() => {
-      const fetchRegisters = async () => {
-        try {
-          const result = await getRegisters();
-          setListUsers(result);
-        } catch (e) {
-          toast.error(error);
-        }
-      };
-  
-      fetchRegisters();
-    }, []);
-  
-    const filterUsers = async () => {
-      try {
-        const result = await searchUser(valueFilterUser);
-        setListUsers(result);
-      } catch (error) {
-        toast.error(error);
-      }
-    };
+  const navigate = useNavigate();
+  const {
+    carregarUsuario,
+    editarUsuario,
+    roles,
+    isLoading,
+    isLoadingData,
+    inputsErrors,
+  } = useUsuarioFormHook();
+
+  const [nome, setNome] = useState("");
+  const [celular, setCelular] = useState("");
+  const [email, setEmail] = useState("");
+  const [departamentoId, setDepartamentoId] = useState("");
+  const [departamentoNome, setDepartamentoNome] = useState("");
+  const [roleId, setRoleId] = useState("");
+  const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    if (!id) {
+      navigate("/users", { replace: true });
+      return;
+    }
+
+    carregarUsuario(id)
+      .then((usuario) => {
+        setNome(usuario.nome ?? "");
+        setCelular(usuario.celular ?? "");
+        setEmail(usuario.email ?? "");
+        setDepartamentoId(usuario.departamento_id ?? "");
+        setDepartamentoNome(usuario.departamento_name ?? "");
+        setRoleId(
+          usuario.roles?.[0]?.id != null
+            ? String(usuario.roles[0].id)
+            : "",
+        );
+      })
+      .catch((error) => {
+        toast.error(error?.message ?? "Não foi possível carregar o usuário");
+        navigate("/users", { replace: true });
+      });
+  }, [id, carregarUsuario, navigate]);
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    if (!id) return;
+
+    try {
+      const result = await editarUsuario(id, {
+        nome,
+        celular,
+        email,
+        departamento_id: departamentoId,
+        role_id: roleId,
+        password,
+      });
+
+      if (!result) return;
+      toast.success("Usuário editado com sucesso!");
+      navigate("/users");
+    } catch (error) {
+      toast.error(error?.message ?? "Não foi possível editar o usuário");
+    }
+  }
+
+  if (isLoadingData) {
+    return (
+      <div className="flex min-h-64 items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-secondary border-t-transparent" />
+      </div>
+    );
+  }
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <div className="gap-2 mb-9">
-        <h3 className=" text-primary/80 mb-2">Editar User</h3>
-        <p>
-          Create credentials and define access levels for a new team member.
-          Ensure all personal <br />
-          details match official identification for inventory accountability.
-        </p>
+    <div className="mx-auto max-w-7xl">
+      <div className="mb-9">
+        <h3 className="mb-2 text-primary/80">Editar Usuário</h3>
+        <p>Atualize os dados pessoais e as credenciais do usuário.</p>
       </div>
 
-      <div className="overflow-hidden bg-bg-secondary px-4 py-3 card">
-        <div class="flex gap-2 mb-5 mt-5 ">
-          <div class="text-secondary">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="2"
-              stroke="currentColor"
-              class="size-5"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-              />
-            </svg>
-          </div>
-
-          <p className="font-bold">Personal Information</p>
-        </div>
-        <div className="flex flex-col mb-5 md:flex-row gap-5">
-          <div className="flex-1">
-            <label>Nome</label>
-            <input className="input-utilities" type="text" placeholder="Nome" />
-          </div>
-        </div>
-
-        <div className="flex flex-col mb-5 md:flex-row gap-5">
-          <div className="flex-1">
-            <label>Celular</label>
-            <input
-              className="input-utilities"
-              type="text"
-              placeholder="Celular"
-            />
-          </div>
-
-          <div className="flex-1">
-            <label>E-mail</label>
-
-            <input
-              className="input-utilities"
-              type="email"
-              placeholder="E-mail"
-            />
-          </div>
-        </div>
-
-        <div class="border border-border/60 mt-6 mb-9"></div>
-        <div>
-          <div class="flex gap-2 mb-5 mt-5 ">
-            <div class="text-secondary">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                class="size-5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
-                />
-              </svg>
-            </div>
-
-            <p className="font-bold">Security Credentials</p>
-          </div>
-
-          <div className="flex flex-col mb-5 md:flex-row gap-5">
-            <div className="flex-1">
-              <label htmlFor="cargo">Perfil de Acesso</label>
-
-              <select id="cargo" name="cargo" className="input-utilities">
-                <option value="">Selecione</option>
-                <option value="volvo">Administrador</option>
-                <option value="saab">Técnico</option>
-                <option value="mercedes">Usuário Comum</option>
-              </select>
-            </div>
-
-            <div className="flex-1">
-              <label htmlFor="cargo">Departamento</label>
-              <select id="cargo" name="cargo" className="input-utilities">
-                <option value="">Selecione</option>
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-                <option value="mercedes">Mercedes</option>
-                <option value="audi">Audi</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="flex flex-col mb-5 md:flex-row gap-5">
-            <div className="flex-1">
-              <label>Password</label>
-              <input
-                className="input-utilities"
-                type="password"
-                placeholder="password"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div class="flex  items-center gap-2 border border-transparent rounded-md px-4 py-4">
-          <div class="text-secondary">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="2"
-              stroke="currentColor"
-              class="size-5"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
-              />
-            </svg>
-          </div>
-          <p>
-            Passwords must be at least 12 characters and contain a mix of
-            uppercase letters, numbers, and symbols for enterprise-grade
-            security.
-          </p>
-        </div>
-      </div>
-
-      <div class="flex flex-row gap-3 justify-end mt-4">
-        <button
-          type="button"
-          className="btn-secondary items-stretch"
-          onClick={() => navigate(-1)}
-        >
-          Cancelar
-        </button>
-        <button type="button" className="btn-primary bg-primary px-8">
-          Salvar
-        </button>
-      </div>
+      <FormularioUsuario
+        nome={nome}
+        setNome={setNome}
+        celular={celular}
+        setCelular={setCelular}
+        email={email}
+        setEmail={setEmail}
+        departamentoId={departamentoId}
+        setDepartamentoId={setDepartamentoId}
+        departamentoNome={departamentoNome}
+        roleId={roleId}
+        setRoleId={setRoleId}
+        password={password}
+        setPassword={setPassword}
+        roles={roles}
+        inputsErrors={inputsErrors}
+        isLoading={isLoading}
+        isEditing
+        onSubmit={handleSubmit}
+        onCancel={() => navigate(-1)}
+      />
     </div>
   );
 }
