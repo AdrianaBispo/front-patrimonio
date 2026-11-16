@@ -1,8 +1,22 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useLogout } from "../../features/auth/logout/hooks/useLogout";
 
 export default function SideMenu() {
+  const navigate = useNavigate();
+  const { logout, isLoading: isLoggingOut } = useLogout();
   const [configuracoesAbertas, setConfiguracoesAbertas] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      toast.success("Sessão encerrada com sucesso!");
+      navigate("/auth/login", { replace: true });
+    } catch (err) {
+      toast.error(err?.message ?? "Não foi possível sair.");
+    }
+  };
 
   return (
     <aside className="fixed-top-0 flex-1">
@@ -373,8 +387,10 @@ export default function SideMenu() {
             </li>
 
             <li>
-              <a
-                href="#"
+              <button
+                type="button"
+                onClick={handleLogout}
+                disabled={isLoggingOut}
                 className="sidebar-item-utilities"
               >
                 <svg
@@ -394,8 +410,10 @@ export default function SideMenu() {
                     d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2"
                   />
                 </svg>
-                <span className="flex-1 ms-3 whitespace-nowrap">Sign In</span>
-              </a>
+                <span className="flex-1 ms-3 whitespace-nowrap">
+                  {isLoggingOut ? "Saindo..." : "Sair"}
+                </span>
+              </button>
             </li>
           </ul>
         </li>
