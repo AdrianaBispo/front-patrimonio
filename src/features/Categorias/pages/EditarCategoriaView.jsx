@@ -35,6 +35,7 @@ export default function EditarCategoriaPage() {
     e.preventDefault();
     try {
       const sucesso = await editarCategoria({
+        id,
         nome,
         tipo,
         nota: nota,
