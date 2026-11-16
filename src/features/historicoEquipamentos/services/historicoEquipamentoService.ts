@@ -19,7 +19,7 @@ export const historicoEquipamentoService = {
     equipament_id: string,
     status_id: string,
     user_id: string) {
-    const { data } = await api.post("/historic_equipaments", {
+    const { data } = await api.post("/historic_equipaments/create", {
       equipament_id,
       status_id,
       user_id,
