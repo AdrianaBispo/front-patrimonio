@@ -67,6 +67,12 @@ export const equipamentService = {
     const { data } = await api.put(`/equipaments/update/${id}`, equipamento);
     return data;
   },
+  async uploadImage(image: File) {
+    const formData = new FormData();
+    formData.append("image", image);
+    const { data } = await api.post("/equipaments/upload-image", formData);
+    return data;
+  },
 };
 
 export default equipamentService;
