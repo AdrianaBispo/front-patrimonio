@@ -1,4 +1,6 @@
 import ErrorLabel from "../../../shared/components/ErrorLabel";
+import { useState } from "react";
+
 
 export function FormularioEquipamento({
   nome,
@@ -19,10 +21,20 @@ export function FormularioEquipamento({
   navigate,
   submitLabel = "Salvar",
 }) {
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleChangeImage = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedImage(URL.createObjectURL(file));
+    }
+    console.log('selectedImage', selectedImage);
+  };
   return (
     <form onSubmit={handleSubmit} noValidate>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[380px_1fr] items-stretch">
         {/* Área da imagem (envio definido como null por enquanto) */}
+
         <div className="flex flex-col rounded-xl border border-gray-100 bg-white p-4">
           <div className="flex gap-2 items-center">
             <div className="text-secondary">
@@ -49,44 +61,48 @@ export function FormularioEquipamento({
 
             <p className="font-bold">Imagem do Equipamento</p>
           </div>
-
-          <div className="mt-2 flex flex-1">
-            <div
-              className="
-                flex flex-1 flex-col
+          <a
+            className="cursor-pointer  flex flex-1 flex-col
                 items-center justify-center
                 rounded-lg border border-dashed
                 border-gray-300
-                bg-[#f8f6f3]
-                px-4 py-8 text-center
-                opacity-75
-              "
-            >
-              <div className="mb-3 text-4xl opacity-20">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-                  />
-                </svg>
+                "
+            onClick={() => document.getElementById('image-input').click()}
+          >
+            <div className={`flex flex-1 flex-col items-center justify-center w-full h-full ${selectedImage ? '' : 'bg-[#f8f6f3]'}`}>
+              <input
+                type="file"
+                id="image-input"
+                accept="image/*"
+                onChange={handleChangeImage}
+                className=" flex flex-1 flex-col
+                cursor-pointer
+                hidden hover:opacity-70 transition-opacity w-full h-full color-black"
+              />
+              <div className={`mb-3 text-4xl ${selectedImage ? 'opacity-100' : 'opacity-20'}`}>
+                {selectedImage ? (
+                  <img src={selectedImage} alt="Imagem do equipamento" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="bg-[#f8f6f3]">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="size-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+                      />
+                    </svg>
+                    </div>
+                )}
               </div>
-
-              <p className="text-xs leading-4 text-gray-500">
-                Upload de imagem indisponível no momento
-              </p>
-              <span className="mt-1 text-[11px] text-gray-400">
-                O equipamento será salvo sem imagem
-              </span>
             </div>
-          </div>
+          </a>
         </div>
 
         {/* Informações do equipamento */}
