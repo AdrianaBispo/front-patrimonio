@@ -11,8 +11,8 @@ export function FormularioEquipamento({
   setUsuarioId,
   descricao,
   setDescricao,
-  statusList = [],
-  usuariosList = [],
+  listaStatus = [],
+  listaUsuarios = [],
   isLoading,
   inputsErrors,
   handleSubmit,
@@ -162,7 +162,7 @@ export function FormularioEquipamento({
                 onChange={(e) => setStatusId(e.target.value)}
               >
                 <option value="">Selecione</option>
-                {statusList.map((status) => (
+                {listaStatus.map((status) => (
                   <option key={status.id} value={status.id}>
                     {status.nome}
                   </option>
@@ -185,7 +185,7 @@ export function FormularioEquipamento({
                 onChange={(e) => setUsuarioId(e.target.value)}
               >
                 <option value="">Selecione</option>
-                {usuariosList.map((usuario) => (
+                {listaUsuarios.map((usuario) => (
                   <option key={usuario.id} value={usuario.id}>
                     {usuario.nome}
                   </option>
