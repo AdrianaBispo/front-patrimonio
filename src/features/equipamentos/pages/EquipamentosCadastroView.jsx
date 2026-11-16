@@ -21,7 +21,7 @@ export default function EquipamentoCadastroView() {
   const [statusId, setStatusId] = useState("");
   const [usuarioId, setUsuarioId] = useState("");
   const [descricao, setDescricao] = useState("");
-
+  const [selectedImage, setSelectedImage] = useState(null);
   useEffect(() => {
     const carregar = async () => {
       try {
@@ -55,6 +55,20 @@ export default function EquipamentoCadastroView() {
       toast.error(err?.message ?? "Ocorreu um erro ao cadastrar o equipamento");
     }
   }
+
+  const handleChangeImage = (e) => {
+    const file = e.target.files[0];
+    if (file.size >= 5 * 1024 * 1024) {
+      toast.error('Arquivo inválido. Por favor, selecione uma imagem menor que 5MB.');
+      return;
+    }
+    else if (file.size > 0 && file.type.startsWith('image/')) {
+      setSelectedImage(URL.createObjectURL(file));
+    } else {
+      setSelectedImage(null);
+      toast.error('Arquivo inválido. Por favor, selecione uma imagem válida.');
+    }
+  };
 
   if (isLoadingOpcoes) {
     return (
@@ -92,6 +106,8 @@ export default function EquipamentoCadastroView() {
         handleSubmit={handleSubmit}
         navigate={navigate}
         submitLabel="Criar Equipamento"
+        selectedImage={selectedImage}
+        handleChangeImage={handleChangeImage}
       />
     </div>
   );
