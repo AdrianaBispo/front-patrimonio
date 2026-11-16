@@ -296,7 +296,7 @@ export default function SideMenu() {
 
         <li>
           <NavLink
-            href="#"
+            to="/historico-equipamentos"
             className="sidebar-item-utilities"
           >
             <svg
@@ -314,7 +314,7 @@ export default function SideMenu() {
               />
             </svg>
 
-            <span className="ms-3">Histórico Manutenção</span>
+            <span className="ms-3">Histórico de Equipamentos</span>
           </NavLink>
         </li>
         {/* <li>
