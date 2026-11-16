@@ -19,23 +19,11 @@ export function FormularioEquipamento({
   inputsErrors,
   handleSubmit,
   navigate,
+  selectedImage,
+  handleChangeImage,
   submitLabel = "Salvar",
 }) {
-  const [selectedImage, setSelectedImage] = useState(null);
 
-  const handleChangeImage = (e) => {
-    const file = e.target.files[0];
-    if (file.size >= 5 * 1024 * 1024) {
-      toast.error('Arquivo inválido. Por favor, selecione uma imagem menor que 5MB.');
-      return;
-    }
-    else if (file.size > 0 && file.type.startsWith('image/')) {
-      setSelectedImage(URL.createObjectURL(file));
-    } else {
-      setSelectedImage(null);
-      toast.error('Arquivo inválido. Por favor, selecione uma imagem válida.');
-    }
-  };
   return (
     <form onSubmit={handleSubmit} noValidate>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[380px_1fr] items-stretch">
