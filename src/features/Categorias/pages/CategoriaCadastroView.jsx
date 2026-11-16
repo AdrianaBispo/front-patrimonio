@@ -20,12 +20,15 @@ export default function CadastrarCategoriaPage() {
       const sucesso = await cadastro({
         nome,
         tipo,
-        nota: nota,
+        nota,
       });
+
+      if (!sucesso) return;
+
       toast.success("Registro salvo!");
-      navigate(-1);
+      navigate("/categorias");
     } catch (e) {
-      toast.error(error);
+      toast.error(e?.message ?? error ?? "Não foi possível cadastrar a categoria");
     }
   }
 
