@@ -89,14 +89,14 @@ function LoginPage() {
               )}
             </div>
 
-            <div className="text-sm text-right">
+            {/* <div className="text-sm text-right">
               <Link
                 to="/auth/forgot-password"
                 className="text-secondary hover:underline"
               >
                 Esqueci minha senha
               </Link>
-            </div>
+            </div> */}
 
             <div>
               <button
