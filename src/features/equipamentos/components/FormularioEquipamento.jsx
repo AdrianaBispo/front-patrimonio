@@ -1,6 +1,5 @@
 import ErrorLabel from "../../../shared/components/ErrorLabel";
 
-
 export function FormularioEquipamento({
   nome,
   setNome,
@@ -12,8 +11,6 @@ export function FormularioEquipamento({
   setUsuarioId,
   descricao,
   setDescricao,
-  imagemUrl,
-  setImagemUrl,
   listaStatus = [],
   listaUsuarios = [],
   isLoading,
@@ -24,14 +21,11 @@ export function FormularioEquipamento({
   handleChangeImage,
   submitLabel = "Salvar",
 }) {
-
   return (
     <form onSubmit={handleSubmit} noValidate>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[380px_1fr] items-stretch">
-        {/* Área da imagem (envio definido como null por enquanto) */}
-
         <div className="flex flex-col rounded-xl border border-gray-100 bg-white p-4">
-          <div className="flex gap-2 items-center">
+          <div className="mb-3 flex items-center gap-2">
             <div className="text-secondary">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -53,72 +47,66 @@ export function FormularioEquipamento({
                 />
               </svg>
             </div>
-
             <p className="font-bold">Imagem do Equipamento</p>
           </div>
-          <a
-            className="cursor-pointer  flex flex-1 flex-col
-                items-center justify-center
-                rounded-lg border border-dashed
-                border-gray-300
-                "
-            onClick={() => document.getElementById('image-input').click()}
+
+          <button
+            type="button"
+            className="flex flex-1 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-gray-300"
+            onClick={() => document.getElementById("image-input")?.click()}
           >
-            <div className={`flex flex-1 flex-col items-center justify-center w-full h-full ${selectedImage ? '' : 'bg-[#f8f6f3]'}`}>
+            <div
+              className={`flex h-full w-full flex-1 flex-col items-center justify-center ${
+                selectedImage ? "" : "bg-[#f8f6f3]"
+              }`}
+            >
               <input
                 type="file"
                 id="image-input"
-                accept="image/*"
+                accept="image/jpeg,image/png,image/jpg"
                 onChange={handleChangeImage}
-                className=" flex flex-1 flex-col
-                cursor-pointer
-                hidden hover:opacity-70 transition-opacity w-full h-full color-black"
+                className="hidden"
               />
-              <div className={`mb-3 text-4xl ${selectedImage ? 'opacity-100' : 'opacity-20'}`}>
-                {selectedImage ? (
-                  <img src={selectedImage} alt="Imagem do equipamento" className="w-full h-full object-cover" />
-                ) : (
-                  <div className="bg-[#f8f6f3]">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="size-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-                      />
-                    </svg>
-                    </div>
-                )}
-              </div>
+              {selectedImage ? (
+                <img
+                  src={selectedImage}
+                  alt="Imagem do equipamento"
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="opacity-20">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="size-10"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+                    />
+                  </svg>
+                </div>
+              )}
             </div>
-          </a>
-          <div className="mt-4">
-            <label htmlFor="imagem_url">URL da imagem</label>
-            <input
-              id="imagem_url"
-              name="imagem_url"
-              className="input-utilities"
-              type="url"
-              maxLength={255}
-              placeholder="https://exemplo.com/equipamento.png"
-              value={imagemUrl}
-              onChange={(e) => setImagemUrl(e.target.value)}
-            />
-            {inputsErrors?.imagem_url && (
-              <ErrorLabel>{inputsErrors.imagem_url}</ErrorLabel>
-            )}
-          </div>
+          </button>
+
+          {(inputsErrors?.imagem_file || inputsErrors?.image || inputsErrors?.imagem_url) && (
+            <div className="mt-2">
+              <ErrorLabel>
+                {inputsErrors.imagem_file ||
+                  inputsErrors.image ||
+                  inputsErrors.imagem_url}
+              </ErrorLabel>
+            </div>
+          )}
         </div>
 
-        {/* Informações do equipamento */}
-        <div className="overflow-hidden bg-bg-secondary px-4 py-3 card">
-          <div className="flex gap-2 items-center mb-4">
+        <div className="card overflow-hidden bg-bg-secondary px-4 py-3">
+          <div className="mb-4 flex items-center gap-2">
             <div className="text-secondary">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -135,11 +123,10 @@ export function FormularioEquipamento({
                 />
               </svg>
             </div>
-
             <p className="font-bold">Informações do Equipamento</p>
           </div>
 
-          <div className="flex flex-col mb-5 md:flex-row gap-5">
+          <div className="mb-5 flex flex-col gap-5 md:flex-row">
             <div className="flex-1">
               <label htmlFor="nome">
                 Nome <span className="text-red-500">*</span>
@@ -172,11 +159,13 @@ export function FormularioEquipamento({
                 value={serie}
                 onChange={(e) => setSerie(e.target.value.replace(/\D/g, ""))}
               />
-              {inputsErrors?.serie && <ErrorLabel>{inputsErrors.serie}</ErrorLabel>}
+              {inputsErrors?.serie && (
+                <ErrorLabel>{inputsErrors.serie}</ErrorLabel>
+              )}
             </div>
           </div>
 
-          <div className="flex flex-col mb-5 md:flex-row gap-5">
+          <div className="mb-5 flex flex-col gap-5 md:flex-row">
             <div className="flex-1">
               <label htmlFor="status_id">
                 Status <span className="text-red-500">*</span>
@@ -224,7 +213,7 @@ export function FormularioEquipamento({
             </div>
           </div>
 
-          <div className="flex flex-col mb-5">
+          <div className="mb-5 flex flex-col">
             <label htmlFor="descricao">
               Descrição <span className="text-red-500">*</span>
             </label>
@@ -245,7 +234,7 @@ export function FormularioEquipamento({
         </div>
       </div>
 
-      <div className="flex flex-row gap-3 justify-end mt-4">
+      <div className="mt-4 flex flex-row justify-end gap-3">
         <button
           type="button"
           className="btn-secondary items-stretch"

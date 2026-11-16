@@ -32,11 +32,13 @@ const equipamentoSchema = z.object({
     .int("Status inválido")
     .positive("Status é obrigatório"),
   imagem_url: z
-    .string()
-    .max(255, "URL da imagem deve ter no máximo 255 caracteres")
-    .nullable()
+    .union([z.string(), z.null(), z.undefined()])
     .optional()
-    .transform((val) => val ?? null),
+    .transform((val) => {
+      if (val == null) return null;
+      const trimmed = String(val).trim();
+      return trimmed.length > 0 ? trimmed : null;
+    }),
   usuario_id: z
     .string()
     .trim()
@@ -246,6 +248,42 @@ export function useEquipamentoHook() {
     throw new Error(message);
   };
 
+  const resolverImagem = useCallback(
+    async (
+      dados: Record<string, unknown>,
+      payload: Equipamento,
+      obrigatoria: boolean,
+    ) => {
+      const arquivo = dados.imagem_file;
+
+      if (!(arquivo instanceof File)) {
+        if (obrigatoria && !payload.imagem_url) {
+          setInputsErrors({ imagem_file: "A imagem é obrigatória" });
+          return undefined;
+        }
+        return payload;
+      }
+
+      try {
+        const image = await equipamentService.uploadImage(arquivo);
+        const url =
+          image?.url ??
+          image?.imagem_url ??
+          image?.path ??
+          image?.data?.url ??
+          null;
+        if (!url) {
+          throw new Error("Upload da imagem não retornou URL");
+        }
+        payload.imagem_url = String(url);
+        return payload;
+      } catch (err) {
+        return tratarErroApi(err, "Erro ao fazer upload da imagem");
+      }
+    },
+    [],
+  );
+
   const cadastrarEquipamento = useCallback(async (dados: unknown) => {
     setIsLoading(true);
     setError(null);
@@ -255,20 +293,21 @@ export function useEquipamentoHook() {
       setIsLoading(false);
       return undefined;
     }
-    if (payload.imagem_url) {
-      const image = await equipamentService.uploadImage(new File([payload.imagem_url], "image.jpg", { type: "image/jpeg" }));
-      if (!image) {
-        return tratarErroApi(new Error("Erro ao fazer upload da imagem"), "Erro ao fazer upload da imagem");
-      }
-      payload.imagem_url = image.url;
+
+    const dadosObj =
+      dados && typeof dados === "object" ? (dados as Record<string, unknown>) : {};
+    const payloadComImagem = await resolverImagem(dadosObj, payload, true);
+    if (!payloadComImagem) {
+      setIsLoading(false);
+      return undefined;
     }
 
     try {
-      const result = await equipamentService.createEquipamento(payload);
+      const result = await equipamentService.createEquipamento(payloadComImagem);
       await historicoEquipamentoService.inserirHistorico(
-        result.id, // equipament_id
-        payload.status_id.toString(), // status_id
-        payload.usuario_id.toString(), // user_id
+        result.id,
+        payloadComImagem.status_id.toString(),
+        payloadComImagem.usuario_id.toString(),
       );
       return result;
     } catch (err) {
@@ -276,7 +315,7 @@ export function useEquipamentoHook() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [resolverImagem]);
 
   const editarEquipamento = useCallback(async (id: string | number, dados: unknown) => {
     setIsLoading(true);
@@ -287,21 +326,21 @@ export function useEquipamentoHook() {
       setIsLoading(false);
       return undefined;
     }
-    
-    if (payload.imagem_url) {
-      const image = await equipamentService.uploadImage(new File([payload.imagem_url], "image.jpg", { type: "image/jpeg" }));
-      if (!image) {
-        return tratarErroApi(new Error("Erro ao fazer upload da imagem"), "Erro ao fazer upload da imagem");
-      }
-      payload.imagem_url = image.url;
+
+    const dadosObj =
+      dados && typeof dados === "object" ? (dados as Record<string, unknown>) : {};
+    const payloadComImagem = await resolverImagem(dadosObj, payload, false);
+    if (!payloadComImagem) {
+      setIsLoading(false);
+      return undefined;
     }
 
     try {
-      const result = await equipamentService.updateEquipamento(id, payload);
+      const result = await equipamentService.updateEquipamento(id, payloadComImagem);
       await historicoEquipamentoService.inserirHistorico(
-        result.id, // equipament_id
-        payload.status_id.toString(), // status_id
-        payload.usuario_id.toString(), // user_id
+        result.id,
+        payloadComImagem.status_id.toString(),
+        payloadComImagem.usuario_id.toString(),
       );
       return result;
     } catch (err) {
@@ -309,7 +348,7 @@ export function useEquipamentoHook() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [resolverImagem]);
 
   return {
     listarEquipamentos,

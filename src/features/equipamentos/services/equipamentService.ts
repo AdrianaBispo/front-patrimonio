@@ -67,10 +67,22 @@ export const equipamentService = {
     const { data } = await api.put(`/equipaments/update/${id}`, equipamento);
     return data;
   },
+
   async uploadImage(image: File) {
     const formData = new FormData();
     formData.append("image", image);
-    const { data } = await api.post("/equipaments/image-upload", formData);
+
+    // Remove application/json padrão para o browser definir multipart + boundary.
+    const { data } = await api.post("/equipaments/image-upload", formData, {
+      transformRequest: [
+        (payload, headers) => {
+          if (payload instanceof FormData) {
+            delete headers["Content-Type"];
+          }
+          return payload;
+        },
+      ],
+    });
     return data;
   },
 };

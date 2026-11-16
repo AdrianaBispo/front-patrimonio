@@ -21,8 +21,9 @@ export default function EquipamentoCadastroView() {
   const [statusId, setStatusId] = useState("");
   const [usuarioId, setUsuarioId] = useState("");
   const [descricao, setDescricao] = useState("");
-  const [imagemUrl, setImagemUrl] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
+  const [imagemFile, setImagemFile] = useState(null);
+
   useEffect(() => {
     const carregar = async () => {
       try {
@@ -45,7 +46,7 @@ export default function EquipamentoCadastroView() {
         status_id: statusId,
         usuario_id: usuarioId,
         descricao,
-        imagem_url: imagemUrl,
+        imagem_file: imagemFile,
       });
 
       if (!result) return;
@@ -58,16 +59,30 @@ export default function EquipamentoCadastroView() {
   }
 
   const handleChangeImage = (e) => {
-    const file = e.target.files[0];
-    if (file.size >= 5 * 1024 * 1024) {
-      toast.error('Arquivo inválido. Por favor, selecione uma imagem menor que 5MB.');
+    const file = e.target.files?.[0];
+    if (!file) {
+      setSelectedImage(null);
+      setImagemFile(null);
       return;
     }
-    else if (file.size > 0 && file.type.startsWith('image/')) {
+
+    if (file.size >= 5 * 1024 * 1024) {
+      toast.error("Arquivo inválido. Por favor, selecione uma imagem menor que 5MB.");
+      return;
+    }
+
+    const tipoOk =
+      file.type === "image/jpeg" ||
+      file.type === "image/jpg" ||
+      file.type === "image/png";
+
+    if (file.size > 0 && tipoOk) {
       setSelectedImage(URL.createObjectURL(file));
+      setImagemFile(file);
     } else {
       setSelectedImage(null);
-      toast.error('Arquivo inválido. Por favor, selecione uma imagem válida.');
+      setImagemFile(null);
+      toast.error("Selecione uma imagem JPG ou PNG válida.");
     }
   };
 
@@ -81,8 +96,8 @@ export default function EquipamentoCadastroView() {
 
   return (
     <div className="max-w-7xl mx-auto">
-      <div className="gap-2 mb-9">
-        <h3 className="text-primary/80 mb-2">Cadastrar Equipamento</h3>
+      <div className="mb-9 gap-2">
+        <h3 className="mb-2 text-primary/80">Cadastrar Equipamento</h3>
         <p>
           Inicializar um novo equipamento no sistema central de gerenciamento de
           inventário.
@@ -100,8 +115,6 @@ export default function EquipamentoCadastroView() {
         setUsuarioId={setUsuarioId}
         descricao={descricao}
         setDescricao={setDescricao}
-        imagemUrl={imagemUrl}
-        setImagemUrl={setImagemUrl}
         listaStatus={listaStatus}
         listaUsuarios={listaUsuarios}
         isLoading={isLoading}
@@ -109,7 +122,7 @@ export default function EquipamentoCadastroView() {
         handleSubmit={handleSubmit}
         navigate={navigate}
         submitLabel="Criar Equipamento"
-        selectedImage={selectedImage || imagemUrl}
+        selectedImage={selectedImage}
         handleChangeImage={handleChangeImage}
       />
     </div>

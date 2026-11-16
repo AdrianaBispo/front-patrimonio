@@ -4,5 +4,7 @@ export type EquipamentoError = {
   serie?: string;
   status_id?: string;
   imagem_url?: string;
+  imagem_file?: string;
+  image?: string;
   usuario_id?: string;
 };

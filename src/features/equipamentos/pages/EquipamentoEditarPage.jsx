@@ -32,7 +32,9 @@ export default function EquipamentoEditarPage() {
   const [statusId, setStatusId] = useState("");
   const [usuarioId, setUsuarioId] = useState("");
   const [descricao, setDescricao] = useState("");
-  const [imagemUrl, setImagemUrl] = useState("");
+  const [imagemAtual, setImagemAtual] = useState(null);
+  const [imagemFile, setImagemFile] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
   const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
@@ -60,13 +62,14 @@ export default function EquipamentoEditarPage() {
         setNome(registro.nome ?? "");
         setSerie(String(registro.serie ?? ""));
         setStatusId(
-          registro.status_id != null ? String(registro.status_id) : ""
+          registro.status_id != null ? String(registro.status_id) : "",
         );
         setUsuarioId(
-          registro.usuario_id != null ? String(registro.usuario_id) : ""
+          registro.usuario_id != null ? String(registro.usuario_id) : "",
         );
         setDescricao(registro.descricao ?? "");
-        setImagemUrl(registro.imagem_url ?? "");
+        setImagemAtual(registro.imagem_url ?? null);
+        setSelectedImage(registro.imagem_url ?? null);
       } catch (err) {
         toast.error(err?.message ?? "Ocorreu um erro ao carregar o equipamento");
       } finally {
@@ -75,7 +78,7 @@ export default function EquipamentoEditarPage() {
     };
 
     carregar();
-  }, [id, carregarOpcoesFormulario, listarEquipamentos, navigate]);
+  }, [id, carregarOpcoesFormulario, listarEquipamentos, navigate, location.state]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -88,7 +91,8 @@ export default function EquipamentoEditarPage() {
         status_id: statusId,
         usuario_id: usuarioId,
         descricao,
-        imagem_url: imagemUrl.trim() || null,
+        imagem_url: imagemAtual,
+        imagem_file: imagemFile,
       });
 
       if (!result) return;
@@ -100,6 +104,34 @@ export default function EquipamentoEditarPage() {
     }
   }
 
+  const handleChangeImage = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) {
+      setSelectedImage(imagemAtual);
+      setImagemFile(null);
+      return;
+    }
+
+    if (file.size >= 5 * 1024 * 1024) {
+      toast.error("Arquivo inválido. Por favor, selecione uma imagem menor que 5MB.");
+      return;
+    }
+
+    const tipoOk =
+      file.type === "image/jpeg" ||
+      file.type === "image/jpg" ||
+      file.type === "image/png";
+
+    if (file.size > 0 && tipoOk) {
+      setSelectedImage(URL.createObjectURL(file));
+      setImagemFile(file);
+    } else {
+      setSelectedImage(imagemAtual);
+      setImagemFile(null);
+      toast.error("Selecione uma imagem JPG ou PNG válida.");
+    }
+  };
+
   if (carregando) {
     return (
       <div className="flex min-h-64 items-center justify-center">
@@ -110,8 +142,8 @@ export default function EquipamentoEditarPage() {
 
   return (
     <div className="max-w-7xl mx-auto">
-      <div className="gap-2 mb-9">
-        <h3 className="text-primary/80 mb-2">Editar Equipamento</h3>
+      <div className="mb-9 gap-2">
+        <h3 className="mb-2 text-primary/80">Editar Equipamento</h3>
       </div>
 
       <FormularioEquipamento
@@ -125,8 +157,6 @@ export default function EquipamentoEditarPage() {
         setUsuarioId={setUsuarioId}
         descricao={descricao}
         setDescricao={setDescricao}
-        imagemUrl={imagemUrl}
-        setImagemUrl={setImagemUrl}
         listaStatus={listaStatus}
         listaUsuarios={listaUsuarios}
         isLoading={isLoading}
@@ -134,7 +164,8 @@ export default function EquipamentoEditarPage() {
         handleSubmit={handleSubmit}
         navigate={navigate}
         submitLabel="Salvar"
-        selectedImage={imagemUrl}
+        selectedImage={selectedImage}
+        handleChangeImage={handleChangeImage}
       />
     </div>
   );
