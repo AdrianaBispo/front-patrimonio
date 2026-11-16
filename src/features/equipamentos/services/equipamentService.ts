@@ -70,7 +70,7 @@ export const equipamentService = {
   async uploadImage(image: File) {
     const formData = new FormData();
     formData.append("image", image);
-    const { data } = await api.post("/equipaments/upload-image", formData);
+    const { data } = await api.post("/equipaments/image-upload", formData);
     return data;
   },
 };
