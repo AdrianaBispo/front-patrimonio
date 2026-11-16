@@ -9,6 +9,7 @@ import ColaboradorRoute from "./app/routes/colaboradorRoute";
 import { ToastContainer } from 'react-toastify';
 import CategoriaRoute from "./app/routes/categoriaRoutes";
 import TipoEquipamentoRoute from "./app/routes/tipoEquipamentoRoute";
+import HistoricoEquipamentoRoute from "./app/routes/historicoEquipamentoRoute";
 
 export default function Router() {
   return (
@@ -24,6 +25,10 @@ export default function Router() {
           <Route path="colaboradores/*" element={<ColaboradorRoute />} />
           <Route path="categoria/*" element={<CategoriaRoute/>}/>
           <Route path="tipo-equipamento/*" element={<TipoEquipamentoRoute/>}/>
+          <Route
+            path="historico-equipamentos/*"
+            element={<HistoricoEquipamentoRoute />}
+          />
           <Route path="*" element={<Navigate to="/auth" replace />} />
         </Route>
       </Routes>
