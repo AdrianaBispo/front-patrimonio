@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+
 import { FormularioCategoria } from "../components/FormularioCategoria";
 import { useCadastroCategoriaHook } from "../hooks/useCadastroCategoriaHook";
 
@@ -10,21 +12,42 @@ export default function EditarCategoriaPage() {
   const [nome, setNome] = useState("");
   const [tipo, setTipo] = useState("");
   const [nota, setNota] = useState("");
+  const [isLoadingData, setIsLoadingData] = useState(true);
 
   const { getCategoria, editarCategoria, error, inputsErrors, isLoading } =
     useCadastroCategoriaHook();
 
   useEffect(() => {
     const getCategoriaById = async () => {
-      if (!id) return;
+      if (!id) {
+        navigate("/categorias", { replace: true });
+        return;
+      }
+
+      setIsLoadingData(true);
 
       try {
-        const categoriaById = await getCategoria(nome,id);
-        setNome(categoriaById.data[0].nome);
-        setNota(categoriaById.data[0].nota ?? "");
-        setTipo(categoriaById.data[0].tipo);
-      } catch (error) {
-        console.error("Erro ao buscar categoria:", error);
+        const categoriaById = await getCategoria("", id);
+        const item = Array.isArray(categoriaById?.data)
+          ? categoriaById.data[0]
+          : Array.isArray(categoriaById)
+            ? categoriaById[0]
+            : categoriaById;
+
+        if (!item) {
+          throw new Error("Categoria não encontrada");
+        }
+
+        setNome(item.nome ?? "");
+        setNota(item.nota ?? "");
+        setTipo(item.tipo ?? "");
+      } catch (err) {
+        toast.error(
+          err?.message ?? error ?? "Não foi possível carregar a categoria",
+        );
+        navigate("/categorias", { replace: true });
+      } finally {
+        setIsLoadingData(false);
       }
     };
 
@@ -33,18 +56,30 @@ export default function EditarCategoriaPage() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (!id) return;
+
     try {
-      const sucesso = await editarCategoria({
-        id,
+      const sucesso = await editarCategoria(id, {
         nome,
         tipo,
-        nota: nota,
+        nota,
       });
+
+      if (!sucesso) return;
+
       toast.success("Registro salvo!");
-      navigate(-1);
-    } catch (e) {
-      toast.error(error);
+      navigate("/categorias");
+    } catch (err) {
+      toast.error(err?.message ?? error ?? "Não foi possível editar a categoria");
     }
+  }
+
+  if (isLoadingData) {
+    return (
+      <div className="flex min-h-64 items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-secondary border-t-transparent" />
+      </div>
+    );
   }
 
   return (
