@@ -1,6 +1,10 @@
-import axios from "axios";
+import api from "../../../shared/api/axios";
 
-const api = axios.create({
-  baseURL: "http://localhost:8000/api",
-  withCredentials: true,
-});
+export const userService = {
+  async listarUsuarios() {
+    const { data } = await api.get("/auth/users");
+    return data;
+  },
+};
+
+export default userService;
