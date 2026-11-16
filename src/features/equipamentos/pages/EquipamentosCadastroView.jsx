@@ -44,7 +44,7 @@ export default function EquipamentoCadastroView() {
         status_id: statusId,
         usuario_id: usuarioId,
         descricao,
-        imagem_url: null,
+        imagem_url: imagemUrl,
       });
 
       if (!result) return;
