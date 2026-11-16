@@ -283,6 +283,11 @@ export function useEquipamentoHook() {
 
     try {
       const result = await equipamentService.updateEquipamento(id, payload);
+      await historicoEquipamentoService.inserirHistorico(
+        result.id, // equipament_id
+        payload.status_id.toString(), // status_id
+        payload.usuario_id.toString(), // user_id
+      );
       return result;
     } catch (err) {
       return tratarErroApi(err, "Ocorreu um erro ao atualizar o equipamento");
