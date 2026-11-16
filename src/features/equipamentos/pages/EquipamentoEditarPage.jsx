@@ -23,6 +23,8 @@ export default function EquipamentoEditarPage() {
     editarEquipamento,
     listaStatus,
     listaUsuarios,
+    listaCategorias,
+    listaTipos,
     isLoading,
     inputsErrors,
   } = useEquipamentoHook();
@@ -30,6 +32,8 @@ export default function EquipamentoEditarPage() {
   const [nome, setNome] = useState("");
   const [serie, setSerie] = useState("");
   const [statusId, setStatusId] = useState("");
+  const [categoriaId, setCategoriaId] = useState("");
+  const [tipoEquipamentoId, setTipoEquipamentoId] = useState("");
   const [usuarioId, setUsuarioId] = useState("");
   const [descricao, setDescricao] = useState("");
   const [imagemAtual, setImagemAtual] = useState(null);
@@ -64,6 +68,14 @@ export default function EquipamentoEditarPage() {
         setStatusId(
           registro.status_id != null ? String(registro.status_id) : "",
         );
+        setCategoriaId(
+          registro.categoria_id != null ? String(registro.categoria_id) : "",
+        );
+        setTipoEquipamentoId(
+          registro.tipo_equipamento_id != null
+            ? String(registro.tipo_equipamento_id)
+            : "",
+        );
         setUsuarioId(
           registro.usuario_id != null ? String(registro.usuario_id) : "",
         );
@@ -89,6 +101,8 @@ export default function EquipamentoEditarPage() {
         nome,
         serie,
         status_id: statusId,
+        categoria_id: categoriaId,
+        tipo_equipamento_id: tipoEquipamentoId,
         usuario_id: usuarioId,
         descricao,
         imagem_url: imagemAtual,
@@ -153,11 +167,17 @@ export default function EquipamentoEditarPage() {
         setSerie={setSerie}
         statusId={statusId}
         setStatusId={setStatusId}
+        categoriaId={categoriaId}
+        setCategoriaId={setCategoriaId}
+        tipoEquipamentoId={tipoEquipamentoId}
+        setTipoEquipamentoId={setTipoEquipamentoId}
         usuarioId={usuarioId}
         setUsuarioId={setUsuarioId}
         descricao={descricao}
         setDescricao={setDescricao}
         listaStatus={listaStatus}
+        listaCategorias={listaCategorias}
+        listaTipos={listaTipos}
         listaUsuarios={listaUsuarios}
         isLoading={isLoading}
         inputsErrors={inputsErrors}

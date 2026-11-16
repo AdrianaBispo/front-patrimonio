@@ -4,11 +4,18 @@ import { z } from "zod";
 import equipamentService from "../services/equipamentService";
 import statusService from "../../status/services/statusService";
 import userService from "../../user/services/userService";
+import categoriaService from "../../Categorias/services/categoriaService";
+import { tipoEquipamentoService } from "../../tipoEquipamento/services/tipoEquipamentoService";
 import { Status } from "../../status/types/status.types";
 import { UsuarioParaSelecao } from "../../user/types/user";
 import { Equipamento } from "../types/equipament.type";
 import { EquipamentoError } from "../types/equipamentoError.types";
 import historicoEquipamentoService from "../../historicoEquipamentos/services/historicoEquipamentoService";
+
+export type OpcaoSelect = {
+  id: string | number;
+  nome: string;
+};
 
 const equipamentoSchema = z.object({
   nome: z
@@ -31,6 +38,14 @@ const equipamentoSchema = z.object({
     .number({ error: "Status é obrigatório" })
     .int("Status inválido")
     .positive("Status é obrigatório"),
+  categoria_id: z.coerce
+    .number({ error: "Categoria é obrigatória" })
+    .int("Categoria inválida")
+    .positive("Categoria é obrigatória"),
+  tipo_equipamento_id: z.coerce
+    .number({ error: "Tipo de equipamento é obrigatório" })
+    .int("Tipo de equipamento inválido")
+    .positive("Tipo de equipamento é obrigatório"),
   imagem_url: z
     .union([z.string(), z.null(), z.undefined()])
     .optional()
@@ -108,6 +123,8 @@ export function useEquipamentoHook() {
   const [inputsErrors, setInputsErrors] = useState<EquipamentoError>({});
   const [listaStatus, setListaStatus] = useState<Status[]>([]);
   const [listaUsuarios, setListaUsuarios] = useState<UsuarioParaSelecao[]>([]);
+  const [listaCategorias, setListaCategorias] = useState<OpcaoSelect[]>([]);
+  const [listaTipos, setListaTipos] = useState<OpcaoSelect[]>([]);
 
   const listarEquipamentos = useCallback(async (
     page = 1,
@@ -166,9 +183,11 @@ export function useEquipamentoHook() {
     setError(null);
 
     try {
-      const [statusRes, usuariosRes] = await Promise.all([
+      const [statusRes, usuariosRes, categoriasRes, tiposRes] = await Promise.all([
         statusService.listarStatus(),
         userService.listarUsuarios(),
+        categoriaService.getCategoria("", null, 1, 0),
+        tipoEquipamentoService.getTipoEquipamento("", "", 1),
       ]);
 
       const rawStatus = extrairLista(statusRes, ["status", "statuses", "data"]);
@@ -187,15 +206,46 @@ export function useEquipamentoHook() {
           nome: String(item.nome ?? item.name ?? item.email ?? item.id),
         }));
 
+      const rawCategorias = extrairLista(categoriasRes, [
+        "categorias",
+        "categoria",
+        "data",
+      ]);
+      const categoriasFormatadas: OpcaoSelect[] = rawCategorias
+        .filter((item) => item?.id != null)
+        .map((item) => ({
+          id: item.id as string | number,
+          nome: String(item.nome ?? item.name ?? `Categoria #${item.id}`),
+        }));
+
+      const rawTipos = extrairLista(tiposRes, [
+        "tipo_equipamentos",
+        "tipos",
+        "data",
+      ]);
+      const tiposFormatados: OpcaoSelect[] = rawTipos
+        .filter((item) => item?.id != null)
+        .map((item) => ({
+          id: item.id as string | number,
+          nome: String(item.nome ?? item.name ?? `Tipo #${item.id}`),
+        }));
+
       setListaStatus(statusFormatados);
       setListaUsuarios(usuariosFormatados);
+      setListaCategorias(categoriasFormatadas);
+      setListaTipos(tiposFormatados);
 
       return {
         listaStatus: statusFormatados,
         listaUsuarios: usuariosFormatados,
+        listaCategorias: categoriasFormatadas,
+        listaTipos: tiposFormatados,
       };
     } catch (err) {
-      const message = extrairMensagemHttp(err, "Ocorreu um erro ao carregar status e usuários");
+      const message = extrairMensagemHttp(
+        err,
+        "Ocorreu um erro ao carregar as opções do formulário",
+      );
       setError(message);
       throw new Error(message);
     } finally {
@@ -267,10 +317,13 @@ export function useEquipamentoHook() {
       try {
         const image = await equipamentService.uploadImage(arquivo);
         const url =
+          image?.imagepath ??
+          image?.image_path ??
           image?.url ??
           image?.imagem_url ??
           image?.path ??
           image?.data?.url ??
+          image?.data?.imagepath ??
           null;
         if (!url) {
           throw new Error("Upload da imagem não retornou URL");
@@ -358,6 +411,8 @@ export function useEquipamentoHook() {
     editarEquipamento,
     listaStatus,
     listaUsuarios,
+    listaCategorias,
+    listaTipos,
     isLoading,
     isLoadingOpcoes,
     error,

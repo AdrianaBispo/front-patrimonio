@@ -7,11 +7,17 @@ export function FormularioEquipamento({
   setSerie,
   statusId,
   setStatusId,
+  categoriaId,
+  setCategoriaId,
+  tipoEquipamentoId,
+  setTipoEquipamentoId,
   usuarioId,
   setUsuarioId,
   descricao,
   setDescricao,
   listaStatus = [],
+  listaCategorias = [],
+  listaTipos = [],
   listaUsuarios = [],
   isLoading,
   inputsErrors,
@@ -161,6 +167,54 @@ export function FormularioEquipamento({
               />
               {inputsErrors?.serie && (
                 <ErrorLabel>{inputsErrors.serie}</ErrorLabel>
+              )}
+            </div>
+          </div>
+
+          <div className="mb-5 flex flex-col gap-5 md:flex-row">
+            <div className="flex-1">
+              <label htmlFor="categoria_id">
+                Categoria <span className="text-red-500">*</span>
+              </label>
+              <select
+                id="categoria_id"
+                name="categoria_id"
+                className="input-utilities"
+                value={categoriaId}
+                onChange={(e) => setCategoriaId(e.target.value)}
+              >
+                <option value="">Selecione</option>
+                {listaCategorias.map((categoria) => (
+                  <option key={categoria.id} value={categoria.id}>
+                    {categoria.nome}
+                  </option>
+                ))}
+              </select>
+              {inputsErrors?.categoria_id && (
+                <ErrorLabel>{inputsErrors.categoria_id}</ErrorLabel>
+              )}
+            </div>
+
+            <div className="flex-1">
+              <label htmlFor="tipo_equipamento_id">
+                Tipo de Equipamento <span className="text-red-500">*</span>
+              </label>
+              <select
+                id="tipo_equipamento_id"
+                name="tipo_equipamento_id"
+                className="input-utilities"
+                value={tipoEquipamentoId}
+                onChange={(e) => setTipoEquipamentoId(e.target.value)}
+              >
+                <option value="">Selecione</option>
+                {listaTipos.map((tipo) => (
+                  <option key={tipo.id} value={tipo.id}>
+                    {tipo.nome}
+                  </option>
+                ))}
+              </select>
+              {inputsErrors?.tipo_equipamento_id && (
+                <ErrorLabel>{inputsErrors.tipo_equipamento_id}</ErrorLabel>
               )}
             </div>
           </div>

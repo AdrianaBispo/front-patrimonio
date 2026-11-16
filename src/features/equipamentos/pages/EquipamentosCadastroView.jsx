@@ -11,6 +11,8 @@ export default function EquipamentoCadastroView() {
     carregarOpcoesFormulario,
     listaStatus,
     listaUsuarios,
+    listaCategorias,
+    listaTipos,
     isLoading,
     isLoadingOpcoes,
     inputsErrors,
@@ -19,6 +21,8 @@ export default function EquipamentoCadastroView() {
   const [nome, setNome] = useState("");
   const [serie, setSerie] = useState("");
   const [statusId, setStatusId] = useState("");
+  const [categoriaId, setCategoriaId] = useState("");
+  const [tipoEquipamentoId, setTipoEquipamentoId] = useState("");
   const [usuarioId, setUsuarioId] = useState("");
   const [descricao, setDescricao] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
@@ -44,6 +48,8 @@ export default function EquipamentoCadastroView() {
         nome,
         serie,
         status_id: statusId,
+        categoria_id: categoriaId,
+        tipo_equipamento_id: tipoEquipamentoId,
         usuario_id: usuarioId,
         descricao,
         imagem_file: imagemFile,
@@ -111,11 +117,17 @@ export default function EquipamentoCadastroView() {
         setSerie={setSerie}
         statusId={statusId}
         setStatusId={setStatusId}
+        categoriaId={categoriaId}
+        setCategoriaId={setCategoriaId}
+        tipoEquipamentoId={tipoEquipamentoId}
+        setTipoEquipamentoId={setTipoEquipamentoId}
         usuarioId={usuarioId}
         setUsuarioId={setUsuarioId}
         descricao={descricao}
         setDescricao={setDescricao}
         listaStatus={listaStatus}
+        listaCategorias={listaCategorias}
+        listaTipos={listaTipos}
         listaUsuarios={listaUsuarios}
         isLoading={isLoading}
         inputsErrors={inputsErrors}
