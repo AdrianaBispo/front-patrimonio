@@ -8,6 +8,7 @@ import { Status } from "../../status/types/status.types";
 import { UsuarioParaSelecao } from "../../user/types/user";
 import { Equipamento } from "../types/equipament.type";
 import { EquipamentoError } from "../types/equipamentoError.types";
+import historicoEquipamentoService from "../../historicoEquipamentos/services/historicoEquipamentoService";
 
 const equipamentoSchema = z.object({
   nome: z
@@ -257,6 +258,11 @@ export function useEquipamentoHook() {
 
     try {
       const result = await equipamentService.createEquipamento(payload);
+      await historicoEquipamentoService.inserirHistorico(
+        result.id, // equipament_id
+        payload.status_id.toString(), // status_id
+        payload.usuario_id.toString(), // user_id
+      );
       return result;
     } catch (err) {
       return tratarErroApi(err, "Ocorreu um erro ao cadastrar o equipamento");
