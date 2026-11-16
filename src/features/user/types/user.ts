@@ -6,3 +6,5 @@ export type User = {
   cpf: string | null;
   email: string;
 };
+
+export type UsuarioParaSelecao = Pick<User, "id" | "nome">;
