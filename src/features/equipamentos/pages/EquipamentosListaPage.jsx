@@ -71,16 +71,15 @@ export default function EquipamentosListaPage() {
   const [listEquipamentos, setListEquipamentos] = useState([]);
   const [paginacao, setPaginacao] = useState(paginacaoInicial);
   const [valueFilter, setValueFilter] = useState("");
-  const [tipoFiltro, setTipoFiltro] = useState("nome");
 
-  const carregarPagina = async (termo, campoFiltro, pageNumber) => {
+  const carregarPagina = async (serie, pageNumber) => {
     try {
-      const termoLimpo = termo.trim();
+      const serieFiltrada = serie.trim();
       const result = await listarEquipamentos(
         pageNumber,
         POR_PAGINA,
-        campoFiltro === "nome" ? termoLimpo : "",
-        campoFiltro === "serie" ? termoLimpo : "",
+        "",
+        serieFiltrada,
       );
 
       const pagina = extrairPaginacao(result);
@@ -92,11 +91,11 @@ export default function EquipamentosListaPage() {
   };
 
   useEffect(() => {
-    carregarPagina("", "nome", 1);
+    carregarPagina("", 1);
   }, []);
 
   const handleSearch = () => {
-    carregarPagina(valueFilter, tipoFiltro, 1);
+    carregarPagina(valueFilter, 1);
   };
 
   return (
@@ -132,18 +131,7 @@ export default function EquipamentosListaPage() {
         {/* Pesquisa */}
 
         <div className="bg-bg-secondary r-50 px-3 py-3">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center max-w-xl">
-            <select
-              aria-label="Tipo de filtro"
-              className="input-utilities sm:w-36 bg-bg-primary py-2"
-              value={tipoFiltro}
-              onChange={(e) => setTipoFiltro(e.target.value)}
-            >
-              <option value="nome">Nome</option>
-              <option value="serie">Série</option>
-            </select>
-
-            <div className="relative flex-1">
+          <div className="relative w-full max-w-md">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -161,12 +149,8 @@ export default function EquipamentosListaPage() {
 
               <input
                 type="text"
-                placeholder={
-                  tipoFiltro === "serie"
-                    ? "Pesquisar por série..."
-                    : "Pesquisar por nome..."
-                }
-                className="input-utilities w-full pl-10 pr-2 py-2 bg-bg-primary"
+                placeholder="Pesquisar por série..."
+                className="input-utilities w-full pl-10 pr-12 py-2 bg-bg-primary"
                 value={valueFilter}
                 onChange={(e) => setValueFilter(e.target.value)}
                 onKeyDown={(e) => {
@@ -175,7 +159,23 @@ export default function EquipamentosListaPage() {
                   }
                 }}
               />
-            </div>
+
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center text-text-primary/70 transition-colors hover:text-secondary"
+                title="Pesquisar código de barras"
+                aria-label="Pesquisar código de barras"
+                onClick={handleSearch}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 -960 960 960"
+                  className="size-5"
+                  fill="currentColor"
+                >
+                  <path d="M40-120v-200h80v120h120v80H40Zm680 0v-80h120v-120h80v200H720ZM160-240v-480h80v480h-80Zm120 0v-480h40v480h-40Zm120 0v-480h80v480h-80Zm120 0v-480h120v480H520Zm160 0v-480h40v480h-40Zm80 0v-480h40v480h-40ZM40-640v-200h200v80H120v120H40Zm800 0v-120H720v-80h200v200h-80Z" />
+                </svg>
+              </button>
           </div>
         </div>
 
@@ -276,7 +276,7 @@ export default function EquipamentosListaPage() {
           from={paginacao.from}
           to={paginacao.to}
           isLoading={isLoading}
-          onPageChange={(page) => carregarPagina(valueFilter, tipoFiltro, page)}
+          onPageChange={(page) => carregarPagina(valueFilter, page)}
         />
       </div>
     </div>
