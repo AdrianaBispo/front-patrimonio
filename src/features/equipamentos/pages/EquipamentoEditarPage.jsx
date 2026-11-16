@@ -32,6 +32,7 @@ export default function EquipamentoEditarPage() {
   const [statusId, setStatusId] = useState("");
   const [usuarioId, setUsuarioId] = useState("");
   const [descricao, setDescricao] = useState("");
+  const [imagemUrl, setImagemUrl] = useState("");
   const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
@@ -65,6 +66,7 @@ export default function EquipamentoEditarPage() {
           registro.usuario_id != null ? String(registro.usuario_id) : ""
         );
         setDescricao(registro.descricao ?? "");
+        setImagemUrl(registro.imagem_url ?? "");
       } catch (err) {
         toast.error(err?.message ?? "Ocorreu um erro ao carregar o equipamento");
       } finally {
@@ -86,7 +88,7 @@ export default function EquipamentoEditarPage() {
         status_id: statusId,
         usuario_id: usuarioId,
         descricao,
-        imagem_url: null,
+        imagem_url: imagemUrl.trim() || null,
       });
 
       if (!result) return;
@@ -123,6 +125,8 @@ export default function EquipamentoEditarPage() {
         setUsuarioId={setUsuarioId}
         descricao={descricao}
         setDescricao={setDescricao}
+        imagemUrl={imagemUrl}
+        setImagemUrl={setImagemUrl}
         listaStatus={listaStatus}
         listaUsuarios={listaUsuarios}
         isLoading={isLoading}
@@ -130,6 +134,7 @@ export default function EquipamentoEditarPage() {
         handleSubmit={handleSubmit}
         navigate={navigate}
         submitLabel="Salvar"
+        selectedImage={imagemUrl}
       />
     </div>
   );
