@@ -1,5 +1,4 @@
 import ErrorLabel from "../../../shared/components/ErrorLabel";
-import { useState } from "react";
 
 
 export function FormularioEquipamento({
@@ -13,6 +12,8 @@ export function FormularioEquipamento({
   setUsuarioId,
   descricao,
   setDescricao,
+  imagemUrl,
+  setImagemUrl,
   listaStatus = [],
   listaUsuarios = [],
   isLoading,
@@ -97,6 +98,22 @@ export function FormularioEquipamento({
               </div>
             </div>
           </a>
+          <div className="mt-4">
+            <label htmlFor="imagem_url">URL da imagem</label>
+            <input
+              id="imagem_url"
+              name="imagem_url"
+              className="input-utilities"
+              type="url"
+              maxLength={255}
+              placeholder="https://exemplo.com/equipamento.png"
+              value={imagemUrl}
+              onChange={(e) => setImagemUrl(e.target.value)}
+            />
+            {inputsErrors?.imagem_url && (
+              <ErrorLabel>{inputsErrors.imagem_url}</ErrorLabel>
+            )}
+          </div>
         </div>
 
         {/* Informações do equipamento */}

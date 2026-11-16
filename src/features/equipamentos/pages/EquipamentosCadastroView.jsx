@@ -21,6 +21,7 @@ export default function EquipamentoCadastroView() {
   const [statusId, setStatusId] = useState("");
   const [usuarioId, setUsuarioId] = useState("");
   const [descricao, setDescricao] = useState("");
+  const [imagemUrl, setImagemUrl] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   useEffect(() => {
     const carregar = async () => {
@@ -99,6 +100,8 @@ export default function EquipamentoCadastroView() {
         setUsuarioId={setUsuarioId}
         descricao={descricao}
         setDescricao={setDescricao}
+        imagemUrl={imagemUrl}
+        setImagemUrl={setImagemUrl}
         listaStatus={listaStatus}
         listaUsuarios={listaUsuarios}
         isLoading={isLoading}
@@ -106,7 +109,7 @@ export default function EquipamentoCadastroView() {
         handleSubmit={handleSubmit}
         navigate={navigate}
         submitLabel="Criar Equipamento"
-        selectedImage={selectedImage}
+        selectedImage={selectedImage || imagemUrl}
         handleChangeImage={handleChangeImage}
       />
     </div>
