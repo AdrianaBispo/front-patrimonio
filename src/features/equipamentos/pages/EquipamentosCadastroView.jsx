@@ -44,21 +44,24 @@ export default function EquipamentoCadastroView() {
     e.preventDefault();
 
     try {
-      const result = await cadastrarEquipamento({
-        nome,
-        serie,
-        status_id: statusId,
-        categoria_id: categoriaId,
-        tipo_equipamento_id: tipoEquipamentoId,
-        usuario_id: usuarioId,
-        descricao,
-        imagem_file: imagemFile,
-      });
+      const result = await cadastrarEquipamento(
+        {
+          eqi_name: nome,
+          eqi_descricao: descricao,
+          eqi_serie: serie,
+          eqi_status_id: statusId,
+          categoria_id: categoriaId,
+          tipo_equipamento_id: tipoEquipamentoId,
+          usuario_id: usuarioId,
+          imagem_url: null,
+        },
+        imagemFile,
+      );
 
       if (!result) return;
 
       toast.success("Equipamento cadastrado com sucesso!");
-      navigate(-1);
+      navigate("/equipamentos");
     } catch (err) {
       toast.error(err?.message ?? "Ocorreu um erro ao cadastrar o equipamento");
     }

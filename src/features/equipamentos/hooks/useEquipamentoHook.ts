@@ -18,23 +18,23 @@ export type OpcaoSelect = {
 };
 
 const equipamentoSchema = z.object({
-  nome: z
+  eqi_name: z
     .string()
     .trim()
     .min(1, "Nome é obrigatório")
     .max(255, "Nome deve ter no máximo 255 caracteres"),
-  descricao: z
+  eqi_descricao: z
     .string()
     .trim()
     .min(1, "Descrição é obrigatória")
     .max(255, "Descrição deve ter no máximo 255 caracteres"),
-  serie: z
+  eqi_serie: z
     .string()
     .trim()
     .min(1, "Número de série é obrigatório")
     .max(255, "Número de série deve ter no máximo 255 caracteres")
     .regex(/^\d+$/, "Número de série deve conter apenas dígitos"),
-  status_id: z.coerce
+  eqi_status_id: z.coerce
     .number({ error: "Status é obrigatório" })
     .int("Status inválido")
     .positive("Status é obrigatório"),
@@ -253,6 +253,19 @@ export function useEquipamentoHook() {
     }
   }, []);
 
+  const mapearErroCampo = (campo: string): keyof EquipamentoError => {
+    const mapa: Record<string, keyof EquipamentoError> = {
+      eqi_name: "nome",
+      eqi_nome: "nome",
+      eqi_descricao: "descricao",
+      eqi_serie: "serie",
+      eqi_status_id: "status_id",
+      image: "imagem_file",
+      imagem: "imagem_file",
+    };
+    return mapa[campo] ?? (campo as keyof EquipamentoError);
+  };
+
   const validarEFormatar = (dados: unknown): Equipamento | null => {
     const validar = equipamentoSchema.safeParse(dados);
     if (!validar.success) {
@@ -261,7 +274,7 @@ export function useEquipamentoHook() {
       Object.entries(fieldErrors).forEach(([campo, mensagens]) => {
         const mensagem = mensagens?.[0];
         if (mensagem) {
-          errors[campo as keyof EquipamentoError] = mensagem;
+          errors[mapearErroCampo(campo)] = mensagem;
         }
       });
       setInputsErrors(errors);
@@ -270,8 +283,14 @@ export function useEquipamentoHook() {
 
     setInputsErrors({});
     return {
-      ...validar.data,
+      eqi_name: validar.data.eqi_name,
+      eqi_descricao: validar.data.eqi_descricao,
+      eqi_serie: validar.data.eqi_serie,
+      eqi_status_id: validar.data.eqi_status_id,
+      categoria_id: validar.data.categoria_id,
+      tipo_equipamento_id: validar.data.tipo_equipamento_id,
       imagem_url: validar.data.imagem_url ?? null,
+      usuario_id: validar.data.usuario_id,
     };
   };
 
@@ -283,7 +302,7 @@ export function useEquipamentoHook() {
         Object.entries(apiErrors).forEach(([campo, valor]) => {
           const mensagem = Array.isArray(valor) ? valor[0] : valor;
           if (typeof mensagem === "string") {
-            errors[campo as keyof EquipamentoError] = mensagem;
+            errors[mapearErroCampo(campo)] = mensagem;
           }
         });
         if (Object.keys(errors).length > 0) {
@@ -298,110 +317,152 @@ export function useEquipamentoHook() {
     throw new Error(message);
   };
 
-  const resolverImagem = useCallback(
-    async (
-      dados: Record<string, unknown>,
-      payload: Equipamento,
-      obrigatoria: boolean,
-    ) => {
-      const arquivo = dados.imagem_file;
+  const extrairUrlImagem = (resposta: unknown): string | null => {
+    if (!resposta || typeof resposta !== "object") return null;
+    const data = resposta as Record<string, unknown>;
+    const nested =
+      data.data && typeof data.data === "object"
+        ? (data.data as Record<string, unknown>)
+        : null;
 
-      if (!(arquivo instanceof File)) {
-        if (obrigatoria && !payload.imagem_url) {
-          setInputsErrors({ imagem_file: "A imagem é obrigatória" });
-          return undefined;
-        }
-        return payload;
+    const url =
+      data.imagepath ??
+      data.image_path ??
+      data.url ??
+      data.imagem_url ??
+      data.path ??
+      nested?.imagepath ??
+      nested?.url ??
+      null;
+
+    return url != null ? String(url) : null;
+  };
+
+  const uploadImage = useCallback(async (arquivo: File | null | undefined) => {
+    if (!(arquivo instanceof File)) {
+      setInputsErrors({ imagem_file: "A imagem é obrigatória" });
+      return undefined;
+    }
+
+    try {
+      const result = await equipamentService.uploadImage(arquivo);
+      const url = extrairUrlImagem(result);
+      if (!url) {
+        throw new Error("Upload da imagem não retornou URL");
       }
+      return url;
+    } catch (err) {
+      return tratarErroApi(err, "Erro ao fazer upload da imagem");
+    }
+  }, []);
+
+  const cadastrarEquipamento = useCallback(
+    async (dados: unknown, imagemFile?: File | null) => {
+      setIsLoading(true);
+      setError(null);
+
+      const payload = validarEFormatar(dados);
+      if (!payload) {
+        setIsLoading(false);
+        return undefined;
+      }
+
+      const imagemUrl = await uploadImage(imagemFile);
+      if (!imagemUrl) {
+        setIsLoading(false);
+        return undefined;
+      }
+
+      const equipamento: Equipamento = {
+        ...payload,
+        imagem_url: imagemUrl,
+      };
 
       try {
-        const image = await equipamentService.uploadImage(arquivo);
-        const url =
-          image?.imagepath ??
-          image?.image_path ??
-          image?.url ??
-          image?.imagem_url ??
-          image?.path ??
-          image?.data?.url ??
-          image?.data?.imagepath ??
-          null;
-        if (!url) {
-          throw new Error("Upload da imagem não retornou URL");
+        const result = await equipamentService.createEquipamento(equipamento);
+        const equipamentId = String(
+          result?.eqi_id ?? result?.id ?? result?.data?.eqi_id ?? result?.data?.id ?? "",
+        );
+        const statusId = String(
+          result?.eqi_status_id ??
+            result?.status_id ??
+            equipamento.eqi_status_id,
+        );
+        const userId = String(
+          result?.usuario_id ?? equipamento.usuario_id,
+        );
+
+        if (equipamentId) {
+          await historicoEquipamentoService.inserirHistorico(
+            equipamentId,
+            statusId,
+            userId,
+          );
         }
-        payload.imagem_url = String(url);
-        return payload;
+
+        return result;
       } catch (err) {
-        return tratarErroApi(err, "Erro ao fazer upload da imagem");
+        return tratarErroApi(err, "Ocorreu um erro ao cadastrar o equipamento");
+      } finally {
+        setIsLoading(false);
       }
     },
-    [],
+    [uploadImage],
   );
 
-  const cadastrarEquipamento = useCallback(async (dados: unknown) => {
-    setIsLoading(true);
-    setError(null);
+  const editarEquipamento = useCallback(
+    async (id: string | number, dados: unknown, imagemFile?: File | null) => {
+      setIsLoading(true);
+      setError(null);
 
-    const payload = validarEFormatar(dados);
-    if (!payload) {
-      setIsLoading(false);
-      return undefined;
-    }
+      const payload = validarEFormatar(dados);
+      if (!payload) {
+        setIsLoading(false);
+        return undefined;
+      }
 
-    const dadosObj =
-      dados && typeof dados === "object" ? (dados as Record<string, unknown>) : {};
-    const payloadComImagem = await resolverImagem(dadosObj, payload, true);
-    if (!payloadComImagem) {
-      setIsLoading(false);
-      return undefined;
-    }
+      let imagemUrl = payload.imagem_url;
+      if (imagemFile instanceof File) {
+        const uploaded = await uploadImage(imagemFile);
+        if (!uploaded) {
+          setIsLoading(false);
+          return undefined;
+        }
+        imagemUrl = uploaded;
+      }
 
-    try {
-      const result = await equipamentService.createEquipamento(payloadComImagem);
-      await historicoEquipamentoService.inserirHistorico(
-        result.id,
-        payloadComImagem.status_id.toString(),
-        payloadComImagem.usuario_id.toString(),
-      );
-      return result;
-    } catch (err) {
-      return tratarErroApi(err, "Ocorreu um erro ao cadastrar o equipamento");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [resolverImagem]);
+      const equipamento: Equipamento = {
+        ...payload,
+        imagem_url: imagemUrl,
+      };
 
-  const editarEquipamento = useCallback(async (id: string | number, dados: unknown) => {
-    setIsLoading(true);
-    setError(null);
+      try {
+        const result = await equipamentService.updateEquipamento(id, equipamento);
+        const equipamentId = String(result?.eqi_id ?? result?.id ?? id);
+        const statusId = String(
+          result?.eqi_status_id ??
+            result?.status_id ??
+            equipamento.eqi_status_id,
+        );
+        const userId = String(
+          result?.usuario_id ?? equipamento.usuario_id,
+        );
 
-    const payload = validarEFormatar(dados);
-    if (!payload) {
-      setIsLoading(false);
-      return undefined;
-    }
+        await historicoEquipamentoService.inserirHistorico(
+          equipamentId,
+          statusId,
+          userId,
+        );
 
-    const dadosObj =
-      dados && typeof dados === "object" ? (dados as Record<string, unknown>) : {};
-    const payloadComImagem = await resolverImagem(dadosObj, payload, false);
-    if (!payloadComImagem) {
-      setIsLoading(false);
-      return undefined;
-    }
-
-    try {
-      const result = await equipamentService.updateEquipamento(id, payloadComImagem);
-      await historicoEquipamentoService.inserirHistorico(
-        result.id,
-        payloadComImagem.status_id.toString(),
-        payloadComImagem.usuario_id.toString(),
-      );
-      return result;
-    } catch (err) {
-      return tratarErroApi(err, "Ocorreu um erro ao atualizar o equipamento");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [resolverImagem]);
+        return result;
+      } catch (err) {
+        return tratarErroApi(err, "Ocorreu um erro ao atualizar o equipamento");
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [uploadImage],
+  );
 
   return {
     listarEquipamentos,

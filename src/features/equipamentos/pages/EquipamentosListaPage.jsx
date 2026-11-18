@@ -81,7 +81,6 @@ export default function EquipamentosListaPage() {
         "",
         serieFiltrada,
       );
-
       const pagina = extrairPaginacao(result);
       setListEquipamentos(pagina.items);
       setPaginacao(pagina);
@@ -132,61 +131,62 @@ export default function EquipamentosListaPage() {
 
         <div className="bg-bg-secondary r-50 px-3 py-3">
           <div className="relative w-full max-w-md">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="absolute left-3 top-1/2 size-5 -translate-y-1/2 text-gray-400"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+              />
+            </svg>
+
+            <input
+              type="text"
+              placeholder="Pesquisar por série..."
+              className="input-utilities w-full pl-10 pr-12 py-2 bg-bg-primary"
+              value={valueFilter}
+              onChange={(e) => setValueFilter(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch();
+                }
+              }}
+            />
+
+            <button
+              type="button"
+              className="absolute right-3 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center text-text-primary/70 transition-colors hover:text-secondary"
+              title="Pesquisar código de barras"
+              aria-label="Pesquisar código de barras"
+              onClick={handleSearch}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="absolute left-3 top-1/2 size-5 -translate-y-1/2 text-gray-400"
+                viewBox="0 -960 960 960"
+                className="size-5"
+                fill="currentColor"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-                />
+                <path d="M40-120v-200h80v120h120v80H40Zm680 0v-80h120v-120h80v200H720ZM160-240v-480h80v480h-80Zm120 0v-480h40v480h-40Zm120 0v-480h80v480h-80Zm120 0v-480h120v480H520Zm160 0v-480h40v480h-40Zm80 0v-480h40v480h-40ZM40-640v-200h200v80H120v120H40Zm800 0v-120H720v-80h200v200h-80Z" />
               </svg>
-
-              <input
-                type="text"
-                placeholder="Pesquisar por série..."
-                className="input-utilities w-full pl-10 pr-12 py-2 bg-bg-primary"
-                value={valueFilter}
-                onChange={(e) => setValueFilter(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    handleSearch();
-                  }
-                }}
-              />
-
-              <button
-                type="button"
-                className="absolute right-3 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center text-text-primary/70 transition-colors hover:text-secondary"
-                title="Pesquisar código de barras"
-                aria-label="Pesquisar código de barras"
-                onClick={handleSearch}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 -960 960 960"
-                  className="size-5"
-                  fill="currentColor"
-                >
-                  <path d="M40-120v-200h80v120h120v80H40Zm680 0v-80h120v-120h80v200H720ZM160-240v-480h80v480h-80Zm120 0v-480h40v480h-40Zm120 0v-480h80v480h-80Zm120 0v-480h120v480H520Zm160 0v-480h40v480h-40Zm80 0v-480h40v480h-40ZM40-640v-200h200v80H120v120H40Zm800 0v-120H720v-80h200v200h-80Z" />
-                </svg>
-              </button>
+            </button>
           </div>
         </div>
 
         <table className="min-w-full divide-y divide-border justify-around">
           <thead className="text-center text-xs font-medium tracking-wider text-text-primary">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
-                ID
-              </th>
+
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
                 Nome
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
+                Categoria
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
                 Série
@@ -221,22 +221,22 @@ export default function EquipamentosListaPage() {
               </tr>
             ) : (
               listEquipamentos.map((item) => (
-                <tr key={item.id}>
+                <tr key={item.eqi_id ?? item.id}>
                   <td className="whitespace-nowrap px-6 py-4">
                     <div className="text-sm font-medium text-text-primary">
-                      {item.id}
-                    </div>
-                  </td>
-
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <div className="text-sm font-medium text-text-primary">
-                      {item.nome}
+                      {item.eqi_name ?? item.eqi_nome ?? item.nome ?? "-"}
                     </div>
                   </td>
 
                   <td className="whitespace-nowrap px-6 py-4">
                     <div className="text-sm text-text-primary">
-                      {item.serie}
+                      {item.categoria_nome ?? item.categoria?.nome ?? "-"}
+                    </div>
+                  </td>
+
+                  <td className="whitespace-nowrap px-6 py-4">
+                    <div className="text-sm text-text-primary">
+                      {item.eqi_serie ?? item.serie ?? "-"}
                     </div>
                   </td>
 
@@ -247,8 +247,8 @@ export default function EquipamentosListaPage() {
                   </td>
 
                   <td className="whitespace-nowrap px-6 py-4">
-                    <span className="inline-flex rounded-full bg-active px-3 py-0.5 text-xs font-semibold leading-5 text-white">
-                      {item.status_nome ?? "-"}
+                    <span className="inline-flex rounded-full bg-success/15 px-3 py-0.5 text-xs font-semibold leading-5 text-success">
+                      {item.status_nome ?? item.status?.nome ?? "-"}
                     </span>
                   </td>
 
@@ -256,7 +256,7 @@ export default function EquipamentosListaPage() {
                     <div className="flex items-center justify-end gap-3">
                       <EditButton
                         onClick={() =>
-                          navigate(`editar/${item.id}`, {
+                          navigate(`editar/${item.eqi_id ?? item.id}`, {
                             state: { equipamento: item },
                           })
                         }

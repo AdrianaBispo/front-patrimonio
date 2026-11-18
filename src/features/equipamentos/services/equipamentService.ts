@@ -1,6 +1,20 @@
 import api from "../../../shared/api/axios";
 import { Equipamento } from "../types/equipament.type";
 
+function toApiPayload(equipamento: Equipamento) {
+  // Backend de create/update ainda valida os nomes sem prefixo eqi_
+  return {
+    nome: equipamento.eqi_name,
+    descricao: equipamento.eqi_descricao,
+    serie: equipamento.eqi_serie,
+    status_id: equipamento.eqi_status_id,
+    categoria_id: equipamento.categoria_id,
+    tipo_equipamento_id: equipamento.tipo_equipamento_id,
+    usuario_id: equipamento.usuario_id,
+    imagem_url: equipamento.imagem_url,
+  };
+}
+
 export const equipamentService = {
   async getAllEquipamentos(
     page = 1,
@@ -59,12 +73,18 @@ export const equipamentService = {
   },
 
   async createEquipamento(equipamento: Equipamento) {
-    const { data } = await api.post("/equipaments/create", equipamento);
+    const { data } = await api.post(
+      "/equipaments/create",
+      toApiPayload(equipamento),
+    );
     return data;
   },
 
   async updateEquipamento(id: string | number, equipamento: Equipamento) {
-    const { data } = await api.put(`/equipaments/update/${id}`, equipamento);
+    const { data } = await api.put(
+      `/equipaments/update/${id}`,
+      toApiPayload(equipamento),
+    );
     return data;
   },
 
