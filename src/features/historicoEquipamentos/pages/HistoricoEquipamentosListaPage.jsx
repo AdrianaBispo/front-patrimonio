@@ -144,7 +144,7 @@ export default function HistoricoEquipamentosListaPage() {
                     {item.equipament_nome ?? "-"}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4">
-                    <span className="inline-flex rounded-full bg-active px-3 py-0.5 text-xs font-semibold leading-5 text-white">
+                    <span className="inline-flex rounded-full bg-success/15 px-3 py-0.5 text-xs font-semibold leading-5 text-success">
                       {item.status_nome ?? "-"}
                     </span>
                   </td>
