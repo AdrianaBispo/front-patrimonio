@@ -3,9 +3,10 @@ import { toast } from "react-toastify";
 
 import Pagination from "../../../shared/components/Pagination";
 import { useRoleHook } from "../hooks/useRoleHook";
+import EditButton from "../../../shared/components/EditButton";
+import { useNavigate } from "react-router-dom";
 
 const POR_PAGINA = 10;
-
 const paginacaoInicial = {
   currentPage: 1,
   lastPage: 1,
@@ -77,6 +78,7 @@ function paginarLocal(items, pagina, porPagina) {
 }
 
 export default function RolesPageLista() {
+  const navigate = useNavigate();
   const { listarRoles, isLoading } = useRoleHook();
   const [roles, setRoles] = useState([]);
   const [todosRoles, setTodosRoles] = useState([]);
@@ -170,17 +172,16 @@ export default function RolesPageLista() {
     <div className="mx-auto max-w-7xl">
       <div className="mb-9">
         <h3 className="mb-2 text-primary/80">Perfis de Acesso</h3>
-        <p>Lista dos roles cadastrados no sistema.</p>
+        <p>Lista dos perfis de acesso cadastrados no sistema.</p>
       </div>
 
       <div className="overflow-hidden rounded-2xl border-border shadow-md">
         <table className="min-w-full divide-y divide-border">
           <thead className="text-xs font-medium tracking-wider text-text-primary">
             <tr>
-              <th className="px-6 py-3 text-left">ID</th>
               <th className="px-6 py-3 text-left">Nome</th>
-              <th className="px-6 py-3 text-left">Guard</th>
-              <th className="px-6 py-3 text-left">Permissões</th>
+            
+              <th className="px-6 py-3"></th>{/* Editar */}
             </tr>
           </thead>
 
@@ -205,20 +206,16 @@ export default function RolesPageLista() {
             ) : (
               roles.map((item) => (
                 <tr key={item.id}>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-text-primary">
-                    {item.id}
-                  </td>
+
                   <td className="px-6 py-4 text-sm font-medium text-text-primary">
                     {item.name ?? "-"}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-text-primary">
-                    {item.guard_name ?? "-"}
+                  <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
+                    <div className="flex items-center justify-end gap-3">
+                      <EditButton onClick={() => navigate(`editar/${item.id}`)} />
+                    </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-text-primary">
-                    {Array.isArray(item.permissions)
-                      ? item.permissions.length
-                      : "-"}
-                  </td>
+
                 </tr>
               ))
             )}
