@@ -1,5 +1,5 @@
 import ErrorLabel from "../../../shared/components/ErrorLabel";
-
+import { IMaskInput } from "react-imask";
 export default function FormularioUsuario({
   nome,
   setNome,
@@ -46,7 +46,17 @@ export default function FormularioUsuario({
             <label htmlFor="celular">
               Celular <span className="text-red-500">*</span>
             </label>
-            <input
+            <IMaskInput
+            
+            mask={[
+                {
+                    mask: '(00) 0000-0000',
+                },
+                {
+                    mask: '(00) 00000-0000',
+                },
+            ]}
+            unmask={true}
               id="celular"
               name="celular"
               className="input-utilities"
@@ -85,8 +95,7 @@ export default function FormularioUsuario({
           <div className="flex flex-col gap-5 md:flex-row">
             <div className="flex-1">
               <label htmlFor="role_id">
-                Perfil de acesso{" "}
-                {!isEditing && <span className="text-red-500">*</span>}
+                Perfil de acesso <span className="text-red-500">*</span>
               </label>
               <select
                 id="role_id"
@@ -94,12 +103,11 @@ export default function FormularioUsuario({
                 className="input-utilities"
                 value={roleId}
                 onChange={(event) => setRoleId(event.target.value)}
+                required
               >
-                <option value="">
-                  {isEditing ? "Manter perfil atual" : "Selecione"}
-                </option>
+                <option value="">Selecione</option>
                 {roles.map((role) => (
-                  <option key={role.id} value={role.id}>
+                  <option key={role.id} value={String(role.id)}>
                     {role.name}
                   </option>
                 ))}
