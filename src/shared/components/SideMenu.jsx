@@ -28,7 +28,7 @@ export default function SideMenu() {
       </div>
       <ul>
         <li className="px-1 py-1"></li>
-        <li>
+        {/* <li>
           <a
             href="#"
             className="sidebar-item-utilities"
@@ -59,7 +59,7 @@ export default function SideMenu() {
             </svg>
             <span className="ms-3">Dashboard</span>
           </a>
-        </li>
+        </li> */}
 
 
         {/* <li>
