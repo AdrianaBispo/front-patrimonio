@@ -42,6 +42,7 @@ export function useLogin() {
 
     try {
       const result = await authService.login(credentials);
+      const refreshToken = await authService.getRefreshToken();
       return result;
     } catch (err) {
       if (axios.isAxiosError(err)) {

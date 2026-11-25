@@ -46,7 +46,7 @@ const edicaoSchema = z.object({
       "A senha deve ter pelo menos 8 caracteres",
     )
     .optional(),
-  role_id: z.string().optional(),
+  role_id: z.string().min(1, "Perfil de acesso é obrigatório"),
 });
 
 function mensagemErro(error: unknown, fallback: string) {
@@ -88,30 +88,35 @@ export function useUsuarioFormHook() {
     }
   }, []);
 
-  const carregarUsuario = useCallback(async (id: string): Promise<User> => {
-    setIsLoadingData(true);
-    setError(null);
+  const carregarUsuario = useCallback(
+    async (
+      id: string,
+    ): Promise<{ usuario: User; roles: Role[] }> => {
+      setIsLoadingData(true);
+      setError(null);
 
-    try {
-      const [usuario, listaRoles] = await Promise.all([
-        userService.buscarUsuario(id),
-        userService.listarRoles(),
-      ]);
+      try {
+        const [usuario, listaRoles] = await Promise.all([
+          userService.buscarUsuario(id),
+          userService.listarRoles(),
+        ]);
 
-      if (!usuario) throw new Error("Usuário não encontrado");
-      setRoles(listaRoles);
-      return usuario;
-    } catch (err) {
-      const message =
-        err instanceof Error && err.message === "Usuário não encontrado"
-          ? err.message
-          : mensagemErro(err, "Não foi possível carregar o usuário");
-      setError(message);
-      throw new Error(message);
-    } finally {
-      setIsLoadingData(false);
-    }
-  }, []);
+        if (!usuario) throw new Error("Usuário não encontrado");
+        setRoles(listaRoles);
+        return { usuario, roles: listaRoles };
+      } catch (err) {
+        const message =
+          err instanceof Error && err.message === "Usuário não encontrado"
+            ? err.message
+            : mensagemErro(err, "Não foi possível carregar o usuário");
+        setError(message);
+        throw new Error(message);
+      } finally {
+        setIsLoadingData(false);
+      }
+    },
+    [],
+  );
 
   const validar = (
     dados: UsuarioFormData,

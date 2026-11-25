@@ -5,6 +5,36 @@ import { toast } from "react-toastify";
 import FormularioUsuario from "../components/FormularioUsuario";
 import { useUsuarioFormHook } from "../hooks/useUsuarioFormHook";
 
+function extrairRoleId(usuario, listaRoles = []) {
+  if (usuario?.role_id != null && usuario.role_id !== "") {
+    return String(usuario.role_id);
+  }
+
+  const rolesUsuario = usuario?.roles;
+
+  if (Array.isArray(rolesUsuario) && rolesUsuario.length > 0) {
+    const primeiro = rolesUsuario[0];
+
+    if (primeiro != null && typeof primeiro === "object" && primeiro.id != null) {
+      return String(primeiro.id);
+    }
+
+    const valor = String(primeiro);
+    const porId = listaRoles.find((role) => String(role.id) === valor);
+    if (porId) return String(porId.id);
+
+    const porNome = listaRoles.find((role) => role.name === valor);
+    if (porNome) return String(porNome.id);
+  }
+
+  if (typeof rolesUsuario === "string" && rolesUsuario.trim()) {
+    const porNome = listaRoles.find((role) => role.name === rolesUsuario);
+    if (porNome) return String(porNome.id);
+  }
+
+  return "";
+}
+
 export default function EditarUsuarioPage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -30,15 +60,11 @@ export default function EditarUsuarioPage() {
     }
 
     carregarUsuario(id)
-      .then((usuario) => {
+      .then(({ usuario, roles: listaRoles }) => {
         setNome(usuario.nome ?? "");
         setCelular(usuario.celular ?? "");
         setEmail(usuario.email ?? "");
-        setRoleId(
-          usuario.roles?.[0]?.id != null
-            ? String(usuario.roles[0].id)
-            : "",
-        );
+        setRoleId(extrairRoleId(usuario, listaRoles));
       })
       .catch((error) => {
         toast.error(error?.message ?? "Não foi possível carregar o usuário");

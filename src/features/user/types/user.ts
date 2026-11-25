@@ -7,7 +7,8 @@ export type User = {
   cpf: string | null;
   email: string;
   status?: number | string;
-  roles?: Role[];
+  role_id?: number | string | null;
+  role_name?: string | null;
 };
 
 export type UsuarioParaSelecao = Pick<User, "id" | "nome">;

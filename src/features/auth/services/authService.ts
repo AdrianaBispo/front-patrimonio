@@ -37,5 +37,12 @@ export const authService = {
     const { data } = await api.get("/auth/users/nome-list");
     return data;
   },
+
+  async getRefreshToken() {
+    const { data } = await api.post("/auth/refresh");
+    return data;
+  },
 };
+
+
 export default authService;

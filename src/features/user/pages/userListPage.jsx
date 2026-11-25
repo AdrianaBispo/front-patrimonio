@@ -219,7 +219,7 @@ export default function UserListPage() {
                 </td>
 
                 <td className="whitespace-nowrap px-6 py-4 text-sm text-text-primary/60">
-                  {item.roles}
+                  {item.role_name}
                 </td>
 
                 <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
