@@ -170,9 +170,28 @@ export default function RolesPageLista() {
 
   return (
     <div className="mx-auto max-w-7xl">
-      <div className="mb-9">
+      <div className="gap-2 mb-9 flex justify-between">
         <h3 className="mb-2 text-primary/80">Perfis de Acesso</h3>
-        <p>Lista dos perfis de acesso cadastrados no sistema.</p>
+        <button
+          class="flex justify-center gap-2 items-center rounded-md bg-primary px-8 py-1.5 text-sm/6 font-semibold text-white hover:bg-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary active:bg-primary/65"
+          onClick={() => navigate("cadastrar")}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="3"
+            stroke="currentColor"
+            class="size-4"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 4.5v15m7.5-7.5h-15"
+            />
+          </svg>
+          Adicionar
+        </button>
       </div>
 
       <div className="overflow-hidden rounded-2xl border-border shadow-md">
@@ -180,7 +199,7 @@ export default function RolesPageLista() {
           <thead className="text-xs font-medium tracking-wider text-text-primary">
             <tr>
               <th className="px-6 py-3 text-left">Nome</th>
-            
+
               <th className="px-6 py-3"></th>{/* Editar */}
             </tr>
           </thead>
