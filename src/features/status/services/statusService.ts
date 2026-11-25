@@ -1,7 +1,7 @@
 import api from "../../../shared/api/axios";
 
 export const statusService = {
-  async listarStatus() {
+  async listStatuses() {
     const { data } = await api.get("/status/all");
     return data;
   },

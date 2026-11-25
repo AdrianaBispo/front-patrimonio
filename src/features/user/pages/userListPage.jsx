@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import EditButton from "../../../shared/components/EditButton";
 import DeleteButton from "../../../shared/components/DeleteButton";
 import Cards from "../../../shared/components/Cards";
-import ErroDialogo from "../../../shared/components/ErroDialogo";
+import ErrorDialog from "../../../shared/components/errorDialog";
 import { useList } from "../hooks/useListHook";
 import { toast } from "react-toastify";
 
@@ -156,7 +156,7 @@ export default function UserListPage() {
 
             <input
               type="text"
-              placeholder="Pesquisar usuário..."
+              placeholder="Pesquisar usuÃ¡rio..."
               class="px-1.5"
               className="input-utilities w-full pl-10 pr-2 py-2 bg-bg-primary"
               onChange={(e) => setValueFilterUser(e.target.value)}
@@ -226,18 +226,18 @@ export default function UserListPage() {
                   <div className="flex items-center gap-3">
               <EditButton onClick={() => navigate(`editar/${item.id}`)} />
                     <DeleteButton onClick={() => setShowPopUp(true)} />{" "}
-                    <ErroDialogo
+                    <ErrorDialog
                       showPopUp={showPopUp}
-                      titulo="Desativar Usuário"
+                      title="Desativar Usuário"
                       isLoading={isLoading}
-                      mensagem={
+                      message={
                         <>
-                          Tem certeza que deseja desativar este usuário?
+                          Tem certeza que deseja desativar este usuÃ¡rio?
                           <br />
-                          Essa ação não poderá ser desfeita.
+                          Essa aÃ§Ã£o nÃ£o poderÃ¡ ser desfeita.
                         </>
                       }
-                      confirmarDialogo={async () => {
+                      onConfirm={async () => {
                         try {
                           await deactivateUser(item.id);
                           toast.success("Desativado com sucesso!");
@@ -246,7 +246,7 @@ export default function UserListPage() {
                         }
                         setShowPopUp(false);
                       }}
-                      fecharDialogo={() => setShowPopUp(false)}
+                      onClose={() => setShowPopUp(false)}
                     />
                   </div>
                 </td>

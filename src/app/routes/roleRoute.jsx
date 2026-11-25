@@ -1,15 +1,15 @@
 import { Route, Routes } from "react-router-dom";
 
-import RolesPageLista from "../../features/roles/pages/rolesPageLista";
-import RolesCadastroPage from "../../features/roles/pages/rolesCadastroPage";
-import RolesEditarPage from "../../features/roles/pages/rolesEditarPage";
+import RolesListPage from "../../features/roles/pages/rolesListPage";
+import RolesCreatePage from "../../features/roles/pages/rolesCreatePage";
+import RolesEditPage from "../../features/roles/pages/rolesEditPage";
 
 export default function RoleRoute() {
   return (
     <Routes>
-      <Route index element={<RolesPageLista />} />
-      <Route path="cadastrar" element={<RolesCadastroPage />} />
-      <Route path="editar/:id" element={<RolesEditarPage />} />
+      <Route index element={<RolesListPage />} />
+      <Route path="cadastrar" element={<RolesCreatePage />} />
+      <Route path="editar/:id" element={<RolesEditPage />} />
     </Routes>
   );
 }

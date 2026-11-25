@@ -1,13 +1,13 @@
 import api from "../../../shared/api/axios";
-import { UsuarioFormData } from "../types/user";
+import { UsuarioFormData } from "../types/user.types";
 
 export const userService = {
-  async listarUsuarios() {
+  async listUsers() {
     const { data } = await api.get("/auth/users");
     return data;
   },
 
-  async buscarUsuario(id: string) {
+  async getUser(id: string) {
     const { data } = await api.get("/auth/users", {
       params: { id },
     });
@@ -21,12 +21,12 @@ export const userService = {
     return usuarios.find((usuario) => String(usuario.id) === String(id)) ?? null;
   },
 
-  async listarRoles() {
+  async listRoles() {
     const { data } = await api.get("/roles/all");
     return Array.isArray(data) ? data : (data?.data ?? []);
   },
 
-  async cadastrarUsuario(usuario: UsuarioFormData) {
+  async createUser(usuario: UsuarioFormData) {
     const { role_id, ...dados } = usuario;
     const { data } = await api.post("/auth/register", {
       ...dados,
@@ -36,7 +36,7 @@ export const userService = {
     return data;
   },
 
-  async editarUsuario(id: string, usuario: UsuarioFormData) {
+  async updateUser(id: string, usuario: UsuarioFormData) {
     const { role_id, password, ...dados } = usuario;
     const payload: Record<string, unknown> = {
       ...dados,

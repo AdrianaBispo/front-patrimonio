@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import authService from "../../auth/services/authService";
 import axios from "axios";
-import { User } from "../types/user";
+import { User } from "../types/user.types";
 
 export function useList() {
   const [isLoading, setIsLoading] = useState(false);

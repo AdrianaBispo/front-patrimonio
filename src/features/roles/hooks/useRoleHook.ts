@@ -4,7 +4,7 @@ import axios from "axios";
 import roleService from "../services/roleService";
 import { CreateRolePayload, UpdateRolePayload } from "../types/role.types";
 
-function obterMensagemErro(
+function getErrorMessage(
   error: unknown,
   fallback = "Ocorreu um erro ao carregar os perfis de acesso",
 ): string {
@@ -39,14 +39,14 @@ export function useRoleHook() {
   const [isLoadingData, setIsLoadingData] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const listarRoles = useCallback(async (page = 1, perPage = 10) => {
+  const listRoles = useCallback(async (page = 1, perPage = 10) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      return await roleService.listarRoles(page, perPage);
+      return await roleService.listRoles(page, perPage);
     } catch (err) {
-      const mensagem = obterMensagemErro(err);
+      const mensagem = getErrorMessage(err);
       setError(mensagem);
       throw new Error(mensagem);
     } finally {
@@ -54,14 +54,14 @@ export function useRoleHook() {
     }
   }, []);
 
-  const criarRole = useCallback(async (payload: CreateRolePayload) => {
+  const createRole = useCallback(async (payload: CreateRolePayload) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      return await roleService.criarRole(payload);
+      return await roleService.createRole(payload);
     } catch (err) {
-      const mensagem = obterMensagemErro(
+      const mensagem = getErrorMessage(
         err,
         "Ocorreu um erro ao criar o perfil de acesso",
       );
@@ -72,14 +72,14 @@ export function useRoleHook() {
     }
   }, []);
 
-  const buscarPermissoesRole = useCallback(async (id: string | number) => {
+  const getRolePermissions = useCallback(async (id: string | number) => {
     setIsLoadingData(true);
     setError(null);
 
     try {
-      return await roleService.buscarPermissoesRole(id);
+      return await roleService.getRolePermissions(id);
     } catch (err) {
-      const mensagem = obterMensagemErro(
+      const mensagem = getErrorMessage(
         err,
         "Ocorreu um erro ao carregar as permissões do perfil",
       );
@@ -90,15 +90,15 @@ export function useRoleHook() {
     }
   }, []);
 
-  const atualizarRole = useCallback(
+  const updateRole = useCallback(
     async (id: string | number, payload: UpdateRolePayload) => {
       setIsLoading(true);
       setError(null);
 
       try {
-        return await roleService.atualizarRole(id, payload);
+        return await roleService.updateRole(id, payload);
       } catch (err) {
-        const mensagem = obterMensagemErro(
+        const mensagem = getErrorMessage(
           err,
           "Ocorreu um erro ao atualizar o perfil de acesso",
         );
@@ -112,10 +112,10 @@ export function useRoleHook() {
   );
 
   return {
-    listarRoles,
-    criarRole,
-    buscarPermissoesRole,
-    atualizarRole,
+    listRoles,
+    createRole,
+    getRolePermissions,
+    updateRole,
     isLoading,
     isLoadingData,
     error,

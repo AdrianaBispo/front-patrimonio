@@ -8,7 +8,7 @@ import {
 } from "../types/role.types";
 
 export const roleService = {
-  async listarRoles(page = 1, perPage = 10) {
+  async listRoles(page = 1, perPage = 10) {
     const params: Record<string, number> = {
       page,
       per_page: perPage,
@@ -18,7 +18,7 @@ export const roleService = {
     return data;
   },
 
-  async criarRole(payload: CreateRolePayload): Promise<CreateRoleResponse> {
+  async createRole(payload: CreateRolePayload): Promise<CreateRoleResponse> {
     const { data } = await api.post<CreateRoleResponse>("/roles/create", {
       name: payload.name,
       permissions: payload.permissions,
@@ -26,7 +26,7 @@ export const roleService = {
     return data;
   },
 
-  async buscarPermissoesRole(
+  async getRolePermissions(
     id: string | number,
   ): Promise<RolePermissionsResponse> {
     const { data } = await api.get<RolePermissionsResponse>(
@@ -35,7 +35,7 @@ export const roleService = {
     return data;
   },
 
-  async atualizarRole(
+  async updateRole(
     id: string | number,
     payload: UpdateRolePayload,
   ): Promise<UpdateRoleResponse> {

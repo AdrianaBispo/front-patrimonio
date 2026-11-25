@@ -3,13 +3,13 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import App from "./App";
 import AuthRoute from "./app/routes/authRoutes";
 import UserRoute from "./app/routes/userRoute";
-import EquipamentoRoute from "./app/routes/equipamentoRoute";
-// import FornecedorRoute from "./pages/fornecedor/FornecedorRoute";
-import ColaboradorRoute from "./app/routes/colaboradorRoute";
+import EquipmentRoute from "./app/routes/equipmentRoute";
+// import SupplierRoute from "./pages/fornecedor/SupplierRoute";
+import CollaboratorRoute from "./app/routes/collaboratorRoute";
 import { ToastContainer } from 'react-toastify';
-import CategoriaRoute from "./app/routes/categoriaRoutes";
-import TipoEquipamentoRoute from "./app/routes/tipoEquipamentoRoute";
-import HistoricoEquipamentoRoute from "./app/routes/historicoEquipamentoRoute";
+import CategoryRoute from "./app/routes/categoryRoutes";
+import EquipmentTypeRoute from "./app/routes/equipmentTypeRoute";
+import EquipmentHistoryRoute from "./app/routes/equipmentHistoryRoute";
 import RoleRoute from "./app/routes/roleRoute";
 
 export default function Router() {
@@ -21,15 +21,15 @@ export default function Router() {
           <Route index element={<Navigate to="/users" replace />} />
           <Route path="users/*" element={<UserRoute />} />
           <Route path="roles/*" element={<RoleRoute />} />
-          <Route path="equipamentos/*" element={<EquipamentoRoute />} />
-          <Route path="categorias/*" element={<CategoriaRoute/>}/>
-          {/* <Route path="fornecedores/*" element={<FornecedorRoute />} /> */}
-          <Route path="colaboradores/*" element={<ColaboradorRoute />} />
-          <Route path="categoria/*" element={<CategoriaRoute/>}/>
-          <Route path="tipo-equipamento/*" element={<TipoEquipamentoRoute/>}/>
+          <Route path="equipamentos/*" element={<EquipmentRoute />} />
+          <Route path="categorias/*" element={<CategoryRoute/>}/>
+          {/* <Route path="fornecedores/*" element={<SupplierRoute />} /> */}
+          <Route path="colaboradores/*" element={<CollaboratorRoute />} />
+          <Route path="categoria/*" element={<CategoryRoute/>}/>
+          <Route path="tipo-equipamento/*" element={<EquipmentTypeRoute/>}/>
           <Route
             path="historico-equipamentos/*"
-            element={<HistoricoEquipamentoRoute />}
+            element={<EquipmentHistoryRoute />}
           />
           <Route path="*" element={<Navigate to="/auth" replace />} />
         </Route>
