@@ -5,6 +5,33 @@
     "permissionError": "An error occurred while loading permissions",
     "managerNotFound": "Manager not found",
     "managerAlreadyExists": "Manager already exists",
-    "managerError": "An error occurred while loading managers"
+    "managerError": "An error occurred while loading managers",
+    "userNotFound": "User not found",
+    "userError": "An error occurred while processing the user"
+  },
+  "messages": {
+    "userCreated": "User created successfully"
+  },
+  "user": {
+    "create": {
+      "title": "Register New User",
+      "subtitle": "Enter the personal details and access profile for the new user."
+    },
+    "form": {
+      "personalInfo": "Personal information",
+      "name": "Name",
+      "phone": "Phone",
+      "email": "Email",
+      "securityCredentials": "Security credentials",
+      "accessProfile": "Access profile",
+      "select": "Select",
+      "password": "Password",
+      "newPassword": "New password",
+      "passwordPlaceholder": "Minimum of 8 characters",
+      "passwordKeepPlaceholder": "Leave blank to keep the current password",
+      "cancel": "Cancel",
+      "createUser": "Create User",
+      "save": "Save"
+    }
   }
 }

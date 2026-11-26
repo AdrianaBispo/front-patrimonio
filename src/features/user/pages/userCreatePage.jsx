@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-
+import { useTranslation } from "react-i18next";
 import UserForm from "../components/UserForm";
 import { useUserFormHook } from "../hooks/useUserFormHook";
 
 export default function UserCreatePage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const {
     loadRoles,
     createUser,
@@ -24,9 +25,9 @@ export default function UserCreatePage() {
 
   useEffect(() => {
     loadRoles().catch((error) => {
-      toast.error(error?.message ?? "Não foi possível carregar os perfis");
+      toast.error(t(error?.message) ?? t("errors.userError"));
     });
-  }, [loadRoles]);
+  }, [loadRoles, t]);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -41,10 +42,10 @@ export default function UserCreatePage() {
       });
 
       if (!result) return;
-      toast.success("Usuário cadastrado com sucesso!");
+      toast.success(t("messages.userCreated"));
       navigate("/users");
     } catch (error) {
-      toast.error(error?.message ?? "Não foi possível cadastrar o usuário");
+      toast.error(t(error?.message) ?? t("errors.userError"));
     }
   }
 
@@ -59,8 +60,8 @@ export default function UserCreatePage() {
   return (
     <div className="mx-auto max-w-7xl">
       <div className="mb-9">
-        <h3 className="mb-2 text-primary/80">Cadastrar Novo Usuário</h3>
-        <p>Informe os dados pessoais e o perfil de acesso do novo usuário.</p>
+        <h3 className="mb-2 text-primary/80">{t("user.create.title")}</h3>
+        <p>{t("user.create.subtitle")}</p>
       </div>
 
       <UserForm

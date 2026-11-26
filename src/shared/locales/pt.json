@@ -5,6 +5,33 @@
     "permissionError": "Ocorreu um erro ao carregar as permissões",
     "managerNotFound": "Gestor não encontrado",
     "managerAlreadyExists": "Gestor já existe",
-    "managerError": "Ocorreu um erro ao carregar os gestores"
+    "managerError": "Ocorreu um erro ao carregar os gestores",
+    "userNotFound": "Usuário não encontrado",
+    "userError": "Ocorreu um erro ao processar o usuário"
+  },
+  "messages": {
+    "userCreated": "Usuário criado com sucesso"
+  },
+  "user": {
+    "create": {
+      "title": "Cadastrar Novo Usuário",
+      "subtitle": "Informe os dados pessoais e o perfil de acesso do novo usuário."
+    },
+    "form": {
+      "personalInfo": "Informações pessoais",
+      "name": "Nome",
+      "phone": "Celular",
+      "email": "E-mail",
+      "securityCredentials": "Credenciais de segurança",
+      "accessProfile": "Perfil de acesso",
+      "select": "Selecione",
+      "password": "Senha",
+      "newPassword": "Nova senha",
+      "passwordPlaceholder": "Mínimo de 8 caracteres",
+      "passwordKeepPlaceholder": "Deixe em branco para manter a senha",
+      "cancel": "Cancelar",
+      "createUser": "Criar Usuário",
+      "save": "Salvar"
+    }
   }
 }
