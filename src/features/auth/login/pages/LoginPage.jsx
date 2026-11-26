@@ -1,5 +1,5 @@
 import { useState } from "react";
-import LoadingUI from "../../../../shared/components/LoadingUi";
+import LoadingUI from "../../../../shared/components/LoadingUI";
 import { Link } from "react-router-dom";
 import { useLogin } from "../hooks/useLogin";
 import { useNavigate } from "react-router-dom";

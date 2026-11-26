@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
 
 import EditButton from "../../../shared/components/EditButton";
-import ErrorDialog from "../../../shared/components/errorDialog";
+import ErrorDialog from "../../../shared/components/ErrorDialog";
 import Pagination from "../../../shared/components/Pagination";
 import { useEquipmentTypeHook } from "../hooks/useEquipmentTypeHook";
 
@@ -40,7 +40,7 @@ function extrairPaginacao(result) {
     };
 }
 
-export default function EquipmentTypeListaPage() {
+export default function EquipmentTypeListPage() {
     const navigate = useNavigate();
     const [itemSelecionado, setItemSelecionado] = useState(null);
     const { isLoading, desactivateEquipmentType, activateEquipmentType, searchEquipmentType } =

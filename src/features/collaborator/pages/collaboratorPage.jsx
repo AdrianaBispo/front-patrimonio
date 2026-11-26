@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 import Cards from "../../../shared/components/Cards";
 import EditButton from "../../../shared/components/EditButton";
 import DeleteButton from "../../../shared/components/DeleteButton";
-import ErrorDialog from "../../../shared/components/errorDialog";
+import ErrorDialog from "../../../shared/components/ErrorDialog";
 
 export default function CollaboratorPage() {
   const navigate = useNavigate();

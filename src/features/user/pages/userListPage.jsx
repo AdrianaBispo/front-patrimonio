@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import EditButton from "../../../shared/components/EditButton";
 import DeleteButton from "../../../shared/components/DeleteButton";
 import Cards from "../../../shared/components/Cards";
-import ErrorDialog from "../../../shared/components/errorDialog";
+import ErrorDialog from "../../../shared/components/ErrorDialog";
 import { useList } from "../hooks/useListHook";
 import { toast } from "react-toastify";
 

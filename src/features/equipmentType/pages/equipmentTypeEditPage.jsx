@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { EquipmentTypeForm } from "../components/equipmentTypeForm";
+import { EquipmentTypeForm } from "../components/EquipmentTypeForm";
 import { useEquipmentTypeHook } from "../hooks/useEquipmentTypeHook";
 
 function extrairRegistro(result, id) {
@@ -21,7 +21,7 @@ function registroAtivo(valor) {
     return valor === true || valor === 1 || valor === "1";
 }
 
-export default function TipoEquipmentEditPage() {
+export default function EquipmentTypeEditPage() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { editar, searchEquipmentType, isLoading, inputsErrors } = useEquipmentTypeHook();

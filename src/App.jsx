@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom";
 import { getCookie } from "./utils/getCookie";
 import { useEffect, useState } from "react";
 import {authService} from "./features/auth/services/authService";
-import LoadingUI from "./shared/components/LoadingUi";
+import LoadingUI from "./shared/components/LoadingUI";
 
 export default function App() {
   const [authenticated, setAuthenticated] = useState(false);

@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
-import EquipmentListPage from "../../features/equipment/pages/equipmentListPage";
-import EquipmentCreatePage from "../../features/equipment/pages/equipmentCreatePage";
-import EquipmentEditPage from "../../features/equipment/pages/equipmentEditPage";
+import EquipmentListPage from "../../features/equipment/pages/EquipmentListPage";
+import EquipmentCreatePage from "../../features/equipment/pages/EquipmentCreatePage";
+import EquipmentEditPage from "../../features/equipment/pages/EquipmentEditPage";
 
 export default function EquipmentRoute() {
   return (

@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { DepartmentForm } from "../components/DepartmentForm";
 
-export default function DepartamentoEditarCadastroPage() {
+export default function DepartmentEditPage() {
     const { id } = useParams();
 
     const navigate = useNavigate();

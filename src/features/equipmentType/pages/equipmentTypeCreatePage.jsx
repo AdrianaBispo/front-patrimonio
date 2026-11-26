@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { EquipmentTypeForm } from "../components/equipmentTypeForm";
+import { EquipmentTypeForm } from "../components/EquipmentTypeForm";
 import { useEquipmentTypeHook } from "../hooks/useEquipmentTypeHook";
 
-export default function EquipmentTypeCadastroPage() {
+export default function EquipmentTypeCreatePage() {
     const navigate = useNavigate();
     const { cadastro, isLoading, inputsErrors } = useEquipmentTypeHook();
     const [nome, setNome] = useState("");

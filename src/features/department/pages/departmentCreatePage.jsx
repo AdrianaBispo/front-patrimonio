@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { DepartmentForm } from "../components/DepartmentForm";
 
-export default function CadastrarDepartamentoPage() {
+export default function DepartmentCreatePage() {
   const navigate = useNavigate();
   const [nome, setNome] = useState("");
   const [gestor, setGestor] = useState("");

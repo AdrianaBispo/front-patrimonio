@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 
 import EditButton from "../../../shared/components/EditButton";
 import DeleteButton from "../../../shared/components/DeleteButton";
-import ErrorDialog from "../../../shared/components/errorDialog";
+import ErrorDialog from "../../../shared/components/ErrorDialog";
 import { useList } from "../../user/hooks/useListHook";
 
 export default function DepartmentListPage() {

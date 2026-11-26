@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import EquipmentHistoryListPage from "../../features/equipmentHistory/pages/equipmentHistoryListPage";
+import EquipmentHistoryListPage from "../../features/equipmentHistory/pages/EquipmentHistoryListPage";
 
 export default function EquipmentHistoryRoute() {
   return (

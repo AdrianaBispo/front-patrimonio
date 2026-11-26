@@ -73,7 +73,7 @@ function formatarData(data) {
   }).format(valor);
 }
 
-export default function HistoricoEquipmentListPage() {
+export default function EquipmentHistoryListPage() {
   const { listHistory, isLoading } = useEquipmentHistoryHook();
   const [historicos, setHistoricos] = useState([]);
   const [paginacao, setPaginacao] = useState(paginacaoInicial);

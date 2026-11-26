@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 
-import RolesListPage from "../../features/roles/pages/rolesListPage";
-import RolesCreatePage from "../../features/roles/pages/rolesCreatePage";
-import RolesEditPage from "../../features/roles/pages/rolesEditPage";
+import RolesListPage from "../../features/roles/pages/RolesListPage";
+import RolesCreatePage from "../../features/roles/pages/RolesCreatePage";
+import RolesEditPage from "../../features/roles/pages/RolesEditPage";
 
 export default function RoleRoute() {
   return (

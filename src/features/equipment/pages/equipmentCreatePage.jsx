@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { EquipmentForm } from "../components/EquipmentForm";
 import { useEquipmentHook } from "../hooks/useEquipmentHook";
 
-export default function EquipamentoCadastroView() {
+export default function EquipmentCreatePage() {
   const navigate = useNavigate();
   const {
     createEquipment,
