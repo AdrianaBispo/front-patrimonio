@@ -12,13 +12,7 @@ export const userService = {
       params: { id },
     });
 
-    const usuarios = Array.isArray(data)
-      ? data
-      : Array.isArray(data?.data)
-        ? data.data
-        : [];
-
-    return usuarios.find((usuario) => String(usuario.id) === String(id)) ?? null;
+    return data.data;
   },
 
   async listRoles() {
@@ -45,10 +39,6 @@ export const userService = {
 
     if (password?.trim()) {
       payload.password = password;
-    }
-
-    if (role_id) {
-      payload.roles = [Number(role_id)];
     }
 
     const { data } = await api.put(`/auth/users/${id}`, payload);
