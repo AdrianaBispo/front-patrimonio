@@ -10,12 +10,26 @@
     "userError": "An error occurred while processing the user"
   },
   "messages": {
-    "userCreated": "User created successfully"
+    "userCreated": "User created successfully",
+    "userDeactivated": "Deactivated successfully!"
   },
   "user": {
     "create": {
       "title": "Register New User",
       "subtitle": "Enter the personal details and access profile for the new user."
+    },
+    "list": {
+      "title": "Users",
+      "add": "Add",
+      "totalUsers": "Total Users",
+      "activeOnShift": "Active on shift",
+      "onLeave": "On leave",
+      "searchPlaceholder": "Search user...",
+      "status": "Status",
+      "active": "Active",
+      "deactivateTitle": "Deactivate User",
+      "deactivateConfirm": "Are you sure you want to deactivate this user?",
+      "deactivateIrreversible": "This action cannot be undone."
     },
     "form": {
       "personalInfo": "Personal information",

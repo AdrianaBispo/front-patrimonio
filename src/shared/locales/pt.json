@@ -10,12 +10,26 @@
     "userError": "Ocorreu um erro ao processar o usuário"
   },
   "messages": {
-    "userCreated": "Usuário criado com sucesso"
+    "userCreated": "Usuário criado com sucesso",
+    "userDeactivated": "Desativado com sucesso!"
   },
   "user": {
     "create": {
       "title": "Cadastrar Novo Usuário",
       "subtitle": "Informe os dados pessoais e o perfil de acesso do novo usuário."
+    },
+    "list": {
+      "title": "Usuários",
+      "add": "Adicionar",
+      "totalUsers": "Total de Usuários",
+      "activeOnShift": "Ativos no turno",
+      "onLeave": "De licença",
+      "searchPlaceholder": "Pesquisar usuário...",
+      "status": "Status",
+      "active": "Ativo",
+      "deactivateTitle": "Desativar Usuário",
+      "deactivateConfirm": "Tem certeza que deseja desativar este usuário?",
+      "deactivateIrreversible": "Essa ação não poderá ser desfeita."
     },
     "form": {
       "personalInfo": "Informações pessoais",
