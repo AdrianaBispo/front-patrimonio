@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 import UserForm from "../components/UserForm";
 import { useUserFormHook } from "../hooks/useUserFormHook";
@@ -38,6 +39,7 @@ function extrairRoleId(usuario, listaRoles = []) {
 export default function UserEditPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const {
     loadUser,
     updateUser,
@@ -67,10 +69,10 @@ export default function UserEditPage() {
         setRoleId(extrairRoleId(usuario, listaRoles));
       })
       .catch((error) => {
-        toast.error(error?.message ?? "Não foi possível carregar o usuário");
+        toast.error(t(error?.message) ?? t("errors.userError"));
         navigate("/users", { replace: true });
       });
-  }, [id, loadUser, navigate]);
+  }, [id, loadUser, navigate, t]);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -86,10 +88,10 @@ export default function UserEditPage() {
       });
 
       if (!result) return;
-      toast.success("Usuário editado com sucesso!");
+      toast.success(t("messages.userUpdated"));
       navigate("/users");
     } catch (error) {
-      toast.error(error?.message ?? "Não foi possível editar o usuário");
+      toast.error(t(error?.message) ?? t("errors.userError"));
     }
   }
 
@@ -104,8 +106,8 @@ export default function UserEditPage() {
   return (
     <div className="mx-auto max-w-7xl">
       <div className="mb-9">
-        <h3 className="mb-2 text-primary/80">Editar Usuário</h3>
-        <p>Atualize os dados pessoais e as credenciais do usuário.</p>
+        <h3 className="mb-2 text-primary/80">{t("user.edit.title")}</h3>
+        <p>{t("user.edit.subtitle")}</p>
       </div>
 
       <UserForm

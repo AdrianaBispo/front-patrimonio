@@ -11,12 +11,17 @@
   },
   "messages": {
     "userCreated": "Usuário criado com sucesso",
+    "userUpdated": "Usuário editado com sucesso!",
     "userDeactivated": "Desativado com sucesso!"
   },
   "user": {
     "create": {
       "title": "Cadastrar Novo Usuário",
       "subtitle": "Informe os dados pessoais e o perfil de acesso do novo usuário."
+    },
+    "edit": {
+      "title": "Editar Usuário",
+      "subtitle": "Atualize os dados pessoais e as credenciais do usuário."
     },
     "list": {
       "title": "Usuários",
