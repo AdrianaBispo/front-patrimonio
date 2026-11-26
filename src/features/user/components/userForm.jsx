@@ -1,5 +1,7 @@
+import { useTranslation } from "react-i18next";
 import ErrorLabel from "../../../shared/components/ErrorLabel";
 import { IMaskInput } from "react-imask";
+
 export default function UserForm({
   nome,
   setNome,
@@ -18,15 +20,17 @@ export default function UserForm({
   onSubmit,
   onCancel,
 }) {
+  const { t } = useTranslation();
+
   return (
     <form onSubmit={onSubmit} noValidate>
       <div className="card overflow-hidden bg-bg-secondary px-4 py-3">
-        <h4 className="mb-5 font-bold">Informações pessoais</h4>
+        <h4 className="mb-5 font-bold">{t("user.form.personalInfo")}</h4>
 
         <div className="mb-5 flex flex-col gap-5 md:flex-row">
           <div className="flex-1">
             <label htmlFor="nome">
-              Nome <span className="text-red-500">*</span>
+              {t("user.form.name")} <span className="text-red-500">*</span>
             </label>
             <input
               id="nome"
@@ -44,19 +48,18 @@ export default function UserForm({
 
           <div className="flex-1">
             <label htmlFor="celular">
-              Celular <span className="text-red-500">*</span>
+              {t("user.form.phone")} <span className="text-red-500">*</span>
             </label>
             <IMaskInput
-            
-            mask={[
+              mask={[
                 {
-                    mask: '(00) 0000-0000',
+                  mask: "(00) 0000-0000",
                 },
                 {
-                    mask: '(00) 00000-0000',
+                  mask: "(00) 00000-0000",
                 },
-            ]}
-            unmask={true}
+              ]}
+              unmask={true}
               id="celular"
               name="celular"
               className="input-utilities"
@@ -73,7 +76,7 @@ export default function UserForm({
 
         <div className="mb-8">
           <label htmlFor="email">
-            E-mail <span className="text-red-500">*</span>
+            {t("user.form.email")} <span className="text-red-500">*</span>
           </label>
           <input
             id="email"
@@ -90,12 +93,15 @@ export default function UserForm({
         </div>
 
         <div className="mb-5 border-t border-border/60 pt-6">
-          <h4 className="mb-5 font-bold">Credenciais de segurança</h4>
+          <h4 className="mb-5 font-bold">
+            {t("user.form.securityCredentials")}
+          </h4>
 
           <div className="flex flex-col gap-5 md:flex-row">
             <div className="flex-1">
               <label htmlFor="role_id">
-                Perfil de acesso <span className="text-red-500">*</span>
+                {t("user.form.accessProfile")}{" "}
+                <span className="text-red-500">*</span>
               </label>
               <select
                 id="role_id"
@@ -105,7 +111,7 @@ export default function UserForm({
                 onChange={(event) => setRoleId(event.target.value)}
                 required
               >
-                <option value="">Selecione</option>
+                <option value="">{t("user.form.select")}</option>
                 {roles.map((role) => (
                   <option key={role.id} value={String(role.id)}>
                     {role.name}
@@ -119,7 +125,9 @@ export default function UserForm({
 
             <div className="flex-1">
               <label htmlFor="password">
-                {isEditing ? "Nova senha" : "Senha"}{" "}
+                {isEditing
+                  ? t("user.form.newPassword")
+                  : t("user.form.password")}{" "}
                 {!isEditing && <span className="text-red-500">*</span>}
               </label>
               <input
@@ -131,8 +139,8 @@ export default function UserForm({
                 value={password}
                 placeholder={
                   isEditing
-                    ? "Deixe em branco para manter a senha"
-                    : "Mínimo de 8 caracteres"
+                    ? t("user.form.passwordKeepPlaceholder")
+                    : t("user.form.passwordPlaceholder")
                 }
                 onChange={(event) => setPassword(event.target.value)}
               />
@@ -151,7 +159,7 @@ export default function UserForm({
           disabled={isLoading}
           onClick={onCancel}
         >
-          Cancelar
+          {t("user.form.cancel")}
         </button>
         <button
           type="submit"
@@ -161,9 +169,9 @@ export default function UserForm({
           {isLoading ? (
             <div className="h-6 w-6 animate-spin rounded-full border-2 border-bg-primary border-t-transparent" />
           ) : isEditing ? (
-            "Salvar"
+            t("user.form.save")
           ) : (
-            "Criar Usuário"
+            t("user.form.createUser")
           )}
         </button>
       </div>
