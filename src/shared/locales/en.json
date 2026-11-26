@@ -2,6 +2,9 @@
   "errors": {
     "sessionExpired": "Session expired or not authenticated",
     "permissionForbidden": "You do not have permission to view permissions",
-    "permissionError": "An error occurred while loading permissions"
+    "permissionError": "An error occurred while loading permissions",
+    "managerNotFound": "Manager not found",
+    "managerAlreadyExists": "Manager already exists",
+    "managerError": "An error occurred while loading managers"
   }
 }

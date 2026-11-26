@@ -2,6 +2,9 @@
   "errors": {
     "sessionExpired": "Sessão expirada ou não autenticada",
     "permissionForbidden": "Você não tem permissão para consultar as permissões",
-    "permissionError": "Ocorreu um erro ao carregar as permissões"
+    "permissionError": "Ocorreu um erro ao carregar as permissões",
+    "managerNotFound": "Gestor não encontrado",
+    "managerAlreadyExists": "Gestor já existe",
+    "managerError": "Ocorreu um erro ao carregar os gestores"
   }
 }
