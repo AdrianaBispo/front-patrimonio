@@ -32,15 +32,9 @@ export function useList() {
       const result: User[] = await authService.listUsers();
       return result;
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const message =
-          error.response?.data?.message ??
-          "Ocorreu um erro interno no servidor";
+        const message = getErrorMessage(error);
         setError(message);
-      } else {
-        setError("Ocorreu um erro ao obter os dados");
-      }
-      throw error;
+        throw new Error(message);
     } finally {
       setIsLoading(false);
     }
@@ -53,19 +47,13 @@ export function useList() {
     try {
       await authService.deactivateUser(idUser);
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const message =
-          error.response?.data?.message ??
-          "Ocorreu um erro interno no servidor";
-        setError(message);
-      } else {
-        setError("Ocorreu um erro ao obter os dados");
-      }
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      const message = getErrorMessage(error);
+      setError(message);
+      throw new Error(message);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const searchUser = async (name: string, id:string | null) => {
     setIsLoading(true);
@@ -75,15 +63,9 @@ export function useList() {
      const result: User[] = await authService.filtertUsers(name, id);
      return result;
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const message =
-          error.response?.data?.message ??
-          "Ocorreu um erro interno no servidor";
+        const message = getErrorMessage(error);
         setError(message);
-      } else {
-        setError("Ocorreu um erro ao obter os dados");
-      }
-      throw error;
+        throw new Error(message);
     } finally {
       setIsLoading(false);
     }
