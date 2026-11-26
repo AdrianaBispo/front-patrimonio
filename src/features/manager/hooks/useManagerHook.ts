@@ -15,7 +15,7 @@ export function useManagerHook() {
             if (error.response?.status === 401) {
                 return new ManagerExpiredException().message;
             }
-        
+
             else if (error.response?.status === 403) {
                 return new ManagerNotFoundException().message;
             }
@@ -36,7 +36,9 @@ export function useManagerHook() {
             const result: Map<number, string[]> = await authService.getNomeList();
             setNomeList(result);
         } catch (error) {
-            setError("Ocorreu um erro ao obter os dados");
+            const message = getErrorMessage(error);
+            setError(message);
+            throw new Error(message);
         } finally {
             setIsLoading(false);
         }
@@ -51,15 +53,9 @@ export function useManagerHook() {
             const result: GestorType[] = await GestorService.getGestor("", "");
             return result;
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                const message =
-                    error.response?.data?.message ??
-                    "Ocorreu um erro interno no servidor";
-                setError(message);
-            } else {
-                setError("Ocorreu um erro ao obter os dados");
-            }
-            throw error;
+            const message = getErrorMessage(error);
+            setError(message);
+            throw new Error(message);
         } finally {
             setIsLoading(false);
         }
@@ -72,15 +68,9 @@ export function useManagerHook() {
         try {
             await GestorService.deleteGestor(idGestor);
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                const message =
-                    error.response?.data?.message ??
-                    "Ocorreu um erro interno no servidor";
-                setError(message);
-            } else {
-                setError("Ocorreu um erro ao obter os dados");
-            }
-            throw error;
+            const message = getErrorMessage(error);
+            setError(message);
+            throw new Error(message);
         } finally {
             setIsLoading(false);
         }
@@ -94,18 +84,12 @@ export function useManagerHook() {
             const result: GestorType[] = await GestorService.getGestor(name, id ?? "");
             return result;
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                const message =
-                    error.response?.data?.message ??
-                    "Ocorreu um erro interno no servidor";
-                setError(message);
-            } else {
-                setError("Ocorreu um erro ao obter os dados");
-            }
-            throw error;
+            const message = getErrorMessage(error);
+            setError(message);
+            throw new Error(message);
         } finally {
             setIsLoading(false);
         }
     };
-    return { getRegisters, deactivateGestor, searchGestor, getNomeList, isLoading, error };
+    return { getRegisters, deactivateGestor, searchGestor, getNomeList, isLoading, error, nomeList };
 }
