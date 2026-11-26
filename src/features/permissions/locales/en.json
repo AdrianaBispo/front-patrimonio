@@ -1,0 +1,7 @@
+{
+  "errors": {
+    "sessionExpired": "Session expired or not authenticated",
+    "permissionForbidden": "You do not have permission to view permissions",
+    "permissionError": "An error occurred while loading permissions"
+  }
+}
