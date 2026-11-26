@@ -3,7 +3,7 @@ import axios from "axios";
 
 import permissionService from "../services/permissionService";
 import { Permission } from "../types/permission.types";
-import { PermissionExpiredException, PermissionForbiddenException, PermissionErrorException } from "../exceptions/permissionExeception";
+import { PermissionExpiredException, PermissionForbiddenException, PermissionErrorException } from "../exceptions/permissionException";
 
 function getErrorMessage(error: unknown): string {
   if (axios.isAxiosError(error)) {
