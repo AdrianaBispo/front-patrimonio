@@ -3,24 +3,22 @@ import axios from "axios";
 
 import permissionService from "../services/permissionService";
 import { Permission } from "../types/permission.types";
+import { PermissionExpiredException, PermissionForbiddenException, PermissionErrorException } from "../exceptions/permissionExeception";
 
 function getErrorMessage(error: unknown): string {
   if (axios.isAxiosError(error)) {
-    const mensagem = error.response?.data?.message;
-    if (typeof mensagem === "string" && mensagem.trim()) {
-      return mensagem;
-    }
-
     if (error.response?.status === 401) {
-      return "Sessão expirada ou não autenticada";
+      return new PermissionExpiredException().message;
     }
-
-    if (error.response?.status === 403) {
-      return "Você não tem permissão para consultar as permissões";
+    else if (error.response?.status === 403) {
+      return new PermissionForbiddenException().message;
+    }
+    else {
+      return new PermissionErrorException().message;
     }
   }
 
-  return "Ocorreu um erro ao carregar as permissões";
+  return new PermissionErrorException().message;
 }
 
 export function usePermission() {
