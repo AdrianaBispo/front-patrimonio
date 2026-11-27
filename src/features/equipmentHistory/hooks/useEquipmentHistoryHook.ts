@@ -1,24 +1,24 @@
 import { useCallback, useState } from "react";
 import axios from "axios";
 import equipmentHistoryService from "../services/equipmentHistoryService";
+import {
+  EquipmentHistoryErrorException,
+  EquipmentHistoryExpiredException,
+  EquipmentHistoryForbiddenException,
+} from "../exceptions/equipmentHistoryExceptions";
 
 function getErrorMessage(error: unknown): string {
   if (axios.isAxiosError(error)) {
-    const mensagem = error.response?.data?.message;
-    if (typeof mensagem === "string" && mensagem.trim()) {
-      return mensagem;
-    }
-
     if (error.response?.status === 401) {
-      return "Sessão expirada ou não autenticada";
+      return new EquipmentHistoryExpiredException().message;
     }
 
     if (error.response?.status === 403) {
-      return "Você não tem permissão para consultar o histórico";
+      return new EquipmentHistoryForbiddenException().message;
     }
   }
 
-  return "Ocorreu um erro ao carregar o histórico de equipamentos";
+  return new EquipmentHistoryErrorException().message;
 }
 
 export function useEquipmentHistoryHook() {
