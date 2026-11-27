@@ -7,7 +7,9 @@
     "managerAlreadyExists": "Manager already exists",
     "managerError": "An error occurred while loading managers",
     "userNotFound": "User not found",
-    "userError": "An error occurred while processing the user"
+    "userError": "An error occurred while processing the user",
+    "equipmentHistoryForbidden": "You do not have permission to view the history",
+    "equipmentHistoryError": "An error occurred while loading the equipment history"
   },
   "messages": {
     "userCreated": "User created successfully",

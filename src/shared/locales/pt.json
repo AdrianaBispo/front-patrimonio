@@ -7,7 +7,9 @@
     "managerAlreadyExists": "Gestor já existe",
     "managerError": "Ocorreu um erro ao carregar os gestores",
     "userNotFound": "Usuário não encontrado",
-    "userError": "Ocorreu um erro ao processar o usuário"
+    "userError": "Ocorreu um erro ao processar o usuário",
+    "equipmentHistoryForbidden": "Você não tem permissão para consultar o histórico",
+    "equipmentHistoryError": "Ocorreu um erro ao carregar o histórico de equipamentos"
   },
   "messages": {
     "userCreated": "Usuário criado com sucesso",
