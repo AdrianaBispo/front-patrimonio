@@ -1,5 +1,4 @@
 import api from "../../../shared/api/axios";
-import { HistoricoEquipamento } from "../types/equipmentHistory.types";
 
 export const equipmentHistoryService = {
   async listHistory(page = 1, perPage = 0) {
