@@ -1,110 +1,111 @@
-import { useState, useCallback } from "react";
-import { z } from "zod";
+import { useCallback, useState } from "react";
 import axios from "axios";
+import { z } from "zod";
 
-import { CategoryType } from "../types/categoryType";
-import { CategoriaError } from "../types/categoryError";
 import categoryService from "../services/categoryService";
+import {
+  Category,
+  CategoryFormData,
+  CategoryFormErrors,
+} from "../types/category.types";
+import {
+  CategoryErrorException,
+  CategoryExpiredException,
+  CategoryForbiddenException,
+  CategoryNotFoundException,
+} from "../exceptions/categoryExceptions";
+
+const categorySchema = z.object({
+  nome: z
+    .string()
+    .trim()
+    .min(1, "category.validation.nameRequired")
+    .max(70, "category.validation.nameMax"),
+  tipo: z
+    .string()
+    .trim()
+    .min(1, "category.validation.typeRequired")
+    .max(2, "category.validation.typeMax"),
+  nota: z.string().max(500, "category.validation.noteMax").optional(),
+});
+
+function getErrorMessage(error: unknown): string {
+  if (axios.isAxiosError(error)) {
+    if (error.response?.status === 401) {
+      return new CategoryExpiredException().message;
+    }
+    if (error.response?.status === 403) {
+      return new CategoryForbiddenException().message;
+    }
+    if (error.response?.status === 404) {
+      return new CategoryNotFoundException().message;
+    }
+  }
+
+  return new CategoryErrorException().message;
+}
 
 export function useCategoryFormHook() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingData, setIsLoadingData] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [inputsErrors, setInputsErrors] = useState({} as CategoriaError);
+  const [inputsErrors, setInputsErrors] = useState<CategoryFormErrors>({});
 
-  const cadastroSchema = z.object({
-    nome: z
-      .string()
-      .trim()
-      .min(1, "O nome é obrigatório")
-      .max(70, "O nome deve ter no máximo 70 caracteres"),
-    tipo: z
-      .string()
-      .trim()
-      .min(1, "O tipo é obrigatório")
-      .max(2, "O tipo deve ter no máximo 2 caracteres"),
-    nota: z
-      .string()
-      .max(500, "O máximo de caracteres para o campo nota são 500 caracteres")
-      .optional(),
-  });
+  const validate = (data: CategoryFormData): CategoryFormData | null => {
+    const result = categorySchema.safeParse(data);
 
-  const tratarErroApi = (err: unknown, fallback: string) => {
-    if (axios.isAxiosError(err)) {
-      const apiErrors = err.response?.data?.errors;
-      if (apiErrors && typeof apiErrors === "object") {
-        const errors: CategoriaError = {};
-        Object.entries(apiErrors).forEach(([campo, valor]) => {
-          const mensagem = Array.isArray(valor) ? valor[0] : valor;
-          if (typeof mensagem === "string") {
-            errors[campo as keyof CategoriaError] = mensagem;
-          }
-        });
-        if (Object.keys(errors).length > 0) {
-          setInputsErrors(errors);
-          return;
-        }
-      }
-
-      const message =
-        err.response?.data?.message ?? "Ocorreu um erro interno no servidor";
-      setError(message);
-      throw new Error(message);
+    if (!result.success) {
+      const errors: CategoryFormErrors = {};
+      result.error.issues.forEach((issue) => {
+        const field = issue.path[0] as keyof CategoryFormErrors;
+        if (!errors[field]) errors[field] = issue.message;
+      });
+      setInputsErrors(errors);
+      return null;
     }
 
-    setError(fallback);
-    throw new Error(fallback);
+    setInputsErrors({});
+    return result.data;
   };
 
-  const cadastro = useCallback(async (categoria: CategoryType) => {
+  const createCategory = useCallback(async (data: CategoryFormData) => {
     setIsLoading(true);
     setError(null);
 
-    const validar = cadastroSchema.safeParse(categoria);
-    if (!validar.success) {
-      const errors: CategoriaError = {};
-      validar.error.issues.forEach((issue) => {
-        const campo = issue.path[0] as keyof CategoriaError;
-        if (!errors[campo]) errors[campo] = issue.message;
-      });
-      setInputsErrors(errors);
+    const payload = validate(data);
+    if (!payload) {
       setIsLoading(false);
       return undefined;
     }
 
-    setInputsErrors({});
-
     try {
-      return await categoryService.createCategoria(validar.data);
+      return await categoryService.createCategory(payload);
     } catch (err) {
-      return tratarErroApi(err, "Ocorreu um erro ao cadastrar os dados");
+      const message = getErrorMessage(err);
+      setError(message);
+      throw new Error(message);
     } finally {
       setIsLoading(false);
     }
   }, []);
 
   const updateCategory = useCallback(
-    async (id: string, categoria: CategoryType) => {
+    async (id: string, data: CategoryFormData) => {
       setIsLoading(true);
       setError(null);
 
-      const validar = cadastroSchema.safeParse(categoria);
-      if (!validar.success) {
-        const errors: CategoriaError = {};
-        validar.error.issues.forEach((issue) => {
-          const campo = issue.path[0] as keyof CategoriaError;
-          if (!errors[campo]) errors[campo] = issue.message;
-        });
-        setInputsErrors(errors);
+      const payload = validate(data);
+      if (!payload) {
         setIsLoading(false);
         return undefined;
       }
 
-      setInputsErrors({});
-
       try {
-        return await categoryService.updateCategoria(id, validar.data);
+        return await categoryService.updateCategory(id, payload);
       } catch (err) {
-        return tratarErroApi(err, "Ocorreu um erro ao atualizar os dados");
+        const message = getErrorMessage(err);
+        setError(message);
+        throw new Error(message);
       } finally {
         setIsLoading(false);
       }
@@ -112,35 +113,38 @@ export function useCategoryFormHook() {
     [],
   );
 
-  const getCategories = useCallback(
-    async (nome: string, id?: string | null, page = 1, perPage = 0) => {
-      setIsLoading(true);
-      setError(null);
+  const loadCategory = useCallback(async (id: string): Promise<Category> => {
+    setIsLoadingData(true);
+    setError(null);
 
-      try {
-        return await categoryService.getCategories(nome, id, page, perPage);
-      } catch (err) {
-        if (axios.isAxiosError(err)) {
-          const message =
-            err.response?.data?.message ??
-            "Ocorreu um erro interno no servidor";
-          setError(message);
-          throw new Error(message);
-        }
-        setError("Ocorreu um erro ao obter os dados");
-        throw new Error("Ocorreu um erro ao obter os dados");
-      } finally {
-        setIsLoading(false);
+    try {
+      const result = await categoryService.getCategory(id);
+      const categories = result?.categorias ?? result;
+      const category = categories?.data?.[0];
+
+      if (!category) {
+        throw new CategoryNotFoundException();
       }
-    },
-    [],
-  );
+
+      return category;
+    } catch (err) {
+      const message =
+        err instanceof CategoryNotFoundException
+          ? err.message
+          : getErrorMessage(err);
+      setError(message);
+      throw new Error(message);
+    } finally {
+      setIsLoadingData(false);
+    }
+  }, []);
 
   return {
-    cadastro,
+    createCategory,
     updateCategory,
-    getCategories,
+    loadCategory,
     isLoading,
+    isLoadingData,
     error,
     inputsErrors,
   };
