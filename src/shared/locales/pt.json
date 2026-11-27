@@ -54,5 +54,16 @@
       "createUser": "Criar Usuário",
       "save": "Salvar"
     }
+  },
+  "equipmentHistory": {
+    "list": {
+      "title": "Histórico de Equipamentos",
+      "dateTime": "Data/Hora",
+      "equipment": "Equipamento",
+      "status": "Status",
+      "user": "Usuário",
+      "empty": "Nenhum histórico de equipamento encontrado.",
+      "emptyValue": "-"
+    }
   }
 }

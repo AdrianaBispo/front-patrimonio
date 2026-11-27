@@ -54,5 +54,16 @@
       "createUser": "Create User",
       "save": "Save"
     }
+  },
+  "equipmentHistory": {
+    "list": {
+      "title": "Equipment History",
+      "dateTime": "Date/Time",
+      "equipment": "Equipment",
+      "status": "Status",
+      "user": "User",
+      "empty": "No equipment history found.",
+      "emptyValue": "-"
+    }
   }
 }
