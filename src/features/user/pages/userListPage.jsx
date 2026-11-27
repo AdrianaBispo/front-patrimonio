@@ -179,9 +179,6 @@ export default function UserListPage() {
                 {t("user.form.email")}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
-                {t("user.list.status")}
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
                 {t("user.form.accessProfile")}
               </th>
               <th className="px-6 py-3"></th>
@@ -209,11 +206,6 @@ export default function UserListPage() {
                   {item.email}
                 </td>
 
-                <td className="whitespace-nowrap px-6 py-4">
-                  <span className="inline-flex rounded-full bg-active px-3 py-0.5 text-xs font-semibold leading-5 text-white">
-                    {t("user.list.active")}
-                  </span>
-                </td>
 
                 <td className="whitespace-nowrap px-6 py-4 text-sm text-text-primary/60">
                   {item.role_name}
