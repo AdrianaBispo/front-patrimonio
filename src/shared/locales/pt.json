@@ -15,7 +15,12 @@
     "categoryError": "Ocorreu um erro ao processar a categoria",
     "roleForbidden": "Você não tem permissão para esta operação nos perfis",
     "roleNotFound": "Perfil de acesso não encontrado",
-    "roleError": "Ocorreu um erro ao processar o perfil de acesso"
+    "roleError": "Ocorreu um erro ao processar o perfil de acesso",
+    "equipmentForbidden": "Você não tem permissão para realizar esta ação",
+    "equipmentNotFound": "Equipamento não encontrado",
+    "equipmentError": "Ocorreu um erro ao processar o equipamento",
+    "authForbidden": "Você não tem permissão para acessar",
+    "authError": "Erro ao entrar"
   },
   "messages": {
     "userCreated": "Usuário criado com sucesso",
@@ -24,7 +29,9 @@
     "categoryCreated": "Categoria criada com sucesso",
     "categoryUpdated": "Categoria atualizada com sucesso",
     "roleCreated": "Perfil criado com sucesso",
-    "roleUpdated": "Perfil atualizado com sucesso"
+    "roleUpdated": "Perfil atualizado com sucesso",
+    "equipmentCreated": "Equipamento cadastrado com sucesso!",
+    "equipmentUpdated": "Equipamento atualizado com sucesso!"
   },
   "user": {
     "create": {
@@ -140,6 +147,83 @@
       "nameRequired": "Informe o nome do perfil",
       "nameMax": "O nome deve ter no máximo 255 caracteres",
       "permissionsRequired": "Selecione ao menos uma permissão"
+    }
+  },
+  "equipment": {
+    "create": {
+      "title": "Cadastrar Equipamento",
+      "subtitle": "Inicializar um novo equipamento no sistema central de gerenciamento de inventário."
+    },
+    "edit": {
+      "title": "Editar Equipamento"
+    },
+    "list": {
+      "title": "Equipamentos",
+      "add": "Adicionar",
+      "searchPlaceholder": "Pesquisar por série...",
+      "searchBarcode": "Pesquisar código de barras",
+      "name": "Nome",
+      "category": "Categoria",
+      "serial": "Série",
+      "user": "Usuário",
+      "status": "Status",
+      "empty": "Nenhum equipamento encontrado.",
+      "emptyValue": "-"
+    },
+    "form": {
+      "imageTitle": "Imagem do Equipamento",
+      "imageAlt": "Imagem do equipamento",
+      "infoTitle": "Informações do Equipamento",
+      "name": "Nome",
+      "namePlaceholder": "Ex: Notebook Dell",
+      "serial": "Número de Série",
+      "serialPlaceholder": "Ex: 123456",
+      "category": "Categoria",
+      "type": "Tipo de Equipamento",
+      "status": "Status",
+      "user": "Usuário Responsável",
+      "description": "Descrição",
+      "descriptionPlaceholder": "Insira especificações detalhadas, observações sobre o estado ou requisitos operacionais...",
+      "select": "Selecione",
+      "cancel": "Cancelar",
+      "save": "Salvar",
+      "create": "Criar Equipamento"
+    },
+    "validation": {
+      "nameRequired": "Nome é obrigatório",
+      "nameMax": "Nome deve ter no máximo 255 caracteres",
+      "descriptionRequired": "Descrição é obrigatória",
+      "descriptionMax": "Descrição deve ter no máximo 255 caracteres",
+      "serialRequired": "Número de série é obrigatório",
+      "serialMax": "Número de série deve ter no máximo 255 caracteres",
+      "serialDigits": "Número de série deve conter apenas dígitos",
+      "statusRequired": "Status é obrigatório",
+      "statusInvalid": "Status inválido",
+      "categoryRequired": "Categoria é obrigatória",
+      "categoryInvalid": "Categoria inválida",
+      "typeRequired": "Tipo de equipamento é obrigatório",
+      "typeInvalid": "Tipo de equipamento inválido",
+      "userRequired": "Usuário é obrigatório",
+      "userInvalid": "Usuário inválido",
+      "imageRequired": "A imagem é obrigatória",
+      "imageTooLarge": "Arquivo inválido. Por favor, selecione uma imagem menor que 5MB.",
+      "imageInvalidType": "Selecione uma imagem JPG ou PNG válida."
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "email": "Usuário",
+      "emailPlaceholder": "name@example.com",
+      "password": "Senha",
+      "passwordPlaceholder": "******",
+      "submit": "Login"
+    },
+    "validation": {
+      "emailRequired": "E-mail é obrigatório",
+      "emailInvalid": "E-mail inválido",
+      "passwordRequired": "Senha é obrigatória",
+      "passwordMin": "A senha deve ter pelo menos 8 caracteres"
     }
   }
 }

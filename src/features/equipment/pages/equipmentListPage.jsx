@@ -1,109 +1,54 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 import EditButton from "../../../shared/components/EditButton";
 import Pagination from "../../../shared/components/Pagination";
-import { useEquipmentHook } from "../hooks/useEquipmentHook";
+import { useEquipmentListHook } from "../hooks/useEquipmentListHook";
 
-const POR_PAGINA = 10;
-
-const paginacaoInicial = {
-  currentPage: 1,
-  lastPage: 1,
-  total: 0,
-  from: 0,
-  to: 0,
-};
-
-function extrairPaginacao(result) {
-  if (result?.meta && Array.isArray(result?.data)) {
-    return {
-      items: result.data,
-      currentPage: result.meta.current_page ?? 1,
-      lastPage: result.meta.last_page ?? 1,
-      total: result.meta.total ?? result.data.length,
-      from: result.meta.from ?? 0,
-      to: result.meta.to ?? 0,
-    };
-  }
-
-  const paginator =
-    result?.equipamentos?.current_page != null
-      ? result.equipamentos
-      : result?.data?.current_page != null
-        ? result.data
-        : result;
-
-  if (Array.isArray(paginator?.data)) {
-    const items = paginator.data;
-    return {
-      items,
-      currentPage: paginator.current_page ?? 1,
-      lastPage: paginator.last_page ?? 1,
-      total: paginator.total ?? items.length,
-      from: paginator.from ?? (items.length ? 1 : 0),
-      to: paginator.to ?? items.length,
-    };
-  }
-
-  const listaDireta = Array.isArray(result?.equipamentos)
-    ? result.equipamentos
-    : Array.isArray(result?.data)
-      ? result.data
-      : Array.isArray(result)
-        ? result
-        : [];
-
-  return {
-    items: listaDireta,
-    currentPage: 1,
-    lastPage: 1,
-    total: listaDireta.length,
-    from: listaDireta.length ? 1 : 0,
-    to: listaDireta.length,
-  };
-}
+const PER_PAGE = 10;
 
 export default function EquipmentListPage() {
   const navigate = useNavigate();
-  const { listEquipment, isLoading } = useEquipmentHook();
-  const [listEquipamentos, setListEquipamentos] = useState([]);
-  const [paginacao, setPaginacao] = useState(paginacaoInicial);
-  const [valueFilter, setValueFilter] = useState("");
+  const { t } = useTranslation();
+  const { listEquipments, isLoading, paginator } = useEquipmentListHook();
+  const [equipments, setEquipments] = useState([]);
+  const [filterValue, setFilterValue] = useState("");
+  const emptyValue = t("equipment.list.emptyValue");
 
-  const loadPage = async (serie, pageNumber) => {
-    try {
-      const serieFiltrada = serie.trim();
-      const result = await listEquipment(
-        pageNumber,
-        POR_PAGINA,
-        "",
-        serieFiltrada,
-      );
-      const pagina = extrairPaginacao(result);
-      setListEquipamentos(pagina.items);
-      setPaginacao(pagina);
-    } catch (e) {
-      toast.error(e?.message ?? "Ocorreu um erro ao obter os equipamentos");
-    }
-  };
+  const loadPage = useCallback(
+    async (pageNumber) => {
+      try {
+        const result = await listEquipments(
+          pageNumber,
+          PER_PAGE,
+          filterValue,
+        );
+        setEquipments(result?.data ?? []);
+      } catch (err) {
+        toast.error(t(err?.message) ?? t("errors.equipmentError"));
+      }
+    },
+    [filterValue, listEquipments, t],
+  );
 
   useEffect(() => {
-    loadPage("", 1);
+    loadPage(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSearch = () => {
-    loadPage(valueFilter, 1);
+    loadPage(1);
   };
 
   return (
     <div className="max-w-7xl mx-auto">
-      <div className="gap-2 mb-9 flex justify-between">
-        <h3 className="text-primary/80 mb-2">Equipamentos</h3>
+      <div className="mb-9 flex justify-between gap-2">
+        <h3 className="mb-2 text-primary/80">{t("equipment.list.title")}</h3>
         <button
           type="button"
-          className="flex justify-center gap-2 items-center rounded-md bg-primary px-8 py-1.5 text-sm/6 font-semibold text-white hover:bg-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary active:bg-primary/65"
+          className="flex items-center justify-center gap-2 rounded-md bg-primary px-8 py-1.5 text-sm/6 font-semibold text-white hover:bg-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary active:bg-primary/65"
           onClick={() => navigate("cadastrar")}
         >
           <svg
@@ -120,15 +65,11 @@ export default function EquipmentListPage() {
               d="M12 4.5v15m7.5-7.5h-15"
             />
           </svg>
-          Adicionar
+          {t("equipment.list.add")}
         </button>
       </div>
 
-      {/* Table */}
-
-      <div className="overflow-hidden border-border rounded-2xl shadow-md">
-        {/* Pesquisa */}
-
+      <div className="overflow-hidden rounded-2xl border-border shadow-md">
         <div className="bg-bg-secondary r-50 px-3 py-3">
           <div className="relative w-full max-w-md">
             <svg
@@ -148,10 +89,10 @@ export default function EquipmentListPage() {
 
             <input
               type="text"
-              placeholder="Pesquisar por série..."
-              className="input-utilities w-full pl-10 pr-12 py-2 bg-bg-primary"
-              value={valueFilter}
-              onChange={(e) => setValueFilter(e.target.value)}
+              placeholder={t("equipment.list.searchPlaceholder")}
+              className="input-utilities w-full bg-bg-primary py-2 pl-10 pr-12"
+              value={filterValue}
+              onChange={(e) => setFilterValue(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   handleSearch();
@@ -162,8 +103,8 @@ export default function EquipmentListPage() {
             <button
               type="button"
               className="absolute right-3 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center text-text-primary/70 transition-colors hover:text-secondary"
-              title="Pesquisar código de barras"
-              aria-label="Pesquisar código de barras"
+              title={t("equipment.list.searchBarcode")}
+              aria-label={t("equipment.list.searchBarcode")}
               onClick={handleSearch}
             >
               <svg
@@ -178,24 +119,19 @@ export default function EquipmentListPage() {
           </div>
         </div>
 
-        <table className="min-w-full divide-y divide-border justify-around">
-          <thead className="text-center text-xs font-medium tracking-wider text-text-primary">
+        <table className="min-w-full divide-y divide-border">
+          <thead className="text-xs font-medium tracking-wider text-text-primary">
             <tr>
-
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
-                Nome
+              <th className="px-6 py-3 text-left">{t("equipment.list.name")}</th>
+              <th className="px-6 py-3 text-left">
+                {t("equipment.list.category")}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
-                Categoria
+              <th className="px-6 py-3 text-left">
+                {t("equipment.list.serial")}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
-                Série
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
-                Usuário
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
-                Status
+              <th className="px-6 py-3 text-left">{t("equipment.list.user")}</th>
+              <th className="px-6 py-3 text-left">
+                {t("equipment.list.status")}
               </th>
               <th className="px-6 py-3"></th>
             </tr>
@@ -210,54 +146,49 @@ export default function EquipmentListPage() {
                   </div>
                 </td>
               </tr>
-            ) : listEquipamentos.length === 0 ? (
+            ) : equipments.length === 0 ? (
               <tr>
                 <td
                   colSpan={6}
                   className="px-6 py-8 text-center text-sm text-text-primary/70"
                 >
-                  Nenhum equipamento encontrado.
+                  {t("equipment.list.empty")}
                 </td>
               </tr>
             ) : (
-              listEquipamentos.map((item) => (
+              equipments.map((item) => (
                 <tr key={item.eqi_id ?? item.id}>
                   <td className="whitespace-nowrap px-6 py-4">
                     <div className="text-sm font-medium text-text-primary">
-                      {item.eqi_name ?? item.eqi_nome ?? item.nome ?? "-"}
+                      {item.eqi_name ?? item.eqi_nome ?? item.nome ?? emptyValue}
                     </div>
                   </td>
-
                   <td className="whitespace-nowrap px-6 py-4">
                     <div className="text-sm text-text-primary">
-                      {item.categoria_nome ?? item.categoria?.nome ?? "-"}
+                      {item.categoria_nome ?? item.categoria?.nome ?? emptyValue}
                     </div>
                   </td>
-
                   <td className="whitespace-nowrap px-6 py-4">
                     <div className="text-sm text-text-primary">
-                      {item.eqi_serie ?? item.serie ?? "-"}
+                      {item.eqi_serie ?? item.serie ?? emptyValue}
                     </div>
                   </td>
-
                   <td className="whitespace-nowrap px-6 py-4">
                     <div className="text-sm text-text-primary">
-                      {item.usuario_nome ?? "-"}
+                      {item.usuario_nome ?? emptyValue}
                     </div>
                   </td>
-
                   <td className="whitespace-nowrap px-6 py-4">
                     <span className="inline-flex rounded-full bg-success/15 px-3 py-0.5 text-xs font-semibold leading-5 text-success">
-                      {item.status_nome ?? item.status?.nome ?? "-"}
+                      {item.status_nome ?? item.status?.nome ?? emptyValue}
                     </span>
                   </td>
-
                   <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
                     <div className="flex items-center justify-end gap-3">
                       <EditButton
                         onClick={() =>
                           navigate(`editar/${item.eqi_id ?? item.id}`, {
-                            state: { equipamento: item },
+                            state: { equipment: item },
                           })
                         }
                       />
@@ -270,13 +201,13 @@ export default function EquipmentListPage() {
         </table>
 
         <Pagination
-          currentPage={paginacao.currentPage}
-          lastPage={paginacao.lastPage}
-          total={paginacao.total}
-          from={paginacao.from}
-          to={paginacao.to}
+          currentPage={paginator.currentPage}
+          lastPage={paginator.lastPage}
+          total={paginator.total}
+          from={paginator.from}
+          to={paginator.to}
           isLoading={isLoading}
-          onPageChange={(page) => loadPage(valueFilter, page)}
+          onPageChange={loadPage}
         />
       </div>
     </div>

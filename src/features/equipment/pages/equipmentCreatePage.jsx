@@ -1,101 +1,98 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
+
 import { EquipmentForm } from "../components/EquipmentForm";
-import { useEquipmentHook } from "../hooks/useEquipmentHook";
+import { useEquipmentFormHook } from "../hooks/useEquipmentFormHook";
 
 export default function EquipmentCreatePage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const {
     createEquipment,
     loadFormOptions,
-    listaStatus,
-    listaUsuarios,
-    listaCategorias,
-    listaTipos,
+    statusList,
+    userList,
+    categoryList,
+    typeList,
     isLoading,
-    isLoadingOpcoes,
+    isLoadingOptions,
     inputsErrors,
-  } = useEquipmentHook();
+  } = useEquipmentFormHook();
 
-  const [nome, setNome] = useState("");
-  const [serie, setSerie] = useState("");
+  const [name, setName] = useState("");
+  const [serial, setSerial] = useState("");
   const [statusId, setStatusId] = useState("");
-  const [categoriaId, setCategoriaId] = useState("");
-  const [tipoEquipamentoId, setEquipmentTypeId] = useState("");
-  const [usuarioId, setUsuarioId] = useState("");
-  const [descricao, setDescricao] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const [equipmentTypeId, setEquipmentTypeId] = useState("");
+  const [userId, setUserId] = useState("");
+  const [description, setDescription] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
-  const [imagemFile, setImagemFile] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
 
   useEffect(() => {
-    const carregar = async () => {
-      try {
-        await loadFormOptions();
-      } catch (err) {
-        toast.error(err?.message ?? "Ocorreu um erro ao carregar os dados");
-      }
-    };
+    loadFormOptions().catch((err) => {
+      toast.error(t(err?.message) ?? t("errors.equipmentError"));
+    });
+  }, [loadFormOptions, t]);
 
-    carregar();
-  }, [loadFormOptions]);
-
-  async function handleSubmit(e) {
-    e.preventDefault();
+  async function handleSubmit(event) {
+    event.preventDefault();
 
     try {
       const result = await createEquipment(
         {
-          eqi_name: nome,
-          eqi_descricao: descricao,
-          eqi_serie: serie,
+          eqi_name: name,
+          eqi_descricao: description,
+          eqi_serie: serial,
           eqi_status_id: statusId,
-          categoria_id: categoriaId,
-          tipo_equipamento_id: tipoEquipamentoId,
-          usuario_id: usuarioId,
+          categoria_id: categoryId,
+          tipo_equipamento_id: equipmentTypeId,
+          usuario_id: userId,
           imagem_url: null,
         },
-        imagemFile,
+        imageFile,
       );
 
       if (!result) return;
 
-      toast.success("Equipamento cadastrado com sucesso!");
+      toast.success(t("messages.equipmentCreated"));
       navigate("/equipamentos");
     } catch (err) {
-      toast.error(err?.message ?? "Ocorreu um erro ao cadastrar o equipamento");
+      toast.error(t(err?.message) ?? t("errors.equipmentError"));
     }
   }
 
-  const handleChangeImage = (e) => {
-    const file = e.target.files?.[0];
+  const handleChangeImage = (event) => {
+    const file = event.target.files?.[0];
     if (!file) {
       setSelectedImage(null);
-      setImagemFile(null);
+      setImageFile(null);
       return;
     }
 
     if (file.size >= 5 * 1024 * 1024) {
-      toast.error("Arquivo inválido. Por favor, selecione uma imagem menor que 5MB.");
+      toast.error(t("equipment.validation.imageTooLarge"));
       return;
     }
 
-    const tipoOk =
+    const typeOk =
       file.type === "image/jpeg" ||
       file.type === "image/jpg" ||
       file.type === "image/png";
 
-    if (file.size > 0 && tipoOk) {
+    if (file.size > 0 && typeOk) {
       setSelectedImage(URL.createObjectURL(file));
-      setImagemFile(file);
+      setImageFile(file);
     } else {
       setSelectedImage(null);
-      setImagemFile(null);
-      toast.error("Selecione uma imagem JPG ou PNG válida.");
+      setImageFile(null);
+      toast.error(t("equipment.validation.imageInvalidType"));
     }
   };
 
-  if (isLoadingOpcoes) {
+  if (isLoadingOptions) {
     return (
       <div className="flex min-h-64 items-center justify-center">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-secondary border-t-transparent" />
@@ -104,41 +101,38 @@ export default function EquipmentCreatePage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="mx-auto max-w-7xl">
       <div className="mb-9 gap-2">
-        <h3 className="mb-2 text-primary/80">Cadastrar Equipamento</h3>
-        <p>
-          Inicializar um novo equipamento no sistema central de gerenciamento de
-          inventário.
-        </p>
+        <h3 className="mb-2 text-primary/80">{t("equipment.create.title")}</h3>
+        <p>{t("equipment.create.subtitle")}</p>
       </div>
 
       <EquipmentForm
-        nome={nome}
-        setNome={setNome}
-        serie={serie}
-        setSerie={setSerie}
+        name={name}
+        setName={setName}
+        serial={serial}
+        setSerial={setSerial}
         statusId={statusId}
         setStatusId={setStatusId}
-        categoriaId={categoriaId}
-        setCategoriaId={setCategoriaId}
-        tipoEquipamentoId={tipoEquipamentoId}
+        categoryId={categoryId}
+        setCategoryId={setCategoryId}
+        equipmentTypeId={equipmentTypeId}
         setEquipmentTypeId={setEquipmentTypeId}
-        usuarioId={usuarioId}
-        setUsuarioId={setUsuarioId}
-        descricao={descricao}
-        setDescricao={setDescricao}
-        listaStatus={listaStatus}
-        listaCategorias={listaCategorias}
-        listaTipos={listaTipos}
-        listaUsuarios={listaUsuarios}
+        userId={userId}
+        setUserId={setUserId}
+        description={description}
+        setDescription={setDescription}
+        statusList={statusList}
+        categoryList={categoryList}
+        typeList={typeList}
+        userList={userList}
         isLoading={isLoading}
         inputsErrors={inputsErrors}
-        handleSubmit={handleSubmit}
-        navigate={navigate}
-        submitLabel="Criar Equipamento"
+        onSubmit={handleSubmit}
+        onCancel={() => navigate(-1)}
+        submitLabel={t("equipment.form.create")}
         selectedImage={selectedImage}
-        handleChangeImage={handleChangeImage}
+        onChangeImage={handleChangeImage}
       />
     </div>
   );

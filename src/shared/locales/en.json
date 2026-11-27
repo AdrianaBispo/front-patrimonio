@@ -15,7 +15,12 @@
     "categoryError": "An error occurred while processing the category",
     "roleForbidden": "You do not have permission for this roles operation",
     "roleNotFound": "Access profile not found",
-    "roleError": "An error occurred while processing the access profile"
+    "roleError": "An error occurred while processing the access profile",
+    "equipmentForbidden": "You do not have permission to perform this action",
+    "equipmentNotFound": "Equipment not found",
+    "equipmentError": "An error occurred while processing the equipment",
+    "authForbidden": "You do not have permission to access",
+    "authError": "Failed to sign in"
   },
   "messages": {
     "userCreated": "User created successfully",
@@ -24,7 +29,9 @@
     "categoryCreated": "Category created successfully",
     "categoryUpdated": "Category updated successfully",
     "roleCreated": "Profile created successfully",
-    "roleUpdated": "Profile updated successfully"
+    "roleUpdated": "Profile updated successfully",
+    "equipmentCreated": "Equipment registered successfully!",
+    "equipmentUpdated": "Equipment updated successfully!"
   },
   "user": {
     "create": {
@@ -140,6 +147,83 @@
       "nameRequired": "Enter the profile name",
       "nameMax": "Name must be at most 255 characters",
       "permissionsRequired": "Select at least one permission"
+    }
+  },
+  "equipment": {
+    "create": {
+      "title": "Register Equipment",
+      "subtitle": "Initialize a new equipment item in the central inventory management system."
+    },
+    "edit": {
+      "title": "Edit Equipment"
+    },
+    "list": {
+      "title": "Equipment",
+      "add": "Add",
+      "searchPlaceholder": "Search by serial...",
+      "searchBarcode": "Search barcode",
+      "name": "Name",
+      "category": "Category",
+      "serial": "Serial",
+      "user": "User",
+      "status": "Status",
+      "empty": "No equipment found.",
+      "emptyValue": "-"
+    },
+    "form": {
+      "imageTitle": "Equipment Image",
+      "imageAlt": "Equipment image",
+      "infoTitle": "Equipment Information",
+      "name": "Name",
+      "namePlaceholder": "E.g.: Dell Notebook",
+      "serial": "Serial Number",
+      "serialPlaceholder": "E.g.: 123456",
+      "category": "Category",
+      "type": "Equipment Type",
+      "status": "Status",
+      "user": "Responsible User",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter detailed specifications, condition notes or operational requirements...",
+      "select": "Select",
+      "cancel": "Cancel",
+      "save": "Save",
+      "create": "Create Equipment"
+    },
+    "validation": {
+      "nameRequired": "Name is required",
+      "nameMax": "Name must be at most 255 characters",
+      "descriptionRequired": "Description is required",
+      "descriptionMax": "Description must be at most 255 characters",
+      "serialRequired": "Serial number is required",
+      "serialMax": "Serial number must be at most 255 characters",
+      "serialDigits": "Serial number must contain only digits",
+      "statusRequired": "Status is required",
+      "statusInvalid": "Invalid status",
+      "categoryRequired": "Category is required",
+      "categoryInvalid": "Invalid category",
+      "typeRequired": "Equipment type is required",
+      "typeInvalid": "Invalid equipment type",
+      "userRequired": "User is required",
+      "userInvalid": "Invalid user",
+      "imageRequired": "Image is required",
+      "imageTooLarge": "Invalid file. Please select an image smaller than 5MB.",
+      "imageInvalidType": "Select a valid JPG or PNG image."
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "email": "User",
+      "emailPlaceholder": "name@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "******",
+      "submit": "Login"
+    },
+    "validation": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email",
+      "passwordRequired": "Password is required",
+      "passwordMin": "Password must be at least 8 characters"
     }
   }
 }

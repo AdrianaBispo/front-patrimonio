@@ -1,43 +1,15 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
+
 import { EquipmentForm } from "../components/EquipmentForm";
-import { useEquipmentHook } from "../hooks/useEquipmentHook";
+import { useEquipmentFormHook } from "../hooks/useEquipmentFormHook";
 
-function extrairListaEquipamentos(result) {
-  if (result?.meta && Array.isArray(result?.data)) {
-    return result.data;
-  }
-
-  const paginator =
-    result?.equipamentos?.current_page != null
-      ? result.equipamentos
-      : result?.data?.current_page != null
-        ? result.data
-        : null;
-
-  if (Array.isArray(paginator?.data)) {
-    return paginator.data;
-  }
-
-  if (Array.isArray(result?.equipamentos)) return result.equipamentos;
-  if (Array.isArray(result?.equipamentos?.data)) return result.equipamentos.data;
-  if (Array.isArray(result?.data?.data)) return result.data.data;
-  if (Array.isArray(result?.data)) return result.data;
-  if (Array.isArray(result)) return result;
-  return [];
-}
-
-function mesmoEquipamento(item, id) {
-  if (!item || id == null) return false;
-  const alvo = String(id);
-  return String(item.eqi_id ?? item.id ?? "") === alvo;
-}
-
-function valorCampo(registro, ...chaves) {
-  for (const chave of chaves) {
-    const valor = registro?.[chave];
-    if (valor != null && valor !== "") return valor;
+function fieldValue(record, ...keys) {
+  for (const key of keys) {
+    const value = record?.[key];
+    if (value != null && value !== "") return value;
   }
   return "";
 }
@@ -46,147 +18,124 @@ export default function EquipmentEditPage() {
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const {
-    listEquipment,
-    loadFormOptions,
+    loadEquipment,
     updateEquipment,
-    listaStatus,
-    listaUsuarios,
-    listaCategorias,
-    listaTipos,
+    statusList,
+    userList,
+    categoryList,
+    typeList,
     isLoading,
+    isLoadingData,
     inputsErrors,
-  } = useEquipmentHook();
+  } = useEquipmentFormHook();
 
-  const [nome, setNome] = useState("");
-  const [serie, setSerie] = useState("");
+  const [name, setName] = useState("");
+  const [serial, setSerial] = useState("");
   const [statusId, setStatusId] = useState("");
-  const [categoriaId, setCategoriaId] = useState("");
-  const [tipoEquipamentoId, setEquipmentTypeId] = useState("");
-  const [usuarioId, setUsuarioId] = useState("");
-  const [descricao, setDescricao] = useState("");
-  const [imagemAtual, setImagemAtual] = useState(null);
-  const [imagemFile, setImagemFile] = useState(null);
+  const [categoryId, setCategoryId] = useState("");
+  const [equipmentTypeId, setEquipmentTypeId] = useState("");
+  const [userId, setUserId] = useState("");
+  const [description, setDescription] = useState("");
+  const [currentImage, setCurrentImage] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
-    const carregar = async () => {
-      if (!id) return;
+    if (!id) {
+      navigate("/equipamentos", { replace: true });
+      return;
+    }
 
-      setCarregando(true);
+    const preloaded = location.state?.equipment ?? location.state?.equipamento;
 
-      try {
-        const doState = location.state?.equipamento;
-        const doClique = mesmoEquipamento(doState, id) ? doState : null;
-
-        let registro = doClique;
-
-        if (!registro) {
-          const [, listaRes] = await Promise.all([
-            loadFormOptions(),
-            listEquipment(1, 0),
-          ]);
-          const lista = extrairListaEquipamentos(listaRes);
-          registro = lista.find((item) => mesmoEquipamento(item, id)) ?? null;
-        } else {
-          await loadFormOptions();
-        }
-
-        if (!registro) {
-          toast.error("Equipamento não encontrado");
-          navigate("/equipamentos", { replace: true });
-          return;
-        }
-
-        // Campos conforme retorno da API
-        setNome(String(valorCampo(registro, "eqi_name", "eqi_nome", "nome")));
-        setSerie(String(valorCampo(registro, "eqi_serie", "serie")));
-        setStatusId(String(valorCampo(registro, "eqi_status_id", "status_id")));
-        setCategoriaId(
-          String(valorCampo(registro, "categoria_id", "eqi_categoria_id")),
+    loadEquipment(id, preloaded)
+      .then((record) => {
+        setName(String(fieldValue(record, "eqi_name", "eqi_nome", "nome")));
+        setSerial(String(fieldValue(record, "eqi_serie", "serie")));
+        setStatusId(String(fieldValue(record, "eqi_status_id", "status_id")));
+        setCategoryId(
+          String(fieldValue(record, "categoria_id", "eqi_categoria_id")),
         );
         setEquipmentTypeId(
           String(
-            valorCampo(registro, "tipo_equipamento_id", "eqi_tipo_equipamento_id"),
+            fieldValue(record, "tipo_equipamento_id", "eqi_tipo_equipamento_id"),
           ),
         );
-        setUsuarioId(String(valorCampo(registro, "usuario_id")));
-        setDescricao(
-          String(valorCampo(registro, "eqi_descricao", "descricao")),
+        setUserId(String(fieldValue(record, "usuario_id")));
+        setDescription(
+          String(fieldValue(record, "eqi_descricao", "descricao")),
         );
 
-        const imagem = valorCampo(registro, "imagem_url") || null;
-        setImagemAtual(imagem);
-        setSelectedImage(imagem);
-      } catch (err) {
-        toast.error(err?.message ?? "Ocorreu um erro ao carregar o equipamento");
-      } finally {
-        setCarregando(false);
-      }
-    };
+        const image = fieldValue(record, "imagem_url") || null;
+        setCurrentImage(image);
+        setSelectedImage(image);
+      })
+      .catch((err) => {
+        toast.error(t(err?.message) ?? t("errors.equipmentError"));
+        navigate("/equipamentos", { replace: true });
+      });
+  }, [id, loadEquipment, location.state, navigate, t]);
 
-    carregar();
-  }, [id]);
-
-  async function handleSubmit(e) {
-    e.preventDefault();
+  async function handleSubmit(event) {
+    event.preventDefault();
     if (!id) return;
 
     try {
       const result = await updateEquipment(
         id,
         {
-          eqi_name: nome,
-          eqi_descricao: descricao,
-          eqi_serie: serie,
+          eqi_name: name,
+          eqi_descricao: description,
+          eqi_serie: serial,
           eqi_status_id: statusId,
-          categoria_id: categoriaId,
-          tipo_equipamento_id: tipoEquipamentoId,
-          usuario_id: usuarioId,
-          imagem_url: imagemAtual,
+          categoria_id: categoryId,
+          tipo_equipamento_id: equipmentTypeId,
+          usuario_id: userId,
+          imagem_url: currentImage,
         },
-        imagemFile,
+        imageFile,
       );
 
       if (!result) return;
 
-      toast.success("Equipamento atualizado com sucesso!");
+      toast.success(t("messages.equipmentUpdated"));
       navigate("/equipamentos");
     } catch (err) {
-      toast.error(err?.message ?? "Ocorreu um erro ao atualizar o equipamento");
+      toast.error(t(err?.message) ?? t("errors.equipmentError"));
     }
   }
 
-  const handleChangeImage = (e) => {
-    const file = e.target.files?.[0];
+  const handleChangeImage = (event) => {
+    const file = event.target.files?.[0];
     if (!file) {
-      setSelectedImage(imagemAtual);
-      setImagemFile(null);
+      setSelectedImage(currentImage);
+      setImageFile(null);
       return;
     }
 
     if (file.size >= 5 * 1024 * 1024) {
-      toast.error("Arquivo inválido. Por favor, selecione uma imagem menor que 5MB.");
+      toast.error(t("equipment.validation.imageTooLarge"));
       return;
     }
 
-    const tipoOk =
+    const typeOk =
       file.type === "image/jpeg" ||
       file.type === "image/jpg" ||
       file.type === "image/png";
 
-    if (file.size > 0 && tipoOk) {
+    if (file.size > 0 && typeOk) {
       setSelectedImage(URL.createObjectURL(file));
-      setImagemFile(file);
+      setImageFile(file);
     } else {
-      setSelectedImage(imagemAtual);
-      setImagemFile(null);
-      toast.error("Selecione uma imagem JPG ou PNG válida.");
+      setSelectedImage(currentImage);
+      setImageFile(null);
+      toast.error(t("equipment.validation.imageInvalidType"));
     }
   };
 
-  if (carregando) {
+  if (isLoadingData) {
     return (
       <div className="flex min-h-64 items-center justify-center">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-secondary border-t-transparent" />
@@ -195,37 +144,37 @@ export default function EquipmentEditPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="mx-auto max-w-7xl">
       <div className="mb-9 gap-2">
-        <h3 className="mb-2 text-primary/80">Editar Equipamento</h3>
+        <h3 className="mb-2 text-primary/80">{t("equipment.edit.title")}</h3>
       </div>
 
       <EquipmentForm
-        nome={nome}
-        setNome={setNome}
-        serie={serie}
-        setSerie={setSerie}
+        name={name}
+        setName={setName}
+        serial={serial}
+        setSerial={setSerial}
         statusId={statusId}
         setStatusId={setStatusId}
-        categoriaId={categoriaId}
-        setCategoriaId={setCategoriaId}
-        tipoEquipamentoId={tipoEquipamentoId}
+        categoryId={categoryId}
+        setCategoryId={setCategoryId}
+        equipmentTypeId={equipmentTypeId}
         setEquipmentTypeId={setEquipmentTypeId}
-        usuarioId={usuarioId}
-        setUsuarioId={setUsuarioId}
-        descricao={descricao}
-        setDescricao={setDescricao}
-        listaStatus={listaStatus}
-        listaCategorias={listaCategorias}
-        listaTipos={listaTipos}
-        listaUsuarios={listaUsuarios}
+        userId={userId}
+        setUserId={setUserId}
+        description={description}
+        setDescription={setDescription}
+        statusList={statusList}
+        categoryList={categoryList}
+        typeList={typeList}
+        userList={userList}
         isLoading={isLoading}
         inputsErrors={inputsErrors}
-        handleSubmit={handleSubmit}
-        navigate={navigate}
-        submitLabel="Salvar"
+        onSubmit={handleSubmit}
+        onCancel={() => navigate(-1)}
+        submitLabel={t("equipment.form.save")}
         selectedImage={selectedImage}
-        handleChangeImage={handleChangeImage}
+        onChangeImage={handleChangeImage}
       />
     </div>
   );

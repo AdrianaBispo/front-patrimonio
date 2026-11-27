@@ -1,22 +1,43 @@
 import { useState, useCallback } from "react";
-import { authService } from "../../services/authService";
 import axios from "axios";
-import { LoginCredentials } from "../../types/auth.types";
 import { z } from "zod";
-import { LoginInputError } from "../loginInputError.type";
+
+import { authService } from "../../services/authService";
+import { LoginCredentials, LoginFormErrors } from "../../types/auth.types";
+import {
+  AuthErrorException,
+  AuthExpiredException,
+  AuthForbiddenException,
+} from "../../exceptions/authExceptions";
+
+const loginSchema = z.object({
+  email: z
+    .string()
+    .min(1, "auth.validation.emailRequired")
+    .email("auth.validation.emailInvalid"),
+  password: z
+    .string()
+    .min(1, "auth.validation.passwordRequired")
+    .min(8, "auth.validation.passwordMin"),
+});
+
+function getErrorMessage(error: unknown): string {
+  if (axios.isAxiosError(error)) {
+    if (error.response?.status === 401) {
+      return new AuthExpiredException().message;
+    }
+    if (error.response?.status === 403) {
+      return new AuthForbiddenException().message;
+    }
+  }
+
+  return new AuthErrorException().message;
+}
 
 export function useLogin() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [inputsErrors, setInputsErrors] = useState({} as LoginInputError);
-
-  const loginSchema = z.object({
-    email: z.string().min(1, "E-mail é obrigatório").email("E-mail inválido"),
-    password: z
-      .string()
-      .min(1, "Senha é obrigatória")
-      .min(8, "A senha deve ter pelo menos 8 caracteres"),
-  });
+  const [inputsErrors, setInputsErrors] = useState<LoginFormErrors>({});
 
   const login = useCallback(async (credentials: LoginCredentials) => {
     setIsLoading(true);
@@ -24,33 +45,24 @@ export function useLogin() {
 
     const validation = loginSchema.safeParse(credentials);
     if (!validation.success) {
-      const errors: LoginInputError = {};
-
+      const errors: LoginFormErrors = {};
       validation.error.issues.forEach((issue) => {
-        const field = issue.path[0];
-
-        if (field === "email" || field === "password") {
-          errors[field] = issue.message;
-        }
+        const field = issue.path[0] as keyof LoginFormErrors;
+        if (!errors[field]) errors[field] = issue.message;
       });
-
       setInputsErrors(errors);
       setIsLoading(false);
-      return;
+      return undefined;
     }
+
     setInputsErrors({});
 
     try {
-      const result = await authService.login(credentials);
-      return result;
+      return await authService.login(validation.data);
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        const message = err.response?.data?.message ?? "Erro ao entrar.";
-        setError(message);
-      } else {
-        setError("Erro ao entrar.");
-      }
-      throw err;
+      const message = getErrorMessage(err);
+      setError(message);
+      throw new Error(message);
     } finally {
       setIsLoading(false);
     }

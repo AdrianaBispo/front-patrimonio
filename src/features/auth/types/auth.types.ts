@@ -1,14 +1,19 @@
-export interface LoginCredentials {
-    email: string;
-    password: string;
-  }
-  
-  export interface User {
-    name: string;
-    email: string;
-  }
-  
-  export interface AuthResult {
-    user: User;
-    token: string;
-  }
+export type LoginCredentials = {
+  email: string;
+  password: string;
+};
+
+export type LoginFormErrors = {
+  email?: string;
+  password?: string;
+};
+
+export type User = {
+  name: string;
+  email: string;
+};
+
+export type AuthResult = {
+  user: User;
+  token: string;
+};

@@ -1,34 +1,37 @@
+import { useTranslation } from "react-i18next";
 import ErrorLabel from "../../../shared/components/ErrorLabel";
 
 export function EquipmentForm({
-  nome,
-  setNome,
-  serie,
-  setSerie,
+  name,
+  setName,
+  serial,
+  setSerial,
   statusId,
   setStatusId,
-  categoriaId,
-  setCategoriaId,
-  tipoEquipamentoId,
+  categoryId,
+  setCategoryId,
+  equipmentTypeId,
   setEquipmentTypeId,
-  usuarioId,
-  setUsuarioId,
-  descricao,
-  setDescricao,
-  listaStatus = [],
-  listaCategorias = [],
-  listaTipos = [],
-  listaUsuarios = [],
+  userId,
+  setUserId,
+  description,
+  setDescription,
+  statusList = [],
+  categoryList = [],
+  typeList = [],
+  userList = [],
   isLoading,
   inputsErrors,
-  handleSubmit,
-  navigate,
+  onSubmit,
+  onCancel,
   selectedImage,
-  handleChangeImage,
-  submitLabel = "Salvar",
+  onChangeImage,
+  submitLabel,
 }) {
+  const { t } = useTranslation();
+
   return (
-    <form onSubmit={handleSubmit} noValidate>
+    <form onSubmit={onSubmit} noValidate>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[380px_1fr] items-stretch">
         <div className="flex flex-col rounded-xl border border-gray-100 bg-white p-4">
           <div className="mb-3 flex items-center gap-2">
@@ -53,7 +56,7 @@ export function EquipmentForm({
                 />
               </svg>
             </div>
-            <p className="font-bold">Imagem do Equipamento</p>
+            <p className="font-bold">{t("equipment.form.imageTitle")}</p>
           </div>
 
           <button
@@ -70,13 +73,13 @@ export function EquipmentForm({
                 type="file"
                 id="image-input"
                 accept="image/jpeg,image/png,image/jpg"
-                onChange={handleChangeImage}
+                onChange={onChangeImage}
                 className="hidden"
               />
               {selectedImage ? (
                 <img
                   src={selectedImage}
-                  alt="Imagem do equipamento"
+                  alt={t("equipment.form.imageAlt")}
                   className="h-full w-full object-cover"
                 />
               ) : (
@@ -100,12 +103,16 @@ export function EquipmentForm({
             </div>
           </button>
 
-          {(inputsErrors?.imagem_file || inputsErrors?.image || inputsErrors?.imagem_url) && (
+          {(inputsErrors?.imagem_file ||
+            inputsErrors?.image ||
+            inputsErrors?.imagem_url) && (
             <div className="mt-2">
               <ErrorLabel>
-                {inputsErrors.imagem_file ||
-                  inputsErrors.image ||
-                  inputsErrors.imagem_url}
+                {t(
+                  inputsErrors.imagem_file ||
+                    inputsErrors.image ||
+                    inputsErrors.imagem_url,
+                )}
               </ErrorLabel>
             </div>
           )}
@@ -129,30 +136,34 @@ export function EquipmentForm({
                 />
               </svg>
             </div>
-            <p className="font-bold">Informações do Equipamento</p>
+            <p className="font-bold">{t("equipment.form.infoTitle")}</p>
           </div>
 
           <div className="mb-5 flex flex-col gap-5 md:flex-row">
             <div className="flex-1">
               <label htmlFor="nome">
-                Nome <span className="text-red-500">*</span>
+                {t("equipment.form.name")}{" "}
+                <span className="text-red-500">*</span>
               </label>
               <input
                 id="nome"
                 name="nome"
                 className="input-utilities"
                 type="text"
-                placeholder="Ex: Notebook Dell"
+                placeholder={t("equipment.form.namePlaceholder")}
                 maxLength={255}
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
-              {inputsErrors?.nome && <ErrorLabel>{inputsErrors.nome}</ErrorLabel>}
+              {inputsErrors?.nome && (
+                <ErrorLabel>{t(inputsErrors.nome)}</ErrorLabel>
+              )}
             </div>
 
             <div className="flex-1">
               <label htmlFor="serie">
-                Número de Série <span className="text-red-500">*</span>
+                {t("equipment.form.serial")}{" "}
+                <span className="text-red-500">*</span>
               </label>
               <input
                 id="serie"
@@ -160,13 +171,13 @@ export function EquipmentForm({
                 className="input-utilities"
                 type="text"
                 inputMode="numeric"
-                placeholder="Ex: 123456"
+                placeholder={t("equipment.form.serialPlaceholder")}
                 maxLength={255}
-                value={serie}
-                onChange={(e) => setSerie(e.target.value.replace(/\D/g, ""))}
+                value={serial}
+                onChange={(e) => setSerial(e.target.value.replace(/\D/g, ""))}
               />
               {inputsErrors?.serie && (
-                <ErrorLabel>{inputsErrors.serie}</ErrorLabel>
+                <ErrorLabel>{t(inputsErrors.serie)}</ErrorLabel>
               )}
             </div>
           </div>
@@ -174,47 +185,49 @@ export function EquipmentForm({
           <div className="mb-5 flex flex-col gap-5 md:flex-row">
             <div className="flex-1">
               <label htmlFor="categoria_id">
-                Categoria <span className="text-red-500">*</span>
+                {t("equipment.form.category")}{" "}
+                <span className="text-red-500">*</span>
               </label>
               <select
                 id="categoria_id"
                 name="categoria_id"
                 className="input-utilities"
-                value={categoriaId}
-                onChange={(e) => setCategoriaId(e.target.value)}
+                value={categoryId}
+                onChange={(e) => setCategoryId(e.target.value)}
               >
-                <option value="">Selecione</option>
-                {listaCategorias.map((categoria) => (
-                  <option key={categoria.id} value={categoria.id}>
-                    {categoria.nome}
+                <option value="">{t("equipment.form.select")}</option>
+                {categoryList.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.nome}
                   </option>
                 ))}
               </select>
               {inputsErrors?.categoria_id && (
-                <ErrorLabel>{inputsErrors.categoria_id}</ErrorLabel>
+                <ErrorLabel>{t(inputsErrors.categoria_id)}</ErrorLabel>
               )}
             </div>
 
             <div className="flex-1">
               <label htmlFor="tipo_equipamento_id">
-                Tipo de Equipamento <span className="text-red-500">*</span>
+                {t("equipment.form.type")}{" "}
+                <span className="text-red-500">*</span>
               </label>
               <select
                 id="tipo_equipamento_id"
                 name="tipo_equipamento_id"
                 className="input-utilities"
-                value={tipoEquipamentoId}
+                value={equipmentTypeId}
                 onChange={(e) => setEquipmentTypeId(e.target.value)}
               >
-                <option value="">Selecione</option>
-                {listaTipos.map((tipo) => (
-                  <option key={tipo.id} value={tipo.id}>
-                    {tipo.nome}
+                <option value="">{t("equipment.form.select")}</option>
+                {typeList.map((type) => (
+                  <option key={type.id} value={type.id}>
+                    {type.nome}
                   </option>
                 ))}
               </select>
               {inputsErrors?.tipo_equipamento_id && (
-                <ErrorLabel>{inputsErrors.tipo_equipamento_id}</ErrorLabel>
+                <ErrorLabel>{t(inputsErrors.tipo_equipamento_id)}</ErrorLabel>
               )}
             </div>
           </div>
@@ -222,7 +235,8 @@ export function EquipmentForm({
           <div className="mb-5 flex flex-col gap-5 md:flex-row">
             <div className="flex-1">
               <label htmlFor="status_id">
-                Status <span className="text-red-500">*</span>
+                {t("equipment.form.status")}{" "}
+                <span className="text-red-500">*</span>
               </label>
               <select
                 id="status_id"
@@ -231,45 +245,47 @@ export function EquipmentForm({
                 value={statusId}
                 onChange={(e) => setStatusId(e.target.value)}
               >
-                <option value="">Selecione</option>
-                {listaStatus.map((status) => (
+                <option value="">{t("equipment.form.select")}</option>
+                {statusList.map((status) => (
                   <option key={status.id} value={status.id}>
                     {status.nome}
                   </option>
                 ))}
               </select>
               {inputsErrors?.status_id && (
-                <ErrorLabel>{inputsErrors.status_id}</ErrorLabel>
+                <ErrorLabel>{t(inputsErrors.status_id)}</ErrorLabel>
               )}
             </div>
 
             <div className="flex-1">
               <label htmlFor="usuario_id">
-                Usuário Responsável <span className="text-red-500">*</span>
+                {t("equipment.form.user")}{" "}
+                <span className="text-red-500">*</span>
               </label>
               <select
                 id="usuario_id"
                 name="usuario_id"
                 className="input-utilities"
-                value={usuarioId}
-                onChange={(e) => setUsuarioId(e.target.value)}
+                value={userId}
+                onChange={(e) => setUserId(e.target.value)}
               >
-                <option value="">Selecione</option>
-                {listaUsuarios.map((usuario) => (
-                  <option key={usuario.id} value={usuario.id}>
-                    {usuario.nome}
+                <option value="">{t("equipment.form.select")}</option>
+                {userList.map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.nome}
                   </option>
                 ))}
               </select>
               {inputsErrors?.usuario_id && (
-                <ErrorLabel>{inputsErrors.usuario_id}</ErrorLabel>
+                <ErrorLabel>{t(inputsErrors.usuario_id)}</ErrorLabel>
               )}
             </div>
           </div>
 
           <div className="mb-5 flex flex-col">
             <label htmlFor="descricao">
-              Descrição <span className="text-red-500">*</span>
+              {t("equipment.form.description")}{" "}
+              <span className="text-red-500">*</span>
             </label>
             <textarea
               id="descricao"
@@ -277,12 +293,12 @@ export function EquipmentForm({
               className="input-utilities"
               rows={5}
               maxLength={255}
-              placeholder="Insira especificações detalhadas, observações sobre o estado ou requisitos operacionais..."
-              value={descricao}
-              onChange={(e) => setDescricao(e.target.value)}
+              placeholder={t("equipment.form.descriptionPlaceholder")}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
             {inputsErrors?.descricao && (
-              <ErrorLabel>{inputsErrors.descricao}</ErrorLabel>
+              <ErrorLabel>{t(inputsErrors.descricao)}</ErrorLabel>
             )}
           </div>
         </div>
@@ -292,9 +308,10 @@ export function EquipmentForm({
         <button
           type="button"
           className="btn-secondary items-stretch"
-          onClick={() => navigate(-1)}
+          disabled={isLoading}
+          onClick={onCancel}
         >
-          Cancelar
+          {t("equipment.form.cancel")}
         </button>
 
         <button

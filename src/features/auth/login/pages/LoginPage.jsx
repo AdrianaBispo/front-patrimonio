@@ -1,34 +1,35 @@
 import { useState } from "react";
-import LoadingUI from "../../../../shared/components/LoadingUI";
-import { Link } from "react-router-dom";
-import { useLogin } from "../hooks/useLogin";
 import { useNavigate } from "react-router-dom";
-import ErrorLabel from "../../../../shared/components/ErrorLabel";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
-function LoginPage() {
+import ErrorLabel from "../../../../shared/components/ErrorLabel";
+import { useLogin } from "../hooks/useLogin";
+
+export default function LoginPage() {
   const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const { login, error, isLoading, inputsErrors } = useLogin();
+  const [password, setPassword] = useState("");
+  const { login, isLoading, inputsErrors } = useLogin();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
-  async function logar(e) {
-    e.preventDefault();
+  async function handleSubmit(event) {
+    event.preventDefault();
+
     try {
-      const result = await login({ email, password: senha });
-      if (result != null) {
-        navigate("/users");
-      }
-    } catch (e) {
-      toast.error(error);
+      const result = await login({ email, password });
+      if (!result) return;
+      navigate("/users");
+    } catch (err) {
+      toast.error(t(err?.message) ?? t("errors.authError"));
     }
   }
 
   return (
-    <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2 bg-bg-primary">
+    <div className="grid min-h-screen grid-cols-1 bg-bg-primary lg:grid-cols-2">
       <div className="flex min-h-full flex-col justify-center px-6 py-12">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <div className="rounded-md bg-secondary p-2 ring-1 ring-white/10 text-white max-w-10">
+          <div className="max-w-10 rounded-md bg-secondary p-2 text-white ring-1 ring-white/10">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -45,64 +46,54 @@ function LoginPage() {
             </svg>
           </div>
 
-          <h2 className="mt-10 text-2xl text-left font-bold tracking-tight text-text-primary">
-            Login
+          <h2 className="mt-10 text-left text-2xl font-bold tracking-tight text-text-primary">
+            {t("auth.login.title")}
           </h2>
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form onSubmit={logar} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6" noValidate>
             <div>
-              <label htmlFor="user">Usuário</label>
-
+              <label htmlFor="email">{t("auth.login.email")}</label>
               <div className="mt-2">
                 <input
-                  id="user"
+                  id="email"
                   type="email"
-                  maxLength={20}
+                  maxLength={255}
                   className="input-utilities"
-                  placeholder="name@example.com"
+                  placeholder={t("auth.login.emailPlaceholder")}
+                  value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
               {inputsErrors?.email && (
-                <ErrorLabel>{inputsErrors.email}</ErrorLabel>
+                <ErrorLabel>{t(inputsErrors.email)}</ErrorLabel>
               )}
             </div>
 
             <div>
-              <label htmlFor="password">Senha</label>
-
+              <label htmlFor="password">{t("auth.login.password")}</label>
               <div className="mt-2">
                 <input
                   id="password"
                   type="password"
-                  maxLength={20}
+                  maxLength={255}
                   className="input-utilities"
-                  placeholder="******"
-                  onChange={(e) => setSenha(e.target.value)}
+                  placeholder={t("auth.login.passwordPlaceholder")}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
               {inputsErrors?.password && (
-                <ErrorLabel>{inputsErrors.password}</ErrorLabel>
+                <ErrorLabel>{t(inputsErrors.password)}</ErrorLabel>
               )}
             </div>
-
-            {/* <div className="text-sm text-right">
-              <Link
-                to="/auth/forgot-password"
-                className="text-secondary hover:underline"
-              >
-                Esqueci minha senha
-              </Link>
-            </div> */}
 
             <div>
               <button
                 type="submit"
                 className="btn-primary w-full"
-                // onClick={logar}
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -110,7 +101,7 @@ function LoginPage() {
                     <div className="h-6 w-6 animate-spin rounded-full border-2 border-bg-primary border-t-transparent" />
                   </div>
                 ) : (
-                  "Login"
+                  t("auth.login.submit")
                 )}
               </button>
             </div>
@@ -118,9 +109,7 @@ function LoginPage() {
         </div>
       </div>
 
-      <div className="hidden lg:block bg-cover bg-center bg-[url(https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/content-gallery-3.png)]" />
+      <div className="hidden bg-cover bg-center bg-[url(https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/content-gallery-3.png)] lg:block" />
     </div>
   );
 }
-
-export default LoginPage;

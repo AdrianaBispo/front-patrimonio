@@ -1,56 +1,21 @@
 import api from "../../../shared/api/axios";
-import { Equipamento } from "../types/equipment.types";
+import { Equipment } from "../types/equipment.types";
 
-function toApiPayload(equipamento: Equipamento) {
-  // Backend de create/update ainda valida os nomes sem prefixo eqi_
+function toApiPayload(equipment: Equipment) {
   return {
-    nome: equipamento.eqi_name,
-    descricao: equipamento.eqi_descricao,
-    serie: equipamento.eqi_serie,
-    status_id: equipamento.eqi_status_id,
-    categoria_id: equipamento.categoria_id,
-    tipo_equipamento_id: equipamento.tipo_equipamento_id,
-    usuario_id: equipamento.usuario_id,
-    imagem_url: equipamento.imagem_url,
+    nome: equipment.eqi_name,
+    descricao: equipment.eqi_descricao,
+    serie: equipment.eqi_serie,
+    status_id: equipment.eqi_status_id,
+    categoria_id: equipment.categoria_id,
+    tipo_equipamento_id: equipment.tipo_equipamento_id,
+    usuario_id: equipment.usuario_id,
+    imagem_url: equipment.imagem_url,
   };
 }
 
 export const equipmentService = {
-  async getAllEquipamentos(
-    page = 1,
-    perPage = 0,
-    nome = "",
-    serie = "",
-  ) {
-    const params: Record<string, string | number> = {
-      per_page: perPage,
-    };
-
-    if (perPage > 0) {
-      params.page = page;
-    }
-
-    const nomeFiltrado = nome.trim();
-    const serieFiltrada = serie.trim();
-
-    if (nomeFiltrado) {
-      params.nome = nomeFiltrado;
-    }
-
-    if (serieFiltrada) {
-      params.serie = serieFiltrada;
-    }
-
-    const { data } = await api.get("/equipaments/all", { params });
-    return data;
-  },
-
-  async searchEquipamentos(
-    name = "",
-    serie = "",
-    page = 1,
-    perPage = 0,
-  ) {
+  async listEquipments(page = 1, perPage = 0, name = "", serial = "") {
     const params: Record<string, string | number> = {
       per_page: perPage,
     };
@@ -60,30 +25,54 @@ export const equipmentService = {
     }
 
     const trimmedName = name.trim();
-    const trimmedSerie = serie.trim();
+    const trimmedSerial = serial.trim();
+
+    if (trimmedName) {
+      params.nome = trimmedName;
+    }
+
+    if (trimmedSerial) {
+      params.serie = trimmedSerial;
+    }
+
+    const { data } = await api.get("/equipaments/all", { params });
+    return data;
+  },
+
+  async searchEquipments(name = "", serial = "", page = 1, perPage = 0) {
+    const params: Record<string, string | number> = {
+      per_page: perPage,
+    };
+
+    if (perPage > 0) {
+      params.page = page;
+    }
+
+    const trimmedName = name.trim();
+    const trimmedSerial = serial.trim();
 
     if (trimmedName) {
       params.name = trimmedName;
-    } else if (trimmedSerie) {
-      params.serie = trimmedSerie;
+    } else if (trimmedSerial) {
+      params.serie = trimmedSerial;
     }
 
     const { data } = await api.get("/equipaments/get", { params });
     return data;
   },
 
-  async createEquipamento(equipamento: Equipamento) {
+  async createEquipment(equipment: Equipment) {
     const { data } = await api.post(
       "/equipaments/create",
-      toApiPayload(equipamento),
+      toApiPayload(equipment),
     );
     return data;
   },
 
-  async updateEquipamento(id: string | number, equipamento: Equipamento) {
+  async updateEquipment(id: string | number, equipment: Equipment) {
     const { data } = await api.put(
       `/equipaments/update/${id}`,
-      toApiPayload(equipamento),
+      toApiPayload(equipment),
     );
     return data;
   },
@@ -92,7 +81,6 @@ export const equipmentService = {
     const formData = new FormData();
     formData.append("image", image);
 
-    // Remove application/json padrão para o browser definir multipart + boundary.
     const { data } = await api.post("/equipaments/image-upload", formData, {
       transformRequest: [
         (payload, headers) => {
