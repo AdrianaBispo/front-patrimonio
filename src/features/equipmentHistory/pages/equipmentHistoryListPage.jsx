@@ -5,62 +5,7 @@ import { useTranslation } from "react-i18next";
 import Pagination from "../../../shared/components/Pagination";
 import { useEquipmentHistoryHook } from "../hooks/useEquipmentHistoryHook";
 
-const POR_PAGINA = 10;
-
-const paginacaoInicial = {
-  currentPage: 1,
-  lastPage: 1,
-  total: 0,
-  from: 0,
-  to: 0,
-};
-
-function extrairPaginacao(resposta) {
-  if (resposta?.meta && Array.isArray(resposta?.data)) {
-    return {
-      items: resposta.data,
-      currentPage: resposta.meta.current_page ?? 1,
-      lastPage: resposta.meta.last_page ?? 1,
-      total: resposta.meta.total ?? resposta.data.length,
-      from: resposta.meta.from ?? 0,
-      to: resposta.meta.to ?? 0,
-    };
-  }
-
-  const historicos = resposta?.historic_equipaments ?? resposta;
-  const paginador =
-    historicos?.current_page != null
-      ? historicos
-      : historicos?.data?.current_page != null
-        ? historicos.data
-        : null;
-
-  if (Array.isArray(paginador?.data)) {
-    return {
-      items: paginador.data,
-      currentPage: paginador.current_page ?? 1,
-      lastPage: paginador.last_page ?? 1,
-      total: paginador.total ?? paginador.data.length,
-      from: paginador.from ?? (paginador.data.length ? 1 : 0),
-      to: paginador.to ?? paginador.data.length,
-    };
-  }
-
-  const items = Array.isArray(historicos)
-    ? historicos
-    : Array.isArray(historicos?.data)
-      ? historicos.data
-      : [];
-
-  return {
-    items,
-    currentPage: 1,
-    lastPage: 1,
-    total: items.length,
-    from: items.length ? 1 : 0,
-    to: items.length,
-  };
-}
+const PER_PAGE = 10;
 
 function formatarData(data, locale, emptyValue) {
   if (!data) return emptyValue;
@@ -76,18 +21,15 @@ function formatarData(data, locale, emptyValue) {
 
 export default function EquipmentHistoryListPage() {
   const { t, i18n } = useTranslation();
-  const { listHistory, isLoading } = useEquipmentHistoryHook();
+  const { listHistory, isLoading, paginator } = useEquipmentHistoryHook();
   const [historicos, setHistoricos] = useState([]);
-  const [paginacao, setPaginacao] = useState(paginacaoInicial);
   const emptyValue = t("equipmentHistory.list.emptyValue");
 
   const loadPage = useCallback(
     async (pagina) => {
       try {
-        const resposta = await listHistory(pagina, POR_PAGINA);
-        const resultado = extrairPaginacao(resposta);
-        setHistoricos(resultado.items);
-        setPaginacao(resultado);
+        const result = await listHistory(paginator.currentPage, PER_PAGE);
+        setHistoricos(result.data);
       } catch (error) {
         toast.error(t(error?.message) ?? t("errors.equipmentHistoryError"));
       }
@@ -172,11 +114,11 @@ export default function EquipmentHistoryListPage() {
         </table>
 
         <Pagination
-          currentPage={paginacao.currentPage}
-          lastPage={paginacao.lastPage}
-          total={paginacao.total}
-          from={paginacao.from}
-          to={paginacao.to}
+          currentPage={paginator.currentPage}
+          lastPage={paginator.lastPage}
+          total={paginator.total}
+          from={paginator.from}
+          to={paginator.to}
           isLoading={isLoading}
           onPageChange={loadPage}
         />
