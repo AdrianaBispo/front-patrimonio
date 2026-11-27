@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 import Pagination from "../../../shared/components/Pagination";
 import { useEquipmentHistoryHook } from "../hooks/useEquipmentHistoryHook";
@@ -74,6 +75,7 @@ function formatarData(data) {
 }
 
 export default function EquipmentHistoryListPage() {
+  const { t } = useTranslation();
   const { listHistory, isLoading } = useEquipmentHistoryHook();
   const [historicos, setHistoricos] = useState([]);
   const [paginacao, setPaginacao] = useState(paginacaoInicial);
@@ -86,13 +88,10 @@ export default function EquipmentHistoryListPage() {
         setHistoricos(resultado.items);
         setPaginacao(resultado);
       } catch (error) {
-        toast.error(
-          error?.message ??
-            "Ocorreu um erro ao carregar o histórico de equipamentos",
-        );
+        toast.error(t(error?.message) ?? t("errors.equipmentHistoryError"));
       }
     },
-    [listHistory],
+    [listHistory, t],
   );
 
   useEffect(() => {
