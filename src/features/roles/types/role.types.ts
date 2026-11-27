@@ -11,10 +11,25 @@ export type Role = {
   permissions?: RolePermission[];
 };
 
-export type CreateRolePayload = {
+export type RoleFormData = {
   name: string;
   permissions: number[];
 };
+
+export type RoleFormErrors = {
+  name?: string;
+  permissions?: string;
+};
+
+export type RolePaginator = {
+  currentPage: number;
+  lastPage: number;
+  total: number;
+  from: number;
+  to: number;
+};
+
+export type CreateRolePayload = RoleFormData;
 
 export type CreateRoleResponse = {
   message: string;
