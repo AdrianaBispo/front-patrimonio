@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import axios from "axios";
 import { z } from "zod";
+import { UserExpiredException, UserNotFoundException, UserErrorException } from "../exceptions/userExceptions";
 
 import userService from "../services/userService";
 import {
@@ -49,19 +50,22 @@ const edicaoSchema = z.object({
   role_id: z.string().min(1, "Perfil de acesso é obrigatório"),
 });
 
-function mensagemErro(error: unknown, fallback: string) {
+function getErrorMessage(error: unknown) {
   if (axios.isAxiosError(error)) {
-    const message = error.response?.data?.message;
-    if (typeof message === "string" && message.trim()) return message;
-
-    if (error.response?.status === 401) return "Sessão expirada";
-    if (error.response?.status === 403) {
-      return "Você não tem permissão para realizar esta ação";
+    if (error.response?.status === 401) {
+      return new UserExpiredException().message;
     }
-    if (error.response?.status === 404) return "Usuário não encontrado";
-  }
 
-  return fallback;
+    else if (error.response?.status === 403) {
+      return new UserNotFoundException().message;
+    }
+    else {
+      return new UserErrorException().message;
+    }
+  }
+  else {
+    return new UserErrorException().message;
+  }
 }
 
 export function useUserFormHook() {
@@ -80,7 +84,7 @@ export function useUserFormHook() {
       setRoles(result);
       return result;
     } catch (err) {
-      const message = mensagemErro(err, "Não foi possível carregar os perfis");
+      const message = getErrorMessage(err);
       setError(message);
       throw new Error(message);
     } finally {
@@ -96,19 +100,15 @@ export function useUserFormHook() {
       setError(null);
 
       try {
-        const [usuario, listaRoles] = await Promise.all([
+        const [resultUser, listaRoles] = await Promise.all([
           userService.getUser(id),
           userService.listRoles(),
         ]);
-
-        if (!usuario) throw new Error("Usuário não encontrado");
+        const usuario = resultUser[0];
         setRoles(listaRoles);
         return { usuario, roles: listaRoles };
       } catch (err) {
-        const message =
-          err instanceof Error && err.message === "Usuário não encontrado"
-            ? err.message
-            : mensagemErro(err, "Não foi possível carregar o usuário");
+        const message = getErrorMessage(err);
         setError(message);
         throw new Error(message);
       } finally {
@@ -138,29 +138,6 @@ export function useUserFormHook() {
     return result.data;
   };
 
-  const tratarErroApi = (err: unknown, fallback: string) => {
-    if (axios.isAxiosError(err) && err.response?.status === 422) {
-      const apiErrors = err.response?.data?.errors;
-      if (apiErrors && typeof apiErrors === "object") {
-        const errors: UsuarioFormErrors = {};
-        Object.entries(apiErrors).forEach(([campoApi, valor]) => {
-          const campo = campoApi === "roles" ? "role_id" : campoApi;
-          const message = Array.isArray(valor) ? valor[0] : valor;
-          if (typeof message === "string") {
-            errors[campo as keyof UsuarioFormErrors] = message;
-          }
-        });
-        if (Object.keys(errors).length) {
-          setInputsErrors(errors);
-          return undefined;
-        }
-      }
-    }
-
-    const message = mensagemErro(err, fallback);
-    setError(message);
-    throw new Error(message);
-  };
 
   const createUser = useCallback(async (dados: UsuarioFormData) => {
     setIsLoading(true);
@@ -175,7 +152,9 @@ export function useUserFormHook() {
     try {
       return await userService.createUser(payload);
     } catch (err) {
-      return tratarErroApi(err, "Não foi possível cadastrar o usuário");
+      const message = getErrorMessage(err);
+      setError(message);
+      throw new Error(message);
     } finally {
       setIsLoading(false);
     }
@@ -195,7 +174,9 @@ export function useUserFormHook() {
       try {
         return await userService.updateUser(id, payload);
       } catch (err) {
-        return tratarErroApi(err, "Não foi possível editar o usuário");
+        const message = getErrorMessage(err);
+        setError(message);
+        throw new Error(message);
       } finally {
         setIsLoading(false);
       }
