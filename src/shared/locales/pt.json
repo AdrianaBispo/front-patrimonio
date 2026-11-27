@@ -9,12 +9,17 @@
     "userNotFound": "Usuário não encontrado",
     "userError": "Ocorreu um erro ao processar o usuário",
     "equipmentHistoryForbidden": "Você não tem permissão para consultar o histórico",
-    "equipmentHistoryError": "Ocorreu um erro ao carregar o histórico de equipamentos"
+    "equipmentHistoryError": "Ocorreu um erro ao carregar o histórico de equipamentos",
+    "categoryForbidden": "Você não tem permissão para consultar as categorias",
+    "categoryNotFound": "Categoria não encontrada",
+    "categoryError": "Ocorreu um erro ao processar a categoria"
   },
   "messages": {
     "userCreated": "Usuário criado com sucesso",
     "userUpdated": "Usuário editado com sucesso!",
-    "userDeactivated": "Desativado com sucesso!"
+    "userDeactivated": "Desativado com sucesso!",
+    "categoryCreated": "Categoria criada com sucesso",
+    "categoryUpdated": "Categoria atualizada com sucesso"
   },
   "user": {
     "create": {
@@ -64,6 +69,44 @@
       "user": "Usuário",
       "empty": "Nenhum histórico de equipamento encontrado.",
       "emptyValue": "-"
+    }
+  },
+  "category": {
+    "create": {
+      "title": "Cadastrar Nova Categoria"
+    },
+    "edit": {
+      "title": "Editar Categoria"
+    },
+    "list": {
+      "title": "Categorias",
+      "add": "Adicionar",
+      "searchPlaceholder": "Pesquisar categoria...",
+      "name": "Nome",
+      "type": "Tipo",
+      "empty": "Nenhuma categoria encontrada."
+    },
+    "form": {
+      "name": "Nome",
+      "namePlaceholder": "Nome",
+      "type": "Tipo",
+      "select": "Selecione",
+      "typeAccessory": "Acessório",
+      "typeAsset": "Ativo",
+      "typeConsumable": "Consumível",
+      "typeLicense": "Licença",
+      "typeComponent": "Componente",
+      "note": "Nota",
+      "notePlaceholder": "Adicionar uma nota...",
+      "cancel": "Cancelar",
+      "save": "Salvar"
+    },
+    "validation": {
+      "nameRequired": "O nome é obrigatório",
+      "nameMax": "O nome deve ter no máximo 70 caracteres",
+      "typeRequired": "O tipo é obrigatório",
+      "typeMax": "O tipo deve ter no máximo 2 caracteres",
+      "noteMax": "O máximo de caracteres para o campo nota são 500 caracteres"
     }
   }
 }

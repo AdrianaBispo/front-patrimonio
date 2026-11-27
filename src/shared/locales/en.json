@@ -9,12 +9,17 @@
     "userNotFound": "User not found",
     "userError": "An error occurred while processing the user",
     "equipmentHistoryForbidden": "You do not have permission to view the history",
-    "equipmentHistoryError": "An error occurred while loading the equipment history"
+    "equipmentHistoryError": "An error occurred while loading the equipment history",
+    "categoryForbidden": "You do not have permission to view categories",
+    "categoryNotFound": "Category not found",
+    "categoryError": "An error occurred while processing the category"
   },
   "messages": {
     "userCreated": "User created successfully",
     "userUpdated": "User updated successfully!",
-    "userDeactivated": "Deactivated successfully!"
+    "userDeactivated": "Deactivated successfully!",
+    "categoryCreated": "Category created successfully",
+    "categoryUpdated": "Category updated successfully"
   },
   "user": {
     "create": {
@@ -64,6 +69,44 @@
       "user": "User",
       "empty": "No equipment history found.",
       "emptyValue": "-"
+    }
+  },
+  "category": {
+    "create": {
+      "title": "Register New Category"
+    },
+    "edit": {
+      "title": "Edit Category"
+    },
+    "list": {
+      "title": "Categories",
+      "add": "Add",
+      "searchPlaceholder": "Search category...",
+      "name": "Name",
+      "type": "Type",
+      "empty": "No categories found."
+    },
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Name",
+      "type": "Type",
+      "select": "Select",
+      "typeAccessory": "Accessory",
+      "typeAsset": "Asset",
+      "typeConsumable": "Consumable",
+      "typeLicense": "License",
+      "typeComponent": "Component",
+      "note": "Note",
+      "notePlaceholder": "Add a note...",
+      "cancel": "Cancel",
+      "save": "Save"
+    },
+    "validation": {
+      "nameRequired": "Name is required",
+      "nameMax": "Name must be at most 70 characters",
+      "typeRequired": "Type is required",
+      "typeMax": "Type must be at most 2 characters",
+      "noteMax": "Note must be at most 500 characters"
     }
   }
 }
