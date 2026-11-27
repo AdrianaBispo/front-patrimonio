@@ -1,7 +1,8 @@
 # LendIt — Gestão de Patrimônio
 
 Front-end do LendIt, sistema para gerenciamento de equipamentos e patrimônio.
-O projeto consome uma API Laravel autenticada por cookie `access_token`.
+O projeto consome uma API Laravel autenticada por cookie HttpOnly, com refresh
+automático via interceptor Axios.
 
 ## Tecnologias
 
@@ -11,6 +12,8 @@ O projeto consome uma API Laravel autenticada por cookie `access_token`.
 - Tailwind CSS 4
 - Axios
 - Zod
+- i18next / react-i18next
+- React IMask
 - React Toastify
 - Plus Jakarta Sans
 
@@ -32,8 +35,8 @@ Somente variáveis iniciadas por `VITE_` ficam disponíveis no navegador. A URL 
 lida em `src/config/env.ts` e utilizada pela instância compartilhada
 `src/shared/api/axios.ts`.
 
-O Axios está configurado com `withCredentials: true`, necessário para enviar o
-cookie de autenticação nas requisições.
+O Axios está configurado com `withCredentials: true` e tenta renovar a sessão
+com `POST /auth/refresh` em respostas `401` (exceto nas rotas de login/refresh).
 
 ## Instalação e execução
 
@@ -50,92 +53,90 @@ Por padrão, o Vite disponibiliza a aplicação em `http://localhost:5173`.
 - `npm run build`: gera o build de produção em `dist/`.
 - `npm run preview`: executa localmente o build de produção.
 
+## Internacionalização (i18n)
+
+- Bootstrap em `src/shared/i18n/index.ts` (idioma padrão: `pt`).
+- Traduções em `src/shared/locales/pt.json` e `en.json`.
+- Telas e hooks usam chaves (`errors.*`, `messages.*`, `auth.*`, `user.*`,
+  `category.*`, `role.*`, `equipment.*`, etc.).
+- Exceptions de feature expõem a chave i18n; a UI traduz com `t()`.
+
 ## Módulos implementados
 
-### Autenticação
+### Autenticação (`/auth`)
 
 - Login em `/auth/login`.
 - Recuperação de senha em `/auth/forgot-password`.
 - Logout por `POST /auth/logout`.
-- Autenticação baseada no cookie `access_token`.
+- Sessão baseada em cookies + `GET /auth/user` (`me`).
 
-### Usuários
+### Usuários (`/users`)
 
-- Listagem em `/users`.
-- Cadastro em `/users/cadastrar`.
-- Edição em `/users/editar/:id`.
+- Listagem, cadastro e edição.
+- Perfis (roles) no formulário; máscara de celular com react-imask.
 
-### Categorias
+### Perfis de acesso (`/roles`)
 
-- Listagem com pesquisa e paginação em `/categorias`.
-- Cadastro em `/categorias/cadastrar`.
-- Edição em `/categorias/editar/:id`.
+- Listagem paginada, cadastro e edição de permissões.
+- Formulário compartilhado `RoleForm`.
 
-### Tipos de equipamento
+### Categorias (`/categorias`)
 
-- Listagem, pesquisa e paginação em `/tipo-equipamento`.
-- Cadastro em `/tipo-equipamento/cadastrar`.
-- Edição em `/tipo-equipamento/editar/:id`.
+- Listagem com pesquisa e paginação no hook.
+- Cadastro e edição via `CategoryForm`.
+
+### Tipos de equipamento (`/tipo-equipamento`)
+
+- Listagem, pesquisa, paginação, cadastro e edição.
 - Ativação e desativação de registros.
 
-### Equipamentos
+### Equipamentos (`/equipamentos`)
 
-- Listagem paginada em `/equipamentos`.
-- Pesquisa por número de série.
-- Cadastro em `/equipamentos/cadastrar`.
-- Edição em `/equipamentos/editar/:id`.
-- Validação dos campos com Zod.
-- Status carregados por `GET /status/all`.
-- Usuários carregados por `GET /auth/users`.
+- Listagem paginada com pesquisa por série.
+- Cadastro e edição com upload de imagem.
+- Opções (status, usuários, categorias, tipos) carregadas no hook de formulário.
+- Histórico registrado automaticamente em create/update.
 
-O upload de imagem ainda não está disponível. Nos cadastros e atualizações de
-equipamento, `imagem_url` é enviado como `null`.
+### Histórico de equipamentos (`/historico-equipamentos`)
 
-## Endpoints de equipamentos
-
-- `GET /equipaments/all`: lista equipamentos, aceita `nome`, `serie`, `page` e
-  `per_page`.
-- `GET /equipaments/get`: busca equipamentos.
-- `POST /equipaments/create`: cria um equipamento.
-- `PUT /equipaments/update/{id}`: atualiza um equipamento.
-
-Todas as requisições usam a instância compartilhada do Axios e enviam
-credenciais automaticamente.
+- Listagem paginada; paginação obtida do hook (`paginator`).
 
 ## Estrutura do projeto
 
 ```text
 src/
-├── app/routes/              # Rotas separadas por módulo
-├── config/                  # Configuração das variáveis de ambiente
+├── app/routes/                 # Rotas por módulo
+├── config/                     # Variáveis de ambiente
 ├── features/
-│   ├── auth/                # Login, recuperação de senha e logout
-│   ├── Categorias/          # Categorias
-│   ├── equipamentos/        # Equipamentos
-│   ├── status/              # Tipos e serviço de status
-│   ├── tipoEquipamento/     # Tipos de equipamento
-│   └── user/                # Usuários
+│   ├── auth/                   # Login, logout, forgot password
+│   ├── categories/             # Categorias
+│   ├── collaborator/           # Colaboradores
+│   ├── department/             # Departamentos
+│   ├── equipment/              # Equipamentos
+│   ├── equipmentHistory/       # Histórico de equipamentos
+│   ├── equipmentType/          # Tipos de equipamento
+│   ├── manager/                # Gestores
+│   ├── permissions/            # Permissões (serviço/hook)
+│   ├── roles/                  # Perfis de acesso
+│   ├── status/                 # Status
+│   ├── supplier/               # Fornecedores
+│   └── user/                   # Usuários
 ├── shared/
-│   ├── api/                 # Instância compartilhada do Axios
-│   └── components/          # Componentes reutilizáveis
-├── App.jsx                  # Layout principal
-├── main.jsx                 # Entrada da aplicação
-└── routes.jsx               # Roteador principal
+│   ├── api/                    # Axios compartilhado
+│   ├── components/             # Componentes reutilizáveis
+│   ├── i18n/                   # Bootstrap i18next
+│   ├── locales/                # pt.json / en.json
+│   └── utils/                  # Helpers (ex.: formatPhone)
+├── App.jsx
+├── main.jsx
+└── routes.jsx
 ```
 
-Cada feature pode conter:
+Cada feature tipicamente contém:
 
-- `components/`: componentes específicos ou formulários reutilizáveis.
-- `hooks/`: estado, validação e regras de interação.
-- `pages/`: telas do módulo.
+- `components/`: formulários e UI do módulo.
+- `exceptions/`: classes de erro com chaves i18n.
+- `hooks/`: regras de negócio, validação Zod e paginação.
+- `pages/`: telas.
 - `services/`: integração com a API.
 - `types/`: tipos TypeScript.
-
-## Padrões do projeto
-
-- As páginas exibem loading enquanto aguardam dados da API.
-- Erros de validação são exibidos abaixo dos campos com `ErrorLabel`.
-- Erros gerais e mensagens de sucesso são exibidos com toast.
-- Listagens paginadas reutilizam `Pagination` e `PaginationButton`.
-- Serviços devem reutilizar `src/shared/api/axios.ts`, sem criar novas
-  instâncias locais do Axios.
