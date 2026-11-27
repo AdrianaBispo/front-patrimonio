@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import ErrorLabel from "../../../shared/components/ErrorLabel";
 import { IMaskInput } from "react-imask";
+import { phoneMaskOptions } from "../../../shared/utils/formatPhone";
 
 export default function UserForm({
   nome,
@@ -51,14 +52,7 @@ export default function UserForm({
               {t("user.form.phone")} <span className="text-red-500">*</span>
             </label>
             <IMaskInput
-              mask={[
-                {
-                  mask: "(00) 0000-0000",
-                },
-                {
-                  mask: "(00) 00000-0000",
-                },
-              ]}
+              mask={phoneMaskOptions.mask}
               unmask={true}
               id="celular"
               name="celular"
@@ -66,7 +60,7 @@ export default function UserForm({
               type="tel"
               maxLength={20}
               value={celular}
-              onChange={(event) => setCelular(event.target.value)}
+              onAccept={(value) => setCelular(value)}
             />
             {inputsErrors.celular && (
               <ErrorLabel>{inputsErrors.celular}</ErrorLabel>

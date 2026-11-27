@@ -1,4 +1,6 @@
 import { useNavigate } from "react-router-dom";
+import { IMaskInput } from "react-imask";
+import { phoneMaskOptions } from "../../../shared/utils/formatPhone";
 
 export default function SupplierCreateView() {
   const navigate = useNavigate();
@@ -109,10 +111,14 @@ export default function SupplierCreateView() {
 
             <div className="flex-1">
               <label htmlFor="telefone">Telefone</label>
-              <input
+              <IMaskInput
+                mask={phoneMaskOptions.mask}
+                unmask={true}
                 id="telefone"
+                name="telefone"
                 className="input-utilities"
-                type="text"
+                type="tel"
+                maxLength={20}
                 placeholder="(00) 00000-0000"
               />
             </div>
