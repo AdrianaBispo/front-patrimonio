@@ -23,7 +23,6 @@ export default function EquipmentHistoryListPage() {
   const { t, i18n } = useTranslation();
   const { listHistory, isLoading, paginator } = useEquipmentHistoryHook();
   const [historicos, setHistoricos] = useState([]);
-  const emptyValue = t("equipmentHistory.list.emptyValue");
 
   const loadPage = useCallback(
     async (pagina) => {
