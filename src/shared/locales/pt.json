@@ -12,14 +12,19 @@
     "equipmentHistoryError": "Ocorreu um erro ao carregar o histórico de equipamentos",
     "categoryForbidden": "Você não tem permissão para consultar as categorias",
     "categoryNotFound": "Categoria não encontrada",
-    "categoryError": "Ocorreu um erro ao processar a categoria"
+    "categoryError": "Ocorreu um erro ao processar a categoria",
+    "roleForbidden": "Você não tem permissão para esta operação nos perfis",
+    "roleNotFound": "Perfil de acesso não encontrado",
+    "roleError": "Ocorreu um erro ao processar o perfil de acesso"
   },
   "messages": {
     "userCreated": "Usuário criado com sucesso",
     "userUpdated": "Usuário editado com sucesso!",
     "userDeactivated": "Desativado com sucesso!",
     "categoryCreated": "Categoria criada com sucesso",
-    "categoryUpdated": "Categoria atualizada com sucesso"
+    "categoryUpdated": "Categoria atualizada com sucesso",
+    "roleCreated": "Perfil criado com sucesso",
+    "roleUpdated": "Perfil atualizado com sucesso"
   },
   "user": {
     "create": {
@@ -107,6 +112,34 @@
       "typeRequired": "O tipo é obrigatório",
       "typeMax": "O tipo deve ter no máximo 2 caracteres",
       "noteMax": "O máximo de caracteres para o campo nota são 500 caracteres"
+    }
+  },
+  "role": {
+    "create": {
+      "title": "Cadastrar Perfil de Acesso"
+    },
+    "edit": {
+      "title": "Editar Perfil de Acesso"
+    },
+    "list": {
+      "title": "Perfis de Acesso",
+      "add": "Adicionar",
+      "name": "Nome",
+      "empty": "Nenhum perfil de acesso encontrado.",
+      "emptyValue": "-"
+    },
+    "form": {
+      "name": "Nome",
+      "namePlaceholder": "Nome do perfil",
+      "permissions": "Permissões",
+      "permissionsEmpty": "Nenhuma permissão disponível.",
+      "cancel": "Cancelar",
+      "save": "Salvar"
+    },
+    "validation": {
+      "nameRequired": "Informe o nome do perfil",
+      "nameMax": "O nome deve ter no máximo 255 caracteres",
+      "permissionsRequired": "Selecione ao menos uma permissão"
     }
   }
 }

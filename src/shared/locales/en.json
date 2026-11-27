@@ -12,14 +12,19 @@
     "equipmentHistoryError": "An error occurred while loading the equipment history",
     "categoryForbidden": "You do not have permission to view categories",
     "categoryNotFound": "Category not found",
-    "categoryError": "An error occurred while processing the category"
+    "categoryError": "An error occurred while processing the category",
+    "roleForbidden": "You do not have permission for this roles operation",
+    "roleNotFound": "Access profile not found",
+    "roleError": "An error occurred while processing the access profile"
   },
   "messages": {
     "userCreated": "User created successfully",
     "userUpdated": "User updated successfully!",
     "userDeactivated": "Deactivated successfully!",
     "categoryCreated": "Category created successfully",
-    "categoryUpdated": "Category updated successfully"
+    "categoryUpdated": "Category updated successfully",
+    "roleCreated": "Profile created successfully",
+    "roleUpdated": "Profile updated successfully"
   },
   "user": {
     "create": {
@@ -107,6 +112,34 @@
       "typeRequired": "Type is required",
       "typeMax": "Type must be at most 2 characters",
       "noteMax": "Note must be at most 500 characters"
+    }
+  },
+  "role": {
+    "create": {
+      "title": "Register Access Profile"
+    },
+    "edit": {
+      "title": "Edit Access Profile"
+    },
+    "list": {
+      "title": "Access Profiles",
+      "add": "Add",
+      "name": "Name",
+      "empty": "No access profiles found.",
+      "emptyValue": "-"
+    },
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Profile name",
+      "permissions": "Permissions",
+      "permissionsEmpty": "No permissions available.",
+      "cancel": "Cancel",
+      "save": "Save"
+    },
+    "validation": {
+      "nameRequired": "Enter the profile name",
+      "nameMax": "Name must be at most 255 characters",
+      "permissionsRequired": "Select at least one permission"
     }
   }
 }
