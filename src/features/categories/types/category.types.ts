@@ -1,7 +1,22 @@
-export type CategoryType = {
-    id?: string;
-    nome?: String;
-    nota?: String;
-    tipo?: String;
-    tipo_nome?: String;
-}
+export type Category = {
+  id?: string;
+  nome?: string;
+  nota?: string;
+  tipo?: string;
+  tipo_nome?: string;
+};
+
+export type CategoryFormData = {
+  nome: string;
+  tipo: string;
+  nota?: string;
+};
+
+
+export type CategoryPaginator = {
+  currentPage: number;
+  lastPage: number;
+  total: number;
+  from: number;
+  to: number;
+};
