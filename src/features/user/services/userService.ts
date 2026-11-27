@@ -12,7 +12,7 @@ export const userService = {
       params: { id },
     });
 
-    return data.data;
+    return data;
   },
 
   async listRoles() {
