@@ -1,78 +1,51 @@
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 
 import EditButton from "../../../shared/components/EditButton";
 import Pagination from "../../../shared/components/Pagination";
-import { useCategoryFormHook } from "../hooks/useCategoryFormHook";
+import { useCategoryListHook } from "../hooks/useCategoryListHook";
 
-const POR_PAGINA = 10;
-
-const paginacaoInicial = {
-  currentPage: 1,
-  lastPage: 1,
-  total: 0,
-  from: 0,
-  to: 0,
-};
-
-function extrairPaginacao(result) {
-  if (result?.meta && Array.isArray(result?.data)) {
-    return {
-      items: result.data,
-      currentPage: result.meta.current_page ?? 1,
-      lastPage: result.meta.last_page ?? 1,
-      total: result.meta.total ?? result.data.length,
-      from: result.meta.from ?? 0,
-      to: result.meta.to ?? 0,
-    };
-  }
-
-  const paginator = result?.data?.current_page != null ? result.data : result;
-  const items = Array.isArray(paginator?.data) ? paginator.data : [];
-
-  return {
-    items,
-    currentPage: paginator?.current_page ?? 1,
-    lastPage: paginator?.last_page ?? 1,
-    total: paginator?.total ?? items.length,
-    from: paginator?.from ?? (items.length ? 1 : 0),
-    to: paginator?.to ?? items.length,
-  };
-}
+const PER_PAGE = 10;
 
 export default function CategoryListPage() {
   const navigate = useNavigate();
-  const { getCategories, isLoading } = useCategoryFormHook();
-  const [listCategoria, setListCategoria] = useState([]);
-  const [paginacao, setPaginacao] = useState(paginacaoInicial);
-  const [valueFilterCategoria, setValueFilterCategoria] = useState("");
+  const { t } = useTranslation();
+  const { listCategories, isLoading, paginator } = useCategoryListHook();
+  const [categories, setCategories] = useState([]);
+  const [filterValue, setFilterValue] = useState("");
 
-  const loadPage = async (filterValue, pageNumber) => {
-    try {
-      const result = await getCategories(filterValue, null, pageNumber, POR_PAGINA);
-      const pagina = extrairPaginacao(result);
-      setListCategoria(pagina.items);
-      setPaginacao(pagina);
-    } catch (e) {
-      const message =
-        e?.response?.data?.message ?? "Ocorreu um erro ao obter os dados";
-      toast.error(message);
-    }
-  };
+  const loadPage = useCallback(
+    async (pageNumber) => {
+      try {
+        const result = await listCategories(
+          filterValue,
+          pageNumber,
+          PER_PAGE,
+        );
+        setCategories(result?.data ?? []);
+      } catch (err) {
+        toast.error(t(err?.message) ?? t("errors.categoryError"));
+      }
+    },
+    [filterValue, listCategories, t],
+  );
 
   useEffect(() => {
-    loadPage("", 1);
+    loadPage(1);
+    // carrega só na montagem; filtro dispara via Enter
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const filterCategoria = () => {
-    loadPage(valueFilterCategoria, 1);
+  const filterCategories = () => {
+    loadPage(1);
   };
 
   return (
     <div className="max-w-7xl mx-auto">
       <div className="gap-2 mb-9 flex justify-between">
-        <h3 className="text-primary/80 mb-2">Categorias</h3>
+        <h3 className="text-primary/80 mb-2">{t("category.list.title")}</h3>
         <button
           className="flex justify-center gap-2 items-center rounded-md bg-primary px-8 py-1.5 text-sm/6 font-semibold text-white hover:bg-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary active:bg-primary/65"
           onClick={() => navigate("cadastrar")}
@@ -91,15 +64,11 @@ export default function CategoryListPage() {
               d="M12 4.5v15m7.5-7.5h-15"
             />
           </svg>
-          Adicionar
+          {t("category.list.add")}
         </button>
       </div>
 
-      {/* Table */}
-
       <div className="overflow-hidden border-border rounded-2xl shadow-md">
-        {/* Pesquisa */}
-
         <div className="bg-bg-secondary r-50 px-3 py-3">
           <div className="relative w-full max-w-md">
             <svg
@@ -119,13 +88,13 @@ export default function CategoryListPage() {
 
             <input
               type="text"
-              placeholder="Pesquisar categoria..."
+              placeholder={t("category.list.searchPlaceholder")}
               className="input-utilities w-full pl-10 pr-2 py-2 bg-bg-primary"
-              value={valueFilterCategoria}
-              onChange={(e) => setValueFilterCategoria(e.target.value)}
+              value={filterValue}
+              onChange={(e) => setFilterValue(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  filterCategoria();
+                  filterCategories();
                 }
               }}
             />
@@ -136,10 +105,10 @@ export default function CategoryListPage() {
           <thead className="text-center text-xs font-medium tracking-wider text-text-primary">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
-                Nome
+                {t("category.list.name")}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-text-primary">
-                Tipo
+                {t("category.list.type")}
               </th>
               <th className="px-6 py-3"></th>
             </tr>
@@ -154,17 +123,17 @@ export default function CategoryListPage() {
                   </div>
                 </td>
               </tr>
-            ) : listCategoria.length === 0 ? (
+            ) : categories.length === 0 ? (
               <tr>
                 <td
                   colSpan={3}
                   className="px-6 py-8 text-center text-sm text-text-primary/70"
                 >
-                  Nenhuma categoria encontrada.
+                  {t("category.list.empty")}
                 </td>
               </tr>
             ) : (
-              listCategoria.map((item) => (
+              categories.map((item) => (
                 <tr key={item.id}>
                   <td className="whitespace-nowrap px-6 py-4">
                     <div className="text-sm font-medium text-text-primary">
@@ -180,7 +149,9 @@ export default function CategoryListPage() {
 
                   <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
                     <div className="flex items-center justify-end gap-3">
-                      <EditButton onClick={() => navigate(`editar/${item.id}`)} />
+                      <EditButton
+                        onClick={() => navigate(`editar/${item.id}`)}
+                      />
                     </div>
                   </td>
                 </tr>
@@ -190,13 +161,13 @@ export default function CategoryListPage() {
         </table>
 
         <Pagination
-          currentPage={paginacao.currentPage}
-          lastPage={paginacao.lastPage}
-          total={paginacao.total}
-          from={paginacao.from}
-          to={paginacao.to}
+          currentPage={paginator.currentPage}
+          lastPage={paginator.lastPage}
+          total={paginator.total}
+          from={paginator.from}
+          to={paginator.to}
           isLoading={isLoading}
-          onPageChange={(page) => loadPage(valueFilterCategoria, page)}
+          onPageChange={loadPage}
         />
       </div>
     </div>
