@@ -24,13 +24,30 @@ function getErrorMessage(error: unknown): string {
 export function useEquipmentHistoryHook() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [paginator, setPaginator] = useState<{ currentPage: number, lastPage: number, total: number, from: number, to: number }>({
+    currentPage: 1,
+    lastPage: 1,
+    total: 0,
+    from: 0,
+    to: 0,
+  });
 
   const listHistory = useCallback(async (page = 1, perPage = 0) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      return await equipmentHistoryService.listHistory(page, perPage);
+      const result = await equipmentHistoryService.listHistory(page, perPage);
+      const history = result?.historic_equipaments ?? result;
+     
+      setPaginator({
+        currentPage: history?.current_page ?? 1,
+        lastPage: history?.last_page ?? 1,
+        total: history?.total ?? 0,
+        from: history?.from ?? 0,
+        to: history?.to ?? 0,
+      });
+      return history;
     } catch (err) {
       const mensagem = getErrorMessage(err);
       setError(mensagem);
@@ -40,5 +57,5 @@ export function useEquipmentHistoryHook() {
     }
   }, []);
 
-  return { listHistory, isLoading, error };
+  return { listHistory, isLoading, error, paginator };
 }
