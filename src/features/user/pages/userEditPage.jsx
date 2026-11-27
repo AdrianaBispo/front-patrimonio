@@ -6,35 +6,6 @@ import { useTranslation } from "react-i18next";
 import UserForm from "../components/UserForm";
 import { useUserFormHook } from "../hooks/useUserFormHook";
 
-function extrairRoleId(usuario, listaRoles = []) {
-  if (usuario?.role_id != null && usuario.role_id !== "") {
-    return String(usuario.role_id);
-  }
-
-  const rolesUsuario = usuario?.roles;
-
-  if (Array.isArray(rolesUsuario) && rolesUsuario.length > 0) {
-    const primeiro = rolesUsuario[0];
-
-    if (primeiro != null && typeof primeiro === "object" && primeiro.id != null) {
-      return String(primeiro.id);
-    }
-
-    const valor = String(primeiro);
-    const porId = listaRoles.find((role) => String(role.id) === valor);
-    if (porId) return String(porId.id);
-
-    const porNome = listaRoles.find((role) => role.name === valor);
-    if (porNome) return String(porNome.id);
-  }
-
-  if (typeof rolesUsuario === "string" && rolesUsuario.trim()) {
-    const porNome = listaRoles.find((role) => role.name === rolesUsuario);
-    if (porNome) return String(porNome.id);
-  }
-
-  return "";
-}
 
 export default function UserEditPage() {
   const { id } = useParams();
@@ -66,7 +37,7 @@ export default function UserEditPage() {
         setNome(usuario.nome ?? "");
         setCelular(usuario.celular ?? "");
         setEmail(usuario.email ?? "");
-        setRoleId(extrairRoleId(usuario, listaRoles));
+        setRoleId(usuario.role_id ?? "");
       })
       .catch((error) => {
         toast.error(t(error?.message) ?? t("errors.userError"));
