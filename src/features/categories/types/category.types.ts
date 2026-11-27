@@ -12,6 +12,12 @@ export type CategoryFormData = {
   nota?: string;
 };
 
+export type CategoryFormErrors = {
+  id?: string;
+  nome?: string;
+  nota?: string;
+  tipo?: string;
+};
 
 export type CategoryPaginator = {
   currentPage: number;
